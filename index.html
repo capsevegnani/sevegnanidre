@@ -973,6 +973,7 @@
                 <h1>Categorias</h1>
                 <div style="display:flex;gap:8px;">
                     <button class="btn btn-secondary btn-small" onclick="showPage('subcategorias')" style="background:#6f42c1;color:white;">🗂️ Subcategorias</button>
+                    <button class="btn btn-secondary btn-small" onclick="criarCategoriasPadraoDRE()" style="background:#17a2b8;color:white;">⚡ Criar categorias padrão da DRE</button>
                     <button class="btn btn-primary btn-small" onclick="openModalCategoria()">+ Nova Categoria</button>
                 </div>
             </div>
@@ -3314,6 +3315,60 @@
         'EMPRESTIMO':'Empréstimos','INVESTIMENTO':'Investimentos',
         'OUTRAS_RECEITAS':'Outras Receitas','OUTRAS_DESPESAS':'Outras Despesas'
     };
+
+    // Conjunto padrão de categorias, uma para cada grupo do DRE.
+    // Usado por criarCategoriasPadraoDRE() para popular a tabela de categorias de uma vez.
+    const _CATEGORIAS_PADRAO_DRE = [
+        { grupo_dre: 'RECEITA_BRUTA',       nome: 'Receita Bruta de Vendas',                 tipo: 'Receita'     },
+        { grupo_dre: 'DEDUCOES',            nome: 'Deduções e Impostos sobre Vendas',        tipo: 'Imposto'     },
+        { grupo_dre: 'CPV',                 nome: 'Custo das Mercadorias/Serviços Vendidos',  tipo: 'Custo'       },
+        { grupo_dre: 'DESP_COMERCIAL',      nome: 'Despesas Comerciais',                      tipo: 'Despesa'     },
+        { grupo_dre: 'DESP_ADMIN',          nome: 'Despesas Administrativas',                 tipo: 'Despesa'     },
+        { grupo_dre: 'DESP_FINANCEIRA',     nome: 'Despesas Financeiras',                     tipo: 'Despesa'     },
+        { grupo_dre: 'RECEITA_FINANCEIRA',  nome: 'Receitas Financeiras',                     tipo: 'Receita'     },
+        { grupo_dre: 'EMPRESTIMO',          nome: 'Empréstimos e Financiamentos',             tipo: 'Financeiro'  },
+        { grupo_dre: 'INVESTIMENTO',        nome: 'Investimentos',                            tipo: 'Investimento'},
+        { grupo_dre: 'OUTRAS_RECEITAS',     nome: 'Outras Receitas',                          tipo: 'Receita'     },
+        { grupo_dre: 'OUTRAS_DESPESAS',     nome: 'Outras Despesas',                          tipo: 'Despesa'     }
+    ];
+
+    async function criarCategoriasPadraoDRE() {
+        const existentes = new Set((dadosCache.categorias || [])
+            .map(c => c.grupo_dre)
+            .filter(g => !!g));
+
+        const faltando = _CATEGORIAS_PADRAO_DRE.filter(c => !existentes.has(c.grupo_dre));
+
+        if (faltando.length === 0) {
+            showAlert('Todos os grupos do DRE já têm categoria cadastrada.', 'alertCategorias', 'success');
+            return;
+        }
+
+        const nomes = faltando.map(c => '• ' + c.nome + ' (' + _GRUPOS_DRE_LABELS[c.grupo_dre] + ')').join('\n');
+        const confirmar = confirm(
+            'Serão criadas ' + faltando.length + ' categoria(s) padrão, uma para cada grupo do DRE ainda sem categoria:\n\n' +
+            nomes +
+            '\n\nVocê poderá editar nome/tipo/descrição depois. Continuar?'
+        );
+        if (!confirmar) return;
+
+        const payload = faltando.map(c => ({
+            nome: c.nome,
+            grupo_dre: c.grupo_dre,
+            tipo: c.tipo,
+            descricao: 'Categoria padrão do DRE criada automaticamente',
+            ativo: true
+        }));
+
+        const resultado = await fetchSupabase('categorias', 'POST', payload);
+
+        if (resultado !== null) {
+            showAlert(faltando.length + ' categoria(s) padrão do DRE criada(s) com sucesso!', 'alertCategorias', 'success');
+            await carregarCategorias();
+        } else {
+            showAlert('Erro ao criar categorias padrão. Verifique a conexão/RLS.', 'alertCategorias', 'error');
+        }
+    }
 
     function atualizarTabelaCategorias() {
         const tbody = document.querySelector('#tabelaCategorias tbody');
