@@ -2495,6 +2495,18 @@ tr.cob-dia-vazio > td {
               <option value="">Todas as Categorias</option>
             </select>
           </div>
+          <div class="form-group"><label>Visão</label>
+            <select id="ac-visao" onchange="renderAnaliseCategoria()" style="min-width:300px">
+              <option value="competencia">Competência (data da venda / compra)</option>
+              <option value="aberto">A pagar e a receber em aberto — do mês atual em diante</option>
+            </select>
+          </div>
+          <div class="form-group" id="ac-saldo-wrap" style="display:none;align-self:flex-end">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0 0 10px">
+              <input type="checkbox" id="ac-usar-saldo" checked onchange="renderAnaliseCategoria()" style="width:auto;margin:0;accent-color:#ea580c" />
+              Partir do saldo atual das contas
+            </label>
+          </div>
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="limparFiltrosAnaliseCategoria()">Limpar Filtros</button></div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #f5f4f2;">
@@ -11807,6 +11819,69 @@ function renderAnaliseCategoria() {
     for (let m = 1; m <= 12; m++) { valoresMes[c.id][m] = 0; itensMes[m][c.id] = []; }
   });
 
+  // Visão "em aberto": parcelas ainda não pagas/recebidas, pelo vencimento,
+  // do mês atual em diante. O que já venceu e continua em aberto entra no
+  // mês atual, para o mês em vigor mostrar o saldo real a pagar/receber.
+  const visao = (document.getElementById('ac-visao') || {}).value || 'competencia';
+  const emAberto = visao === 'aberto';
+  const saldoWrap = document.getElementById('ac-saldo-wrap');
+  if (saldoWrap) saldoWrap.style.display = emAberto ? '' : 'none';
+  const hojeAc = new Date();
+  const anoAtualAc = hojeAc.getFullYear(), mesAtualAc = hojeAc.getMonth() + 1;
+  const SEMCAT_REC = '__semcat_rec__', SEMCAT_PAG = '__semcat_pag__';
+  const nomeAcCat = id => id === SEMCAT_REC ? 'Sem categoria (a receber)'
+                        : id === SEMCAT_PAG ? 'Sem categoria (a pagar)' : getDfcCatNome(id);
+  window._acNomeCat = nomeAcCat;
+  let mesInicioAberto = 1, saldoInicialAberto = 0;
+  const aRecMes = {}, aPagMes = {};
+  for (let m = 1; m <= 12; m++) { aRecMes[m] = 0; aPagMes[m] = 0; }
+
+  if (emAberto) {
+    if (ano < anoAtualAc) {
+      wrap.innerHTML = '<div class="empty-state" style="padding:32px">A visão "em aberto" vale do mês atual em diante. Escolha o ano de ' + anoAtualAc + ' ou um ano futuro.</div>';
+      return;
+    }
+    mesInicioAberto = (ano === anoAtualAc) ? mesAtualAc : 1;
+    const inicioPeriodo = `${ano}-${String(mesInicioAberto).padStart(2,'0')}-01`;
+    const usarSaldo = !!((document.getElementById('ac-usar-saldo') || {}).checked);
+    saldoInicialAberto = usarSaldo ? db.bancos.reduce((t, b) => t + getBancoSaldo(b), 0) : 0;
+    [SEMCAT_REC, SEMCAT_PAG].forEach(id => {
+      valoresMes[id] = {};
+      for (let m = 1; m <= 12; m++) { valoresMes[id][m] = 0; itensMes[m][id] = []; }
+    });
+    const encaixar = (p, tipo, valor) => {
+      if (!(valor > 0.005)) return;
+      const venc = p.venc || (tipo === 'receber' ? p.dtvenda : p.dtcompra) || '';
+      let m;
+      if (!venc || venc < inicioPeriodo) {
+        // Vencido e em aberto: só cai no mês atual quando se olha o ano atual.
+        // Em anos futuros entra no saldo de partida.
+        if (ano !== anoAtualAc) { saldoInicialAberto += (tipo === 'receber' ? valor : -valor); return; }
+        m = mesAtualAc;
+      } else {
+        const pv = venc.split('-');
+        if (parseInt(pv[0]) < ano) { saldoInicialAberto += (tipo === 'receber' ? valor : -valor); return; }
+        if (parseInt(pv[0]) !== ano) return;
+        m = parseInt(pv[1]);
+      }
+      let catId = p.catId && valoresMes[p.catId] ? p.catId : (tipo === 'receber' ? SEMCAT_REC : SEMCAT_PAG);
+      valoresMes[catId][m] += valor;
+      if (tipo === 'receber') aRecMes[m] += valor; else aPagMes[m] += valor;
+      itensMes[m][catId].push({
+        tipo, id: p.lancId, nf: p.nf || '', data: venc,
+        nome: tipo === 'receber' ? getClienteNome(p.cliente) : getFornNome(p.forn),
+        prod: (p.prod ? (tipo === 'receber' ? getProdVendaNome(p.prod) : getProdNome(p.prod)) : '')
+              + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
+        valor,
+        status: (venc && venc < today() ? 'Vencido · ' : '') + (tipo === 'receber' ? 'A Receber' : 'A Pagar')
+      });
+    };
+    getParcelasReceber(false).forEach(p => {
+      const pago = (typeof cobTotalBaixas === 'function') ? cobTotalBaixas(p.lancId, p.parcIdx) : 0;
+      encaixar(p, 'receber', Math.max(0, (p.valParc || 0) - pago));
+    });
+    getParcelas(false).forEach(p => encaixar(p, 'pagar', p.valParc || 0));
+  } else {
   db.lancreceber.forEach(l => {
     const dtRef = l.dtvenda || l.dtcompra;
     if (!dtRef) return;
@@ -11840,6 +11915,8 @@ function renderAnaliseCategoria() {
     });
   });
 
+  }
+
   // Guarda para o drill-down (abrirDetalheAcCategoria), acessível após o render
   _acItensCache = itensMes;
   _acAnoCache = ano;
@@ -11856,8 +11933,14 @@ function renderAnaliseCategoria() {
       if (!chk || chk.checked) mesesExibir.push(m);
     }
   }
+  if (emAberto) mesesExibir = mesesExibir.filter(m => m >= mesInicioAberto);
+  if (!mesesExibir.length) {
+    wrap.innerHTML = '<div class="empty-state" style="padding:32px">Nenhum mês para exibir com os filtros atuais.</div>';
+    return;
+  }
 
-  const sinalCat = catId => getDfcCatTipo(catId) === 'entrada' ? 1 : -1;
+  const sinalCat = catId => catId === '__semcat_rec__' ? 1 : catId === '__semcat_pag__' ? -1
+                          : (getDfcCatTipo(catId) === 'entrada' ? 1 : -1);
   const fmtValSigned = v => {
     if (Math.abs(v) < 0.005) return '<span class="dfc-val-zero">—</span>';
     if (v < 0) return `<span class="dfc-val-neg">− ${fmtBRL(Math.abs(v))}</span>`;
@@ -11871,6 +11954,10 @@ function renderAnaliseCategoria() {
 
   // Categorias visíveis, respeitando os filtros de Grupo/Categoria
   let categorias = [...db.dfc_cats];
+  if (emAberto && !grupoFiltro && !catFiltro) {
+    categorias.push({ id: '__semcat_rec__', nome: 'Sem categoria (a receber)', grupo: '' });
+    categorias.push({ id: '__semcat_pag__', nome: 'Sem categoria (a pagar)', grupo: '' });
+  }
   if (grupoFiltro) categorias = categorias.filter(c => c.grupo === grupoFiltro);
   if (catFiltro) categorias = categorias.filter(c => c.id === catFiltro);
 
@@ -11900,6 +11987,15 @@ function renderAnaliseCategoria() {
   let totalGeralAnual = 0;
   let temAlgumaLinha = false;
 
+  if (emAberto) {
+    Object.keys(catsPorGrupo).forEach(gid => {
+      catsPorGrupo[gid] = catsPorGrupo[gid].filter(c =>
+        mesesExibir.some(m => Math.abs(valoresMes[c.id][m] || 0) >= 0.005));
+    });
+  }
+  // Total da coluna = soma só dos meses exibidos
+  const somaCat = cid => mesesExibir.reduce((t, m) => t + (valoresMes[cid][m] || 0), 0);
+
   gruposParaExibir.forEach(g => {
     const cats = catsPorGrupo[g.id];
     if (!cats || !cats.length) return;
@@ -11908,11 +12004,14 @@ function renderAnaliseCategoria() {
     // Linha do grupo = soma assinada de todas as suas categorias
     const grupoCellsVal = mesesExibir.map(m => cats.reduce((s,c) => s + sinalCat(c.id) * (valoresMes[c.id][m]||0), 0));
     let totalGrupoAnual = 0;
-    cats.forEach(c => { for (let m=1;m<=12;m++) totalGrupoAnual += sinalCat(c.id) * (valoresMes[c.id][m]||0); });
-    const grupoCellsHtml = grupoCellsVal.map(v => `<td>${fmtValSigned(v)}</td>`).join('');
+    cats.forEach(c => { totalGrupoAnual += sinalCat(c.id) * somaCat(c.id); });
+    const grupoCellsHtml = grupoCellsVal.map((v, i) => Math.abs(v) < 0.005 ? `<td>${fmtValSigned(v)}</td>`
+      : `<td class="dre-cell-click" onclick="abrirDetalheAcGrupo('${g.id}',${mesesExibir[i]})" title="Ver lançamentos deste grupo">${fmtValSigned(v)}</td>`).join('');
     const recolhido = _acGruposRecolhidos.has(g.id);
     const toggleAc = `<button type="button" class="dre-toggle-cat" onclick="toggleAcGrupo('${g.id}')" title="${recolhido ? 'Expandir' : 'Recolher'} categorias">${recolhido ? '▸' : '▾'}</button>`;
-    linhasHtml += `<tr class="dre-row-subtotal"><td>${toggleAc}${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`}</tr>`;
+    const totGrupoCell = Math.abs(totalGrupoAnual) < 0.005 ? `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`
+      : `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheAcGrupo('${g.id}','total')" title="Ver lançamentos deste grupo">${fmtValSigned(totalGrupoAnual)}</td>`;
+    linhasHtml += `<tr class="dre-row-subtotal"><td>${toggleAc}${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : totGrupoCell}</tr>`;
 
     // Uma linha por categoria do grupo (valores clicáveis para o drill-down).
     // Grupo recolhido: os valores continuam somando no Total Geral, só não aparecem.
@@ -11923,7 +12022,7 @@ function renderAnaliseCategoria() {
         totalGeralPorMes[m] += v;
         return fmtValClicavel(v, c.id, m);
       }).join('');
-      let totalCatAnual = 0; for (let m=1;m<=12;m++) totalCatAnual += sinal * (valoresMes[c.id][m]||0);
+      const totalCatAnual = sinal * somaCat(c.id);
       totalGeralAnual += totalCatAnual;
       const totalCell = mesFiltro ? '' : (Math.abs(totalCatAnual) >= 0.005
         ? `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheAcCategoria('${c.id}','total')" title="Ver lançamentos desta categoria">${fmtValSigned(totalCatAnual)}</td>`
@@ -11938,7 +12037,26 @@ function renderAnaliseCategoria() {
   }
 
   const totalGeralCellsHtml = mesesExibir.map(m => `<td>${fmtValSigned(totalGeralPorMes[m])}</td>`).join('');
-  linhasHtml += `<tr class="dre-row-final"><td>TOTAL GERAL</td>${totalGeralCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGeralAnual)}</td>`}</tr>`;
+  linhasHtml += `<tr class="dre-row-final"><td>${emAberto ? 'SALDO DO MÊS (receber − pagar)' : 'TOTAL GERAL'}</td>${totalGeralCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGeralAnual)}</td>`}</tr>`;
+  if (emAberto) {
+    const totRec = mesesExibir.reduce((t, m) => t + aRecMes[m], 0);
+    const totPag = mesesExibir.reduce((t, m) => t + aPagMes[m], 0);
+    const linhaSimples = (rotulo, fn, tot) => `<tr class="dfc-row-sub"><td>${rotulo}</td>${mesesExibir.map(m => `<td>${fmtValSigned(fn(m))}</td>`).join('')}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(tot)}</td>`}</tr>`;
+    linhasHtml += linhaSimples('A receber no mês', m => aRecMes[m], totRec);
+    linhasHtml += linhaSimples('A pagar no mês', m => -aPagMes[m], -totPag);
+    // Saldo projetado: começa no saldo atual das contas e acumula mês a mês
+    let acum = saldoInicialAberto;
+    for (let m = mesInicioAberto; m < (mesesExibir[0] || mesInicioAberto); m++) acum += aRecMes[m] - aPagMes[m];
+    const cells = mesesExibir.map((m, idx) => {
+      if (idx > 0) for (let k = mesesExibir[idx - 1] + 1; k < m; k++) acum += aRecMes[k] - aPagMes[k];
+      acum += aRecMes[m] - aPagMes[m];
+      return `<td><strong>${fmtValSigned(acum)}</strong></td>`;
+    }).join('');
+    const usarSaldo = !!((document.getElementById('ac-usar-saldo') || {}).checked);
+    linhasHtml += `<tr class="dre-row-pe"><td>${usarSaldo ? 'Saldo projetado (contas + receber − pagar)' : 'Saldo acumulado (receber − pagar)'}</td>${cells}${mesFiltro ? '' : '<td class="dfc-col-total"></td>'}</tr>`;
+    linhasHtml = `<tr class="dfc-row-sub"><td colspan="${mesesExibir.length + (mesFiltro ? 1 : 2)}" style="font-size:11px;color:#78716c;white-space:normal">
+      ${usarSaldo ? 'Saldo atual das contas: <strong>' + fmtBRL(saldoInicialAberto) + '</strong> · ' : ''}Valores pelo vencimento. Parcelas vencidas e ainda em aberto aparecem no mês atual.</td></tr>` + linhasHtml;
+  }
 
   wrap.innerHTML = `<table class="dfc-table">
     <thead><tr><th>Grupo / Categoria</th>${mesesHeader}</tr></thead>
@@ -11976,7 +12094,7 @@ function acMesesTodos(mostrar) {
 function abrirDetalheAcCategoria(catId, mes) {
   if (!_acItensCache) return;
   const cat = db.dfc_cats.find(c => c.id === catId);
-  const nomeCat = cat ? cat.nome : 'Categoria';
+  const nomeCat = cat ? cat.nome : (window._acNomeCat ? window._acNomeCat(catId) : 'Categoria');
 
   let itens = [];
   let periodoTxt = '';
@@ -11990,6 +12108,24 @@ function abrirDetalheAcCategoria(catId, mes) {
   itens = [...itens].sort((a, b) => (a.data || '').localeCompare(b.data || ''));
 
   _dreDetalheRender(nomeCat, periodoTxt, itens, { origem:'ac', chave:catId, mes });
+}
+
+// Drill-down da linha do GRUPO: junta os lançamentos de todas as categorias dele
+function abrirDetalheAcGrupo(grupoId, mes) {
+  if (!_acItensCache) return;
+  const SEM = '__sem_grupo__';
+  const g = db.dre_grupos.find(x => x.id === grupoId);
+  const nome = g ? g.nome : 'Sem Grupo Definido';
+  const idsGrupo = db.dfc_cats
+    .filter(c => grupoId === SEM ? !db.dre_grupos.some(x => x.id === c.grupo) : c.grupo === grupoId)
+    .map(c => c.id);
+  if (grupoId === SEM) idsGrupo.push('__semcat_rec__', '__semcat_pag__');
+  const meses_ = mes === 'total' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [mes];
+  let itens = [];
+  meses_.forEach(m => idsGrupo.forEach(id => { itens = itens.concat((_acItensCache[m] || {})[id] || []); }));
+  itens.sort((a, b) => (a.data || '').localeCompare(b.data || ''));
+  const periodoTxt = mes === 'total' ? `Ano ${_acAnoCache}` : `${meses[mes]} / ${_acAnoCache}`;
+  _dreDetalheRender(nome, periodoTxt, itens, { origem:'acg', chave:grupoId, mes });
 }
 
 // Gera o PDF da Análise por Categoria (usa a tabela já renderizada em tela,
@@ -12188,6 +12324,9 @@ function _dreDetReabrir() {
   if (ctx.origem === 'ac') {
     if (typeof renderAnaliseCategoria === 'function') renderAnaliseCategoria();
     abrirDetalheAcCategoria(ctx.chave, ctx.mes);
+  } else if (ctx.origem === 'acg') {
+    if (typeof renderAnaliseCategoria === 'function') renderAnaliseCategoria();
+    abrirDetalheAcGrupo(ctx.chave, ctx.mes);
   } else {
     renderDre();
     if (ctx.origem === 'grupo') abrirDetalheDreGrupo(ctx.chave, ctx.mes);
@@ -15317,7 +15456,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-24 · sevegnani · categoria-janela';
+window.APP_BUILD = '2026-10-24 · sevegnani · analise-aberto';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
