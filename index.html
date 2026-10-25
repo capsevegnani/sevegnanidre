@@ -2196,7 +2196,7 @@ tr.cob-dia-vazio > td {
     <div class="page" id="page-dfc-categorias">
       <div class="page-header">
         <div><div class="page-title">Categorias</div><div class="page-sub" style="margin-bottom:0">Gerencie as categorias usadas no Demonstrativo de Fluxo de Caixa (DFC) e na DRE. O Grupo de cada categoria é cadastrado em DRE &rarr; Grupos.</div></div>
-        <button class="btn-novo" id="btn-novo-dfccat" onclick="toggleFormPanel('form-dfccat',this)">
+        <button class="btn-novo" id="btn-novo-dfccat" onclick="clearDfcCategoria(); toggleFormPanel('form-dfccat',this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
         </button>
       </div>
@@ -2513,6 +2513,10 @@ tr.cob-dia-vazio > td {
           <label class="dre-mes-chip"><input type="checkbox" id="ac-mes-12" checked onchange="renderAnaliseCategoria()" />Dez</label>
           <button class="btn btn-secondary btn-sm" onclick="acMesesTodos(true)">Marcar todos</button>
           <button class="btn btn-secondary btn-sm" onclick="acMesesTodos(false)">Ocultar todos</button>
+          <span style="width:1px;height:20px;background:#e7e5e4;margin:0 4px"></span>
+          <span style="font-size:11px;color:#a8a29e;font-weight:600;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;">Categorias:</span>
+          <button class="btn btn-secondary btn-sm" onclick="acCategoriasTodas(true)">▾ Expandir</button>
+          <button class="btn btn-secondary btn-sm" onclick="acCategoriasTodas(false)">▸ Recolher</button>
         </div>
       </div>
 
@@ -10300,7 +10304,7 @@ async function saveDfcCategoria() {
     obs: document.getElementById('dfc-cat-obs').value };
   await sbFetch('dfc_categorias', 'POST', rec);
   db.dfc_cats.push(rec);
-  clearDfcCategoria(); renderDfcCategorias(); populateDfcCatSelects(); populateDfcCatProdSelects(); popularCategoriasAnalise(); popularFiltrosGrupoCategoriaTodos();
+  clearDfcCategoria(); fecharFormModalSeAberto('form-dfccat'); renderDfcCategorias(); populateDfcCatSelects(); populateDfcCatProdSelects(); popularCategoriasAnalise(); popularFiltrosGrupoCategoriaTodos();
 }
 async function updateDfcCategoria(id) {
   const cat = db.dfc_cats.find(x => x.id === id);
@@ -10314,7 +10318,7 @@ async function updateDfcCategoria(id) {
   cat.obs = document.getElementById('dfc-cat-obs').value;
   const res = await sbFetch('dfc_categorias', 'PATCH', { nome:cat.nome, grupo:cat.grupo, tipo:cat.tipo, obs:cat.obs }, `?id=eq.${id}`);
   if (!res) { alert('❌ Erro ao atualizar categoria.'); return; }
-  clearDfcCategoria(); renderDfcCategorias(); populateDfcCatSelects(); populateDfcCatProdSelects(); popularCategoriasAnalise(); popularFiltrosGrupoCategoriaTodos();
+  clearDfcCategoria(); fecharFormModalSeAberto('form-dfccat'); renderDfcCategorias(); populateDfcCatSelects(); populateDfcCatProdSelects(); popularCategoriasAnalise(); popularFiltrosGrupoCategoriaTodos();
 }
 function editDfcCategoria(id) {
   const cat = db.dfc_cats.find(x => x.id === id);
@@ -10326,8 +10330,7 @@ function editDfcCategoria(id) {
   document.getElementById('dfc-cat-obs').value = cat.obs || '';
   document.getElementById('dfc-cat-form-title').textContent = 'Editar Categoria';
   document.getElementById('dfc-cat-btn-salvar').textContent = 'Salvar Alterações';
-  abrirFormPanel('form-dfccat', 'btn-novo-dfccat');
-  window.scrollTo({top:0, behavior:'smooth'});
+  abrirFormModal('form-dfccat', 'Editar Categoria');
 }
 function clearDfcCategoria() {
   ['dfc-cat-nome','dfc-cat-obs','dfc-cat-edit-id'].forEach(id => document.getElementById(id).value = '');
@@ -11242,10 +11245,13 @@ function getGrupoAmortizacaoId() {
 // A variação de estoque digitada é somada diretamente neste grupo, de modo que
 // tanto o valor monetário quanto o % do CPV recalculam juntos.
 function getGrupoCpvId() {
+  // 1º o grupo-padrão do CPV (dre-05), mesmo que tenha sido renomeado
+  const fixo = db.dre_grupos.find(g => g.id === 'dre-05' && (g.tipo === 'entrada' || g.tipo === 'saida'));
+  if (fixo) return fixo.id;
   const g = db.dre_grupos.find(g => {
     if (g.tipo !== 'entrada' && g.tipo !== 'saida') return false;
     const n = normText(g.nome || '');
-    return n.includes('cpv') || (n.includes('custo') && n.includes('produto'));
+    return n.includes('cpv') || (n.includes('custo') && n.includes('produto')) || n === 'produto';
   });
   return g ? g.id : null;
 }
@@ -11904,9 +11910,12 @@ function renderAnaliseCategoria() {
     let totalGrupoAnual = 0;
     cats.forEach(c => { for (let m=1;m<=12;m++) totalGrupoAnual += sinalCat(c.id) * (valoresMes[c.id][m]||0); });
     const grupoCellsHtml = grupoCellsVal.map(v => `<td>${fmtValSigned(v)}</td>`).join('');
-    linhasHtml += `<tr class="dre-row-subtotal"><td>${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`}</tr>`;
+    const recolhido = _acGruposRecolhidos.has(g.id);
+    const toggleAc = `<button type="button" class="dre-toggle-cat" onclick="toggleAcGrupo('${g.id}')" title="${recolhido ? 'Expandir' : 'Recolher'} categorias">${recolhido ? '▸' : '▾'}</button>`;
+    linhasHtml += `<tr class="dre-row-subtotal"><td>${toggleAc}${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`}</tr>`;
 
-    // Uma linha por categoria do grupo (valores clicáveis para o drill-down)
+    // Uma linha por categoria do grupo (valores clicáveis para o drill-down).
+    // Grupo recolhido: os valores continuam somando no Total Geral, só não aparecem.
     cats.forEach(c => {
       const sinal = sinalCat(c.id);
       const cellsHtml = mesesExibir.map(m => {
@@ -11919,7 +11928,7 @@ function renderAnaliseCategoria() {
       const totalCell = mesFiltro ? '' : (Math.abs(totalCatAnual) >= 0.005
         ? `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheAcCategoria('${c.id}','total')" title="Ver lançamentos desta categoria">${fmtValSigned(totalCatAnual)}</td>`
         : `<td class="dfc-col-total">${fmtValSigned(totalCatAnual)}</td>`);
-      linhasHtml += `<tr class="dfc-row-sub"><td>${c.nome}</td>${cellsHtml}${totalCell}</tr>`;
+      if (!recolhido) linhasHtml += `<tr class="dfc-row-sub"><td>${c.nome}</td>${cellsHtml}${totalCell}</tr>`;
     });
   });
 
@@ -11935,6 +11944,22 @@ function renderAnaliseCategoria() {
     <thead><tr><th>Grupo / Categoria</th>${mesesHeader}</tr></thead>
     <tbody>${linhasHtml}</tbody>
   </table>`;
+}
+
+// Grupos com as categorias recolhidas na Análise por Grupo e Categoria
+let _acGruposRecolhidos = new Set();
+function toggleAcGrupo(grupoId) {
+  if (_acGruposRecolhidos.has(grupoId)) _acGruposRecolhidos.delete(grupoId);
+  else _acGruposRecolhidos.add(grupoId);
+  renderAnaliseCategoria();
+}
+function acCategoriasTodas(mostrar) {
+  _acGruposRecolhidos.clear();
+  if (!mostrar) {
+    (db.dre_grupos || []).forEach(g => _acGruposRecolhidos.add(g.id));
+    _acGruposRecolhidos.add('__sem_grupo__');
+  }
+  renderAnaliseCategoria();
 }
 
 function acMesesTodos(mostrar) {
@@ -11981,6 +12006,7 @@ function imprimirAnaliseCategoria() {
   const cloneTable = table.cloneNode(true);
   cloneTable.querySelectorAll('[onclick]').forEach(el => el.removeAttribute('onclick'));
   cloneTable.querySelectorAll('.dre-cell-click').forEach(el => el.classList.remove('dre-cell-click'));
+  cloneTable.querySelectorAll('.dre-toggle-cat').forEach(el => el.remove());
 
   const dataHoje = new Date().toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const tableHtml = '<table>' + cloneTable.innerHTML + '</table>';
@@ -13157,7 +13183,8 @@ const PAINEIS_MODAL = {
   'form-forn':    'Novo Fornecedor',
   'form-cli':     'Novo Cliente',
   'form-bnk':     'Nova Conta / Banco',
-  'form-empresa': 'Nova Empresa'
+  'form-empresa': 'Nova Empresa',
+  'form-dfccat':  'Nova Categoria'
 };
 
 let _formModalAtual = null;
@@ -13183,6 +13210,7 @@ function abrirFormModal(panelId, titulo) {
 function fecharFormModal() {
   if (!_formModalAtual) return;
   const { panelId, marca } = _formModalAtual;
+  if (panelId === 'form-dfccat' && typeof clearDfcCategoria === 'function') clearDfcCategoria();
   const panel = document.getElementById(panelId);
   if (panel && marca && marca.parentNode) {
     marca.parentNode.insertBefore(panel, marca);
@@ -15289,7 +15317,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-24 · sevegnani · seguranca';
+window.APP_BUILD = '2026-10-24 · sevegnani · categoria-janela';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
