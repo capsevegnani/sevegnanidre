@@ -481,6 +481,51 @@ th.ef-th { padding:8px 8px 8px 12px; }
 /* ── DRE: linhas de categoria (rastreamento por categoria, expansível) ── */
 .dre-toggle-cat { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; margin-right:6px; background:none; border:none; cursor:pointer; color:#a8a29e; font-size:9px; padding:0; vertical-align:middle; border-radius:4px; transition:.15s; }
 .dre-toggle-cat:hover { color:#ea580c; background:#fff1e6; }
+/* ── Fluxo de caixa projetado ── */
+.fp-scroll { overflow-x:auto; border:1px solid #e7e5e4; border-radius:10px; background:#fff; }
+.fp-table { border-collapse:collapse; width:100%; font-size:12px; }
+.fp-table th { background:#faf9f7; color:#0f766e; font-weight:800; font-size:11px; padding:9px 10px; text-align:right; white-space:nowrap; border-bottom:2px solid #0f766e; position:sticky; top:0; }
+.fp-table th:first-child { text-align:left; min-width:260px; position:sticky; left:0; z-index:2; }
+.fp-table th.fp-mes-atual { background:#fff1e6; color:#ea580c; }
+.fp-table td { padding:6px 10px; text-align:right; white-space:nowrap; font-family:'DM Mono',monospace; font-size:11.5px; border-bottom:1px dashed #e7e5e4; color:#292524; }
+.fp-table td:first-child { text-align:left; font-family:'Plus Jakarta Sans',sans-serif; position:sticky; left:0; background:inherit; z-index:1; }
+.fp-table tr { background:#fff; }
+.fp-table .fp-col-ano { font-weight:700; background:#faf9f7; border-left:1px solid #e7e5e4; }
+.fp-row-secao td { background:#f5f5f4 !important; font-family:'Plus Jakarta Sans',sans-serif !important; font-weight:800; font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:#78716c; text-align:left !important; padding:7px 10px; }
+.fp-row-grupo td:first-child { font-weight:700; text-transform:uppercase; font-size:11.5px; letter-spacing:.2px; }
+.fp-row-grupo td { font-weight:600; }
+.fp-row-cat td { color:#57534e; }
+.fp-row-cat td:first-child { padding-left:40px; font-size:12px; }
+.fp-row-emprestimo, .fp-row-emprestimo td { background:#b91c1c !important; color:#fff !important; }
+.fp-row-emprestimo .dre-toggle-cat { color:#fecaca; }
+.fp-row-caixa td { font-weight:800; }
+.fp-row-total td { font-weight:800; background:#faf9f7 !important; border-top:1.5px solid #d6d3d1; border-bottom:1.5px solid #d6d3d1; }
+.fp-row-saldo td { font-weight:800; background:#fff; border-bottom:1.5px solid #d6d3d1; }
+.fp-row-acum, .fp-row-acum td { background:#0f766e !important; color:#fff !important; font-weight:800; font-size:12px; }
+.fp-cell { cursor:pointer; }
+.fp-cell:hover { outline:2px solid #fdba74; outline-offset:-2px; }
+.fp-row-emprestimo .fp-cell.fp-manual, .fp-row-emprestimo .fp-cell.fp-zero { color:#1f2937 !important; }
+td.fp-manual { background:#dbeafe !important; color:#1d4ed8 !important; font-weight:700; }
+td.fp-manual::before { content:'✎ '; font-size:9px; }
+td.fp-zero { background:#f5f5f4 !important; color:#a8a29e !important; text-decoration:line-through; }
+td.fp-zero::before { content:'⦸ '; font-size:9px; text-decoration:none; display:inline-block; }
+.fp-rotulo { cursor:pointer; border-bottom:1px dotted transparent; }
+.fp-rotulo:hover { border-bottom-color:currentColor; }
+.fp-flag { color:#1d4ed8; font-size:10px; }
+.fp-row-emprestimo .fp-flag { color:#fff; }
+.fp-toggle-vazio { display:inline-block; width:22px; }
+.fp-legenda { display:flex; flex-wrap:wrap; gap:14px; align-items:center; font-size:12px; color:#57534e; }
+.fp-legenda i { display:inline-block; width:14px; height:14px; border-radius:3px; vertical-align:-3px; margin-right:5px; border:1px solid #d6d3d1; }
+.fp-badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:700; }
+.fp-badge.manual { background:#dbeafe; color:#1d4ed8; }
+.fp-badge.zero { background:#f5f5f4; color:#78716c; }
+.fp-badge.auto { background:#dcfce7; color:#166534; }
+.fp-ed-linha { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:7px 0; border-bottom:1px dashed #e7e5e4; font-size:13px; }
+.fp-ed-linha span:first-child { color:#78716c; }
+.fp-ed-link { font-size:12px; color:#ea580c; margin-left:auto; padding-left:8px; }
+.fp-ed-nota { font-size:11.5px; color:#78716c; margin-top:8px; }
+.fp-ed-botoes { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+
 .dre-toggle-spacer { display:inline-block; width:22px; }
 .dre-cat-row td { font-size:11px; border-bottom:1px dashed #f5f4f2; }
 .dre-cat-row td:first-child { padding-left:52px; color:#a8a29e; font-weight:400; }
@@ -1051,6 +1096,10 @@ tr.cob-dia-vazio > td {
       <div class="nav-item" onclick="showPage('fluxo-futuro')" id="nav-fluxo-futuro">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
         Fluxo de Caixa Futuro
+      </div>
+      <div class="nav-item" onclick="showPage('fluxo-projetado')" id="nav-fluxo-projetado">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg>
+        Fluxo de Caixa Projetado
       </div>
       <div class="nav-item" onclick="showPage('fluxo-diario')" id="nav-fluxo-diario">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -2656,6 +2705,49 @@ tr.cob-dia-vazio > td {
     </div>
 
     <!-- ══ FLUXO DE CAIXA FUTURO ══ -->
+    <!-- ══ FLUXO DE CAIXA PROJETADO ══ -->
+    <div class="page" id="page-fluxo-projetado">
+      <div class="page-header"><div>
+        <div class="page-title">Fluxo de Caixa Projetado</div>
+        <div class="page-sub" style="margin-bottom:0">Entradas e saídas mês a mês por grupo e categoria. Clique em qualquer valor para usar o automático, digitar um valor manual ou zerar.</div>
+      </div></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="filter-row" style="align-items:flex-end;flex-wrap:wrap">
+          <div class="form-group"><label>Ano</label>
+            <select id="fp-ano" onchange="renderFluxoProjetado()"></select>
+          </div>
+          <div class="form-group"><label>Ponto de partida</label>
+            <select id="fp-partida" onchange="renderFluxoProjetado()" style="min-width:280px">
+              <option value="atual">Saldo atual das contas, no mês atual</option>
+              <option value="inicio">Saldo das contas em 1º de janeiro</option>
+            </select>
+          </div>
+          <div class="form-group" style="align-self:flex-end">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0 0 10px">
+              <input type="checkbox" id="fp-vazias" onchange="renderFluxoProjetado()" style="width:auto;margin:0;accent-color:#ea580c" />
+              Mostrar categorias sem valor
+            </label>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-self:flex-end;margin-bottom:4px">
+            <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(true)">▾ Expandir</button>
+            <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(false)">▸ Recolher</button>
+            <button class="btn btn-secondary btn-sm" onclick="fpExportar()">⬇ Excel</button>
+            <button class="btn btn-secondary btn-sm" id="fp-btn-restaurar" onclick="fpRestaurarAno()">↺ Voltar tudo ao automático</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #f5f5f4">
+          <div class="fp-legenda">
+            <span><i style="background:#fff"></i>Automático</span>
+            <span><i style="background:#dbeafe;border-color:#93c5fd"></i>✎ Manual</span>
+            <span><i style="background:#f5f5f4"></i>⦸ Zerado</span>
+            <span id="fp-qtd-ajustes" style="font-weight:700;color:#1d4ed8"></span>
+          </div>
+        </div>
+        <div id="fp-info" style="font-size:12px;color:#78716c;margin-top:8px"></div>
+      </div>
+      <div id="fp-tabela-wrap"></div>
+    </div>
+
     <div class="page" id="page-fluxo-futuro">
       <div class="page-header"><div><div class="page-title">Fluxo de Caixa Futuro</div><div class="page-sub" style="margin-bottom:0">Projeção dia a dia de entradas e saídas previstas (por vencimento)</div></div></div>
       <div class="card" style="margin-bottom:16px">
@@ -4062,6 +4154,31 @@ tr.cob-dia-vazio > td {
 </div>
 
 <!-- ══ MODAL DETALHE DE CONTA DO DRE ══ -->
+<div class="modal-overlay" id="modal-fp-celula">
+  <div class="modal" style="width:460px;padding:24px" role="dialog" aria-labelledby="fp-ed-title">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
+      <div style="min-width:0">
+        <div id="fp-ed-title" style="font-size:16px;font-weight:800;color:#1c1917"></div>
+        <div id="fp-ed-sub" style="font-size:12px;color:#78716c;margin-top:2px"></div>
+      </div>
+      <button type="button" class="dre-det-x" onclick="closeModal('modal-fp-celula')" aria-label="Fechar">&times;</button>
+    </div>
+    <div id="fp-ed-info"></div>
+    <div class="form-group" style="margin-top:14px">
+      <label id="fp-ed-lbl-valor">Valor manual</label>
+      <input type="text" id="fp-ed-valor" inputmode="decimal" placeholder="0,00" onkeydown="if(event.key==='Enter'){fpAplicar('manual')}" />
+    </div>
+    <label id="fp-ed-seguintes-wrap" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;margin-top:4px">
+      <input type="checkbox" id="fp-ed-seguintes" style="width:auto;margin:0;accent-color:#ea580c" />
+      Aplicar também aos meses seguintes deste ano
+    </label>
+    <div class="fp-ed-botoes">
+      <button class="btn btn-primary btn-sm" onclick="fpAplicar('manual')">✎ Salvar valor manual</button>
+      <button class="btn btn-secondary btn-sm" onclick="fpAplicar('zero')">⦸ Zerar</button>
+      <button class="btn btn-secondary btn-sm" onclick="fpAplicar('auto')">↺ Voltar ao automático</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-dre-detalhe">
   <div class="modal dre-det-modal" role="dialog" aria-labelledby="dre-detalhe-title">
     <div class="dre-det-head">
@@ -4147,6 +4264,7 @@ const PAGES_CONFIG = [
   { id:'bancos',            label:'Bancos / Caixas',     grupo:'pagar'   },
   { id:'transferencias',    label:'Transferência entre Contas', grupo:'pagar' },
   { id:'fluxo-futuro',      label:'Fluxo de Caixa Futuro',grupo:'pagar'  },
+  { id:'fluxo-projetado',   label:'Fluxo de Caixa Projetado',grupo:'pagar' },
   { id:'fluxo-diario',      label:'Fluxo de Caixa Diário',grupo:'geral'  },
   { id:'fornecedores',      label:'Despesas/Fornecedores', grupo:'pagar' },
   { id:'produtos',          label:'Itens (Compra)',      grupo:'pagar'   },
@@ -5028,6 +5146,7 @@ function showPage(p) {
   if (p === 'bancos')         { renderBancos(); renderFluxoBancoDiario(); }
   if (p === 'transferencias') { populateTransfSelects(); renderTransferencias(); }
   if (p === 'fluxo-futuro')   renderFluxoFuturo();
+  if (p === 'fluxo-projetado') abrirFluxoProjetado();
   if (p === 'fluxo-diario')   renderFluxoDiario(true);
   if (p === 'fornecedores')   renderFornecedores();
   if (p === 'produtos')       renderProdutos();
@@ -5067,6 +5186,7 @@ function renderPaginaAtual() {
   if (p === 'bancos')         { renderBancos(); renderFluxoBancoDiario(); }
   if (p === 'transferencias') { populateTransfSelects(); renderTransferencias(); }
   if (p === 'fluxo-futuro')   renderFluxoFuturo();
+  if (p === 'fluxo-projetado') abrirFluxoProjetado();
   if (p === 'fluxo-diario')   renderFluxoDiario(true);
   if (p === 'fornecedores')   renderFornecedores();
   if (p === 'produtos')       renderProdutos();
@@ -12128,6 +12248,479 @@ function abrirDetalheAcGrupo(grupoId, mes) {
   _dreDetalheRender(nome, periodoTxt, itens, { origem:'acg', chave:grupoId, mes });
 }
 
+
+// ══════════════════════════════════════════════════════════════════
+// FLUXO DE CAIXA PROJETADO
+// Uma linha por grupo do DRE (com as categorias por baixo), mês a mês.
+// Cada número pode ser:
+//   • automático  — vem dos lançamentos do sistema (padrão);
+//   • manual      — valor digitado por alguém;
+//   • zerado      — conta desligada naquele mês.
+// O manual/zerado fica guardado na tabela config e pode voltar ao
+// automático a qualquer momento. Cada ajuste guarda quem fez e quando.
+//
+// Regime de caixa:
+//   • Pago/recebido → mês da data de pagamento/recebimento.
+//   • Em aberto     → mês do vencimento; vencido em aberto vai para o mês atual.
+//   • Lançamentos extras do DFC → mês da data.
+// ══════════════════════════════════════════════════════════════════
+const FP_KEY_BASE = 'fluxo_proj_ajustes';
+let _fpAjustes = {};          // { ano: { linha: { mes: {m:'manual'|'zero', v, u, t} } } }
+let _fpAjustesCarregados = '';
+let _fpItens = {};            // _fpItens[linhaCat][mes] = itens do drill-down
+let _fpLinhas = {};           // metadados da última renderização (nome, auto por mês)
+let _fpEdit = null;           // célula/linha aberta no editor
+let _fpSalvando = Promise.resolve();
+
+function _fpKey() { const e = empresaAtual(); return e ? `${FP_KEY_BASE}:${e}` : FP_KEY_BASE; }
+
+async function carregarFpAjustes(forcar) {
+  const k = _fpKey();
+  if (!forcar && _fpAjustesCarregados === k) return;
+  try {
+    const rows = await sbFetch('config', 'GET', null, `?key=eq.${encodeURIComponent(k)}&limit=1`);
+    _fpAjustes = (rows && rows[0] && rows[0].value) ? (JSON.parse(rows[0].value) || {}) : {};
+    _fpAjustesCarregados = k;
+  } catch(e) { _fpAjustes = {}; }
+}
+function salvarFpAjustes() {
+  const k = _fpKey();
+  const valor = JSON.stringify(_fpAjustes);
+  _fpSalvando = _fpSalvando.then(async () => {
+    const rows = await sbFetch('config', 'GET', null, `?key=eq.${encodeURIComponent(k)}&limit=1`);
+    let ok;
+    if (rows && rows.length) ok = await sbFetch('config', 'PATCH', { value: valor }, `?key=eq.${encodeURIComponent(k)}`);
+    else ok = await sbFetch('config', 'POST', { id: uid(), key: k, value: valor });
+    if (!ok) alert('❌ Não foi possível salvar o ajuste do fluxo projetado. Verifique a conexão e tente de novo.');
+  }).catch(e => console.error('[FLUXO PROJ] erro ao salvar', e));
+  return _fpSalvando;
+}
+
+function _fpAj(ano, linha, mes) {
+  const a = _fpAjustes[ano]; if (!a) return null;
+  const l = a[linha]; if (!l) return null;
+  return l[mes] || null;
+}
+function _fpSetAj(ano, linha, mes, val) {
+  if (!_fpAjustes[ano]) _fpAjustes[ano] = {};
+  if (!_fpAjustes[ano][linha]) _fpAjustes[ano][linha] = {};
+  if (val) _fpAjustes[ano][linha][mes] = val;
+  else delete _fpAjustes[ano][linha][mes];
+  if (!Object.keys(_fpAjustes[ano][linha]).length) delete _fpAjustes[ano][linha];
+  if (!Object.keys(_fpAjustes[ano]).length) delete _fpAjustes[ano];
+}
+
+function _fpAbertosGet() {
+  try { return new Set(JSON.parse(localStorage.getItem('sevegnani_fp_abertos') || 'null') || []); } catch(e) { return new Set(); }
+}
+function _fpAbertosSet(s) { try { localStorage.setItem('sevegnani_fp_abertos', JSON.stringify([...s])); } catch(e) {} }
+let _fpAbertos = null;
+
+function _fpPopularAnos() {
+  const el = document.getElementById('fp-ano');
+  if (!el) return;
+  const atual = new Date().getFullYear();
+  const anos = new Set();
+  for (let y = atual - 2; y <= atual + 2; y++) anos.add(y);
+  Object.keys(_fpAjustes).forEach(a => anos.add(parseInt(a)));
+  const val = el.value;
+  el.innerHTML = [...anos].sort((a,b)=>b-a).map(y => `<option value="${y}">${y}</option>`).join('');
+  el.value = val || atual;
+}
+
+async function abrirFluxoProjetado() {
+  const wrap = document.getElementById('fp-tabela-wrap');
+  if (wrap && !wrap.innerHTML.trim()) wrap.innerHTML = '<div class="empty-state" style="padding:32px">Carregando…</div>';
+  await carregarFpAjustes();
+  _fpPopularAnos();
+  renderFluxoProjetado();
+}
+
+const _fpFmt = v => {
+  if (Math.abs(v) < 0.005) return '–';
+  const s = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.abs(v));
+  return v < 0 ? `(${s})` : s;
+};
+
+function renderFluxoProjetado() {
+  const wrap = document.getElementById('fp-tabela-wrap');
+  if (!wrap) return;
+  const ano = parseInt((document.getElementById('fp-ano') || {}).value) || new Date().getFullYear();
+  const hoje = new Date();
+  const anoAtual = hoje.getFullYear(), mesAtual = hoje.getMonth() + 1;
+  const partidaEl = document.getElementById('fp-partida');
+  // Ano passado: só faz sentido partir do saldo de 1º de janeiro
+  if (partidaEl) partidaEl.disabled = ano !== anoAtual;
+  const partida = (ano === anoAtual && partidaEl) ? partidaEl.value : 'inicio';
+  const mostrarVazias = !!((document.getElementById('fp-vazias') || {}).checked);
+  if (_fpAbertos === null) _fpAbertos = _fpAbertosGet();
+
+  if (!db.dre_grupos.length) {
+    wrap.innerHTML = '<div class="empty-state" style="padding:32px">Cadastre os grupos em <b>DRE → Grupos</b> para montar o fluxo projetado.</div>';
+    return;
+  }
+
+  const iniAno = `${ano}-01-01`;
+  const iniMesAtual = `${anoAtual}-${String(mesAtual).padStart(2,'0')}-01`;
+  const mesInicioAcum = (partida === 'atual') ? mesAtual : 1;
+
+  // ── 1. Linhas de categoria (auto) ────────────────────────────────
+  const SEM_REC = '__semcat_rec__', SEM_PAG = '__semcat_pag__';
+  const caixaMes = {};               // caixa[cat][mes] = valor com sinal (+ entra, − sai)
+  _fpItens = {};
+  const garantir = id => {
+    if (!caixaMes[id]) { caixaMes[id] = {}; _fpItens[id] = {}; for (let m=1;m<=12;m++){ caixaMes[id][m]=0; _fpItens[id][m]=[]; } }
+  };
+  let caixaAbertura = 0;             // ajuste no caixa de janeiro (anos futuros)
+  const catValida = id => id && db.dfc_cats.some(c => c.id === id);
+
+  const lancar = (catId, semCat, dt, valorSinal, item) => {
+    const id = catValida(catId) ? catId : semCat;
+    const p = dt.split('-');
+    const m = parseInt(p[1]);
+    garantir(id);
+    caixaMes[id][m] += valorSinal;
+    _fpItens[id][m].push(item);
+  };
+
+  // Item realizado (pago/recebido): entra pela data efetiva
+  const realizado = (dt, catId, semCat, valorSinal, item) => {
+    if (!dt || parseInt(dt.slice(0,4)) !== ano) return;
+    const m = parseInt(dt.slice(5,7));
+    // "Partir do saldo atual": o que já foi pago neste mês ou antes já está
+    // dentro do saldo das contas. Nos meses anteriores ele aparece só como
+    // referência (o saldo acumulado começa no mês atual).
+    if (partida === 'atual' && m >= mesAtual) return;
+    lancar(catId, semCat, dt, valorSinal, item);
+  };
+  // Item em aberto: entra pelo vencimento; vencido vai para o mês atual
+  const aberto = (venc, catId, semCat, valorSinal, item) => {
+    let dt = venc || '';
+    if (!dt || dt < iniMesAtual) {
+      if (ano === anoAtual) dt = iniMesAtual;
+      else if (ano > anoAtual) { caixaAbertura += valorSinal; return; }
+      else return;                          // ano passado: só o que foi realizado
+    } else if (dt < iniAno) { caixaAbertura += valorSinal; return; }
+    if (parseInt(dt.slice(0,4)) !== ano) return;
+    item.status = (venc && venc < today() ? 'Vencido · ' : '') + item.status;
+    lancar(catId, semCat, dt, valorSinal, item);
+  };
+
+  getParcelasReceber(true).forEach(p => {
+    const dt = p.dtrecebido || p.venc;
+    realizado(dt, p.catId, SEM_REC, p.valParc || 0, {
+      tipo:'receber', id:p.lancId, nf:p.nf||'', data:dt, nome:getClienteNome(p.cliente),
+      prod:(p.prod ? getProdVendaNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
+      valor:p.valParc||0, status:'Recebido' });
+  });
+  getParcelasReceber(false).forEach(p => {
+    const baixas = (typeof cobTotalBaixas === 'function') ? cobTotalBaixas(p.lancId, p.parcIdx) : 0;
+    const v = Math.max(0, (p.valParc || 0) - baixas);
+    if (v < 0.005) return;
+    aberto(p.venc, p.catId, SEM_REC, v, {
+      tipo:'receber', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getClienteNome(p.cliente),
+      prod:(p.prod ? getProdVendaNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
+      valor:v, status:'A Receber' });
+  });
+  getParcelas(true).forEach(p => {
+    const dt = p.dtpago || p.venc;
+    realizado(dt, p.catId, SEM_PAG, -(p.valParc || 0), {
+      tipo:'pagar', id:p.lancId, nf:p.nf||'', data:dt, nome:getFornNome(p.forn),
+      prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
+      valor:p.valParc||0, status:'Pago' });
+  });
+  getParcelas(false).forEach(p => {
+    if (!(p.valParc > 0.005)) return;
+    aberto(p.venc, p.catId, SEM_PAG, -(p.valParc || 0), {
+      tipo:'pagar', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getFornNome(p.forn),
+      prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
+      valor:p.valParc||0, status:'A Pagar' });
+  });
+  // Lançamentos extras do DFC (não passam pelas contas bancárias)
+  (db.dfc_lans || []).forEach(l => {
+    if (!l.data || parseInt(l.data.slice(0,4)) !== ano || !catValida(l.cat)) return;
+    const sinal = getDfcCatTipo(l.cat) === 'entrada' ? 1 : -1;
+    lancar(l.cat, '', l.data, sinal * (l.valor || 0), {
+      tipo:'dfc', id:'', nf:'', data:l.data, nome:'Lançamento DFC', prod:l.desc || '',
+      valor:l.valor||0, status: l.data < today() ? 'Pago' : 'Previsto' });
+  });
+
+  // ── 2. Caixa (saldo das contas) ──────────────────────────────────
+  const caixaAuto = {}; for (let m=1;m<=12;m++) caixaAuto[m] = 0;
+  const contaIds = new Set(db.bancos.map(b => b.id));
+  const saldoEm = data => {                // saldo de todas as contas antes de "data"
+    let s = db.bancos.reduce((t,b) => t + (b.saldo_inicial || 0), 0);
+    getParcelasReceber(true).forEach(p => { if (contaIds.has(p.banco) && p.dtrecebido && p.dtrecebido < data) s += (p.valParc || 0); });
+    getParcelas(true).forEach(p => { if (contaIds.has(p.banco) && p.dtpago && p.dtpago < data) s -= (p.valParc || 0); });
+    return s;
+  };
+  const saldoAtual = db.bancos.reduce((t,b) => t + getBancoSaldo(b), 0);
+  if (ano < anoAtual)                caixaAuto[1] = saldoEm(iniAno);
+  else if (ano > anoAtual)           caixaAuto[1] = saldoAtual + caixaAbertura;
+  else if (partida === 'atual')      caixaAuto[mesAtual] = saldoAtual;
+  else                               caixaAuto[1] = saldoEm(iniAno);
+
+  // ── 3. Estrutura: grupos por seção ───────────────────────────────
+  const grupos = [...db.dre_grupos].filter(g => g.tipo === 'entrada' || g.tipo === 'saida').sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+  const gruposIds = new Set(grupos.map(g => g.id));
+  const catsDoGrupo = {};
+  grupos.forEach(g => catsDoGrupo[g.id] = []);
+  catsDoGrupo.__semgrp_ent__ = []; catsDoGrupo.__semgrp_sai__ = [];
+  db.dfc_cats.forEach(c => {
+    const gid = gruposIds.has(c.grupo) ? c.grupo : (c.tipo === 'entrada' ? '__semgrp_ent__' : '__semgrp_sai__');
+    catsDoGrupo[gid].push({ id:c.id, nome:c.nome });
+  });
+  if (caixaMes[SEM_REC]) catsDoGrupo.__semgrp_ent__.push({ id:SEM_REC, nome:'Sem categoria (a receber)' });
+  if (caixaMes[SEM_PAG]) catsDoGrupo.__semgrp_sai__.push({ id:SEM_PAG, nome:'Sem categoria (a pagar)' });
+  Object.values(catsDoGrupo).forEach(a => a.sort((x,y) => x.nome.localeCompare(y.nome)));
+
+  const secEnt = grupos.filter(g => g.tipo === 'entrada').map(g => ({ id:g.id, nome:g.nome }));
+  const secSai = grupos.filter(g => g.tipo === 'saida').map(g => ({ id:g.id, nome:g.nome }));
+  if (catsDoGrupo.__semgrp_ent__.length) secEnt.push({ id:'__semgrp_ent__', nome:'Outras entradas (sem grupo)' });
+  if (catsDoGrupo.__semgrp_sai__.length) secSai.push({ id:'__semgrp_sai__', nome:'Outras saídas (sem grupo)' });
+
+  // ── 4. Valor efetivo de cada célula (auto → manual/zero) ─────────
+  _fpLinhas = {};
+  let qtdAjustes = 0;
+  const efetivo = (chave, nome, autoMes) => {
+    const ef = {}, est = {};
+    for (let m=1;m<=12;m++) {
+      const aj = _fpAj(ano, chave, m);
+      if (aj && aj.m === 'zero')        { ef[m] = 0; est[m] = 'zero'; qtdAjustes++; }
+      else if (aj && aj.m === 'manual') { ef[m] = aj.v || 0; est[m] = 'manual'; qtdAjustes++; }
+      else                              { ef[m] = autoMes[m] || 0; est[m] = 'auto'; }
+    }
+    _fpLinhas[chave] = { nome, auto: autoMes, ef, est };
+    return { ef, est };
+  };
+
+  const MESES = [1,2,3,4,5,6,7,8,9,10,11,12];
+  const linhasGrupo = (sec, sinalSec) => sec.map(g => {
+    const cats = (catsDoGrupo[g.id] || []).map(c => {
+      const auto = {}; MESES.forEach(m => auto[m] = sinalSec * ((caixaMes[c.id] || {})[m] || 0));
+      const r = efetivo('cat:' + c.id, c.nome, auto);
+      const temValor = MESES.some(m => Math.abs(auto[m]) >= 0.005 || r.est[m] !== 'auto');
+      return { ...c, chave:'cat:' + c.id, ...r, auto, temValor };
+    });
+    const somaCats = {}; MESES.forEach(m => somaCats[m] = cats.reduce((t,c) => t + c.ef[m], 0));
+    const r = efetivo('grp:' + g.id, g.nome, somaCats);
+    return { ...g, chave:'grp:' + g.id, cats, ...r, auto: somaCats };
+  });
+  const gEnt = linhasGrupo(secEnt, 1);
+  const gSai = linhasGrupo(secSai, -1);
+  const cheque = efetivo('cheque', 'Cheque especial', {});
+  const caixa  = efetivo('caixa', 'Caixa (saldo das contas)', caixaAuto);
+
+  // ── 5. Totais ─────────────────────────────────────────────────────
+  const totEnt = {}, totSai = {}, saldoMes = {}, acum = {};
+  let a = 0;
+  MESES.forEach(m => {
+    totEnt[m] = gEnt.reduce((t,g) => t + g.ef[m], 0) + cheque.ef[m] + caixa.ef[m];
+    totSai[m] = gSai.reduce((t,g) => t + g.ef[m], 0);
+    saldoMes[m] = totEnt[m] - totSai[m];
+    if (m >= mesInicioAcum) { a += saldoMes[m]; acum[m] = a; } else acum[m] = null;
+  });
+  const somaAno = obj => MESES.reduce((t,m) => t + (obj[m] || 0), 0);
+
+  // ── 6. HTML ───────────────────────────────────────────────────────
+  const thMeses = MESES.map(m => `<th class="${ano === anoAtual && m === mesAtual ? 'fp-mes-atual' : ''}">${MESES_ABR[m]}_${String(ano).slice(2)}</th>`).join('');
+  const celula = (chave, m, v, est, clicavel) => {
+    const linha = _fpLinhas[chave];
+    let cls = '', tit = '';
+    const autoTxt = linha ? fmtBRL(linha.auto[m] || 0) : '';
+    if (est === 'manual') { cls = 'fp-manual'; tit = `Valor manual · automático seria ${autoTxt}`; }
+    else if (est === 'zero') { cls = 'fp-zero'; tit = `Zerado · automático seria ${autoTxt}`; }
+    else tit = 'Automático';
+    const aj = _fpAj(ano, chave, m);
+    if (aj && aj.u) tit += ` · por ${aj.u}${aj.t ? ' em ' + fmtDate(aj.t.slice(0,10)) : ''}`;
+    const conteudo = est === 'zero' ? '0,00' : _fpFmt(v);
+    if (!clicavel) return `<td class="${cls}">${conteudo}</td>`;
+    return `<td class="fp-cell ${cls}" title="${esc(tit)} · clique para ajustar" onclick="fpAbrirCelula('${chave}',${m})">${conteudo}</td>`;
+  };
+  const linhaHtml = (cls, rotulo, chave, ef, est, opts = {}) => {
+    const tds = MESES.map(m => celula(chave, m, ef[m], est ? est[m] : 'auto', !!chave)).join('');
+    const marca = est && MESES.some(m => est[m] !== 'auto') ? ' <span class="fp-flag" title="Esta linha tem ajustes manuais">✎</span>' : '';
+    const label = chave
+      ? `<span class="fp-rotulo" onclick="fpAbrirCelula('${chave}','linha')" title="Ajustar a linha inteira">${opts.prefixo || ''}${esc(rotulo)}${marca}</span>`
+      : `${opts.prefixo || ''}${esc(rotulo)}`;
+    const total = opts.totalAno !== undefined ? opts.totalAno : somaAno(ef);
+    return `<tr class="${cls}"><td>${opts.toggle || ''}${label}</td>${tds}<td class="fp-col-ano">${_fpFmt(total)}</td></tr>`;
+  };
+  const linhaFixa = (cls, rotulo, vals, totalAno) =>
+    `<tr class="${cls}"><td>${rotulo}</td>${MESES.map(m => `<td>${vals[m] === null ? '' : _fpFmt(vals[m])}</td>`).join('')}<td class="fp-col-ano">${totalAno === null ? '' : _fpFmt(totalAno)}</td></tr>`;
+
+  const blocoGrupos = (lista) => lista.map(g => {
+    const n = normText(g.nome || '');
+    const ehEmprestimo = n.includes('emprestimo') && !n.includes('captacao');
+    const cats = g.cats.filter(c => mostrarVazias || c.temValor);
+    const aberto_ = _fpAbertos.has(g.id);
+    const toggle = cats.length
+      ? `<button type="button" class="dre-toggle-cat" onclick="fpToggleGrupo('${g.id}')" title="${aberto_ ? 'Recolher' : 'Ver'} categorias">${aberto_ ? '▾' : '▸'}</button>`
+      : '<span class="fp-toggle-vazio"></span>';
+    let h = linhaHtml('fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
+    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat', c.nome, c.chave, c.ef, c.est); });
+    return h;
+  }).join('');
+
+  let html = '';
+  html += `<tr class="fp-row-secao"><td colspan="14">Entradas</td></tr>`;
+  html += blocoGrupos(gEnt);
+  html += linhaHtml('fp-row-grupo', 'Cheque especial', 'cheque', cheque.ef, cheque.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
+  html += linhaHtml('fp-row-grupo fp-row-caixa', 'Caixa (saldo das contas)', 'caixa', caixa.ef, caixa.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
+  html += linhaFixa('fp-row-total', 'Total de entradas', totEnt, somaAno(totEnt));
+  html += `<tr class="fp-row-secao"><td colspan="14">Saídas</td></tr>`;
+  html += blocoGrupos(gSai);
+  html += linhaFixa('fp-row-total', 'Total de saídas do mês', totSai, somaAno(totSai));
+  html += linhaFixa('fp-row-saldo', 'Saldo do mês (entradas − saídas)', saldoMes, somaAno(saldoMes));
+  html += linhaFixa('fp-row-acum', 'Saldo acumulado · necessidade de capital de giro', acum, acum[12]);
+
+  const partidaTxt = (ano === anoAtual && partida === 'atual')
+    ? `Começa no saldo atual das contas (<b>${fmtBRL(saldoAtual)}</b>) em ${MESES_ABR[mesAtual]}. Os meses anteriores mostram o que já foi pago e recebido, só como referência.`
+    : (ano > anoAtual
+        ? `Começa em Jan com o saldo atual das contas mais o que ainda está em aberto antes de ${ano}.`
+        : `Começa no saldo das contas em 01/01/${ano}.`);
+  document.getElementById('fp-info').innerHTML = `${partidaTxt} Pago e recebido entram pela data do pagamento; em aberto, pelo vencimento (vencidos entram no mês atual).`;
+  document.getElementById('fp-qtd-ajustes').textContent = qtdAjustes
+    ? `${qtdAjustes} ${qtdAjustes === 1 ? 'célula ajustada' : 'células ajustadas'} em ${ano}` : 'Nenhum ajuste manual neste ano';
+  const btnRest = document.getElementById('fp-btn-restaurar');
+  if (btnRest) btnRest.disabled = !qtdAjustes;
+
+  wrap.innerHTML = `<div class="fp-scroll"><table class="fp-table">
+    <thead><tr><th>Fluxo de caixa projetado</th>${thMeses}<th class="fp-col-ano">Ano</th></tr></thead>
+    <tbody>${html}</tbody></table></div>`;
+  window._fpAnoRender = ano;
+}
+
+function fpToggleGrupo(id) {
+  if (_fpAbertos.has(id)) _fpAbertos.delete(id); else _fpAbertos.add(id);
+  _fpAbertosSet(_fpAbertos); renderFluxoProjetado();
+}
+function fpTodosGrupos(abrir) {
+  _fpAbertos = new Set();
+  if (abrir) { db.dre_grupos.forEach(g => _fpAbertos.add(g.id)); _fpAbertos.add('__semgrp_ent__'); _fpAbertos.add('__semgrp_sai__'); }
+  _fpAbertosSet(_fpAbertos); renderFluxoProjetado();
+}
+
+// ── Editor de célula / linha ─────────────────────────────────────────
+function fpAbrirCelula(chave, mes) {
+  const ano = window._fpAnoRender;
+  const linha = _fpLinhas[chave];
+  if (!linha) return;
+  _fpEdit = { chave, mes, ano };
+  const ehLinha = mes === 'linha';
+  document.getElementById('fp-ed-title').textContent = linha.nome;
+  document.getElementById('fp-ed-sub').textContent = ehLinha ? `Linha inteira · ${ano}` : `${meses[mes]} / ${ano}`;
+  const ehGrupo = chave.startsWith('grp:');
+  let info = '';
+  if (ehLinha) {
+    const autoAno = Object.values(linha.auto).reduce((t,v) => t + (v||0), 0);
+    const efAno = Object.values(linha.ef).reduce((t,v) => t + (v||0), 0);
+    const nAj = Object.values(linha.est).filter(e => e !== 'auto').length;
+    info = `<div class="fp-ed-linha"><span>Automático no ano</span><b>${fmtBRL(autoAno)}</b></div>
+            <div class="fp-ed-linha"><span>Valor usado no ano</span><b>${fmtBRL(efAno)}</b></div>
+            <div class="fp-ed-linha"><span>Meses ajustados</span><b>${nAj}</b></div>`;
+  } else {
+    const est = linha.est[mes];
+    const aj = _fpAj(ano, chave, mes);
+    const estTxt = est === 'manual' ? '<span class="fp-badge manual">✎ Manual</span>'
+                 : est === 'zero' ? '<span class="fp-badge zero">⦸ Zerado</span>'
+                 : '<span class="fp-badge auto">Automático</span>';
+    const temItens = chave.startsWith('cat:') ? ((_fpItens[chave.slice(4)] || {})[mes] || []).length
+                   : ehGrupo ? _fpItensGrupo(chave.slice(4), mes).length : 0;
+    info = `<div class="fp-ed-linha"><span>Situação</span>${estTxt}</div>
+            <div class="fp-ed-linha"><span>Valor automático</span><b>${fmtBRL(linha.auto[mes] || 0)}</b>${temItens ? ` <a href="#" onclick="fpVerLancamentos();return false" class="fp-ed-link">ver ${temItens} lançamento${temItens===1?'':'s'}</a>` : ''}</div>
+            <div class="fp-ed-linha"><span>Valor usado</span><b>${fmtBRL(linha.ef[mes] || 0)}</b></div>
+            ${aj && aj.u ? `<div class="fp-ed-linha"><span>Alterado por</span><span>${esc(aj.u)}${aj.t ? ' · ' + fmtDate(aj.t.slice(0,10)) : ''}</span></div>` : ''}`;
+  }
+  if (ehGrupo) info += `<div class="fp-ed-nota">Valor manual no grupo substitui a soma das categorias dele naquele mês.</div>`;
+  document.getElementById('fp-ed-info').innerHTML = info;
+  const inp = document.getElementById('fp-ed-valor');
+  const atual = ehLinha ? '' : linha.ef[mes];
+  inp.value = (atual !== '' && Math.abs(atual) >= 0.005) ? new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(atual) : '';
+  document.getElementById('fp-ed-seguintes-wrap').style.display = ehLinha ? 'none' : '';
+  document.getElementById('fp-ed-seguintes').checked = false;
+  document.getElementById('fp-ed-lbl-valor').textContent = ehLinha ? 'Valor manual para todos os meses' : 'Valor manual';
+  openModal('modal-fp-celula');
+  setTimeout(() => { inp.focus(); inp.select(); }, 50);
+}
+
+function _fpMesesAlvo() {
+  const e = _fpEdit;
+  if (e.mes === 'linha') return [1,2,3,4,5,6,7,8,9,10,11,12];
+  if (document.getElementById('fp-ed-seguintes').checked) { const r = []; for (let m = e.mes; m <= 12; m++) r.push(m); return r; }
+  return [e.mes];
+}
+async function fpAplicar(modo) {
+  if (!_fpEdit) return;
+  const { chave, ano } = _fpEdit;
+  let valor = 0;
+  if (modo === 'manual') {
+    const txt = document.getElementById('fp-ed-valor').value.trim();
+    if (!txt) { alert('Digite o valor manual.'); return; }
+    valor = parseValorBR(txt);
+  }
+  const mesesAlvo = _fpMesesAlvo();
+  if (_fpEdit.mes === 'linha' && modo !== 'manual') {
+    const msg = modo === 'zero' ? 'Zerar esta linha em todos os meses do ano?' : 'Voltar esta linha para o valor automático em todos os meses do ano?';
+    if (!confirm(msg)) return;
+  }
+  const marca = { u: (currentUser && (currentUser.nome || currentUser.user)) || '', t: new Date().toISOString() };
+  mesesAlvo.forEach(m => {
+    if (modo === 'auto') _fpSetAj(ano, chave, m, null);
+    else if (modo === 'zero') _fpSetAj(ano, chave, m, { m:'zero', ...marca });
+    else _fpSetAj(ano, chave, m, { m:'manual', v: valor, ...marca });
+  });
+  closeModal('modal-fp-celula');
+  renderFluxoProjetado();
+  await salvarFpAjustes();
+}
+async function fpRestaurarAno() {
+  const ano = window._fpAnoRender;
+  if (!_fpAjustes[ano]) return;
+  if (!confirm(`Voltar TODOS os valores de ${ano} para o automático? Os valores manuais e zerados deste ano serão apagados.`)) return;
+  delete _fpAjustes[ano];
+  renderFluxoProjetado();
+  await salvarFpAjustes();
+}
+
+function _fpItensGrupo(gid, mes) {
+  const ids = db.dfc_cats.filter(c => c.grupo === gid).map(c => c.id);
+  if (gid === '__semgrp_ent__') ids.push('__semcat_rec__');
+  if (gid === '__semgrp_sai__') ids.push('__semcat_pag__');
+  if (gid.startsWith('__semgrp')) db.dfc_cats.filter(c => !db.dre_grupos.some(g => g.id === c.grupo)).forEach(c => ids.push(c.id));
+  let itens = [];
+  ids.forEach(id => { itens = itens.concat(((_fpItens[id] || {})[mes]) || []); });
+  return itens;
+}
+function fpVerLancamentos() {
+  if (!_fpEdit) return;
+  const { chave, mes, ano } = _fpEdit;
+  const linha = _fpLinhas[chave];
+  const itens = (chave.startsWith('cat:') ? (((_fpItens[chave.slice(4)] || {})[mes]) || []) : _fpItensGrupo(chave.slice(4), mes))
+    .slice().sort((a,b) => (a.data||'').localeCompare(b.data||''));
+  closeModal('modal-fp-celula');
+  _dreDetalheRender(linha ? linha.nome : 'Lançamentos', `${meses[mes]} / ${ano} · valores automáticos`, itens, { origem:'fp', chave, mes });
+}
+
+// Exporta a tabela atual para Excel (CSV com ponto e vírgula)
+function fpExportar() {
+  const tabela = document.querySelector('#fp-tabela-wrap table');
+  if (!tabela) return;
+  const linhas = [...tabela.querySelectorAll('tr')].map(tr =>
+    [...tr.children].map(td => {
+      let t = td.innerText.replace(/[▸▾✎]/g, '').trim();
+      if (/^\(?[\d.]+,\d{2}\)?$/.test(t)) t = (t.startsWith('(') ? '-' : '') + t.replace(/[()]/g, '');
+      if (t === '–') t = '0';
+      return '"' + t.replace(/"/g, '""') + '"';
+    }).join(';'));
+  const blob = new Blob(['﻿' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `fluxo-caixa-projetado-${window._fpAnoRender || ''}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
 // Gera o PDF da Análise por Categoria (usa a tabela já renderizada em tela,
 // respeitando os meses e filtros aplicados no momento).
 function imprimirAnaliseCategoria() {
@@ -12324,6 +12917,10 @@ function _dreDetReabrir() {
   if (ctx.origem === 'ac') {
     if (typeof renderAnaliseCategoria === 'function') renderAnaliseCategoria();
     abrirDetalheAcCategoria(ctx.chave, ctx.mes);
+  } else if (ctx.origem === 'fp') {
+    renderFluxoProjetado();
+    _fpEdit = { chave: ctx.chave, mes: ctx.mes, ano: window._fpAnoRender };
+    fpVerLancamentos();
   } else if (ctx.origem === 'acg') {
     if (typeof renderAnaliseCategoria === 'function') renderAnaliseCategoria();
     abrirDetalheAcGrupo(ctx.chave, ctx.mes);
@@ -15456,7 +16053,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-24 · sevegnani · analise-aberto';
+window.APP_BUILD = '2026-10-25 · sevegnani · fluxo-projetado';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
