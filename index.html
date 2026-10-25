@@ -2513,10 +2513,6 @@ tr.cob-dia-vazio > td {
           <label class="dre-mes-chip"><input type="checkbox" id="ac-mes-12" checked onchange="renderAnaliseCategoria()" />Dez</label>
           <button class="btn btn-secondary btn-sm" onclick="acMesesTodos(true)">Marcar todos</button>
           <button class="btn btn-secondary btn-sm" onclick="acMesesTodos(false)">Ocultar todos</button>
-          <span style="width:1px;height:20px;background:#e7e5e4;margin:0 4px"></span>
-          <span style="font-size:11px;color:#a8a29e;font-weight:600;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;">Categorias:</span>
-          <button class="btn btn-secondary btn-sm" onclick="acCategoriasTodas(true)">▾ Expandir</button>
-          <button class="btn btn-secondary btn-sm" onclick="acCategoriasTodas(false)">▸ Recolher</button>
         </div>
       </div>
 
@@ -11246,13 +11242,10 @@ function getGrupoAmortizacaoId() {
 // A variação de estoque digitada é somada diretamente neste grupo, de modo que
 // tanto o valor monetário quanto o % do CPV recalculam juntos.
 function getGrupoCpvId() {
-  // 1º o grupo-padrão do CPV (dre-05), mesmo que tenha sido renomeado
-  const fixo = db.dre_grupos.find(g => g.id === 'dre-05' && (g.tipo === 'entrada' || g.tipo === 'saida'));
-  if (fixo) return fixo.id;
   const g = db.dre_grupos.find(g => {
     if (g.tipo !== 'entrada' && g.tipo !== 'saida') return false;
     const n = normText(g.nome || '');
-    return n.includes('cpv') || (n.includes('custo') && n.includes('produto')) || n === 'produto';
+    return n.includes('cpv') || (n.includes('custo') && n.includes('produto'));
   });
   return g ? g.id : null;
 }
@@ -11911,12 +11904,9 @@ function renderAnaliseCategoria() {
     let totalGrupoAnual = 0;
     cats.forEach(c => { for (let m=1;m<=12;m++) totalGrupoAnual += sinalCat(c.id) * (valoresMes[c.id][m]||0); });
     const grupoCellsHtml = grupoCellsVal.map(v => `<td>${fmtValSigned(v)}</td>`).join('');
-    const recolhido = _acGruposRecolhidos.has(g.id);
-    const toggleAc = `<button type="button" class="dre-toggle-cat" onclick="toggleAcGrupo('${g.id}')" title="${recolhido ? 'Expandir' : 'Recolher'} categorias">${recolhido ? '▸' : '▾'}</button>`;
-    linhasHtml += `<tr class="dre-row-subtotal"><td>${toggleAc}${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`}</tr>`;
+    linhasHtml += `<tr class="dre-row-subtotal"><td>${g.nome}</td>${grupoCellsHtml}${mesFiltro ? '' : `<td class="dfc-col-total">${fmtValSigned(totalGrupoAnual)}</td>`}</tr>`;
 
-    // Uma linha por categoria do grupo (valores clicáveis para o drill-down).
-    // Grupo recolhido: os valores continuam somando no Total Geral, só não aparecem.
+    // Uma linha por categoria do grupo (valores clicáveis para o drill-down)
     cats.forEach(c => {
       const sinal = sinalCat(c.id);
       const cellsHtml = mesesExibir.map(m => {
@@ -11929,7 +11919,7 @@ function renderAnaliseCategoria() {
       const totalCell = mesFiltro ? '' : (Math.abs(totalCatAnual) >= 0.005
         ? `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheAcCategoria('${c.id}','total')" title="Ver lançamentos desta categoria">${fmtValSigned(totalCatAnual)}</td>`
         : `<td class="dfc-col-total">${fmtValSigned(totalCatAnual)}</td>`);
-      if (!recolhido) linhasHtml += `<tr class="dfc-row-sub"><td>${c.nome}</td>${cellsHtml}${totalCell}</tr>`;
+      linhasHtml += `<tr class="dfc-row-sub"><td>${c.nome}</td>${cellsHtml}${totalCell}</tr>`;
     });
   });
 
@@ -11945,22 +11935,6 @@ function renderAnaliseCategoria() {
     <thead><tr><th>Grupo / Categoria</th>${mesesHeader}</tr></thead>
     <tbody>${linhasHtml}</tbody>
   </table>`;
-}
-
-// Grupos com as categorias recolhidas na Análise por Grupo e Categoria
-let _acGruposRecolhidos = new Set();
-function toggleAcGrupo(grupoId) {
-  if (_acGruposRecolhidos.has(grupoId)) _acGruposRecolhidos.delete(grupoId);
-  else _acGruposRecolhidos.add(grupoId);
-  renderAnaliseCategoria();
-}
-function acCategoriasTodas(mostrar) {
-  _acGruposRecolhidos.clear();
-  if (!mostrar) {
-    (db.dre_grupos || []).forEach(g => _acGruposRecolhidos.add(g.id));
-    _acGruposRecolhidos.add('__sem_grupo__');
-  }
-  renderAnaliseCategoria();
 }
 
 function acMesesTodos(mostrar) {
@@ -12007,7 +11981,6 @@ function imprimirAnaliseCategoria() {
   const cloneTable = table.cloneNode(true);
   cloneTable.querySelectorAll('[onclick]').forEach(el => el.removeAttribute('onclick'));
   cloneTable.querySelectorAll('.dre-cell-click').forEach(el => el.classList.remove('dre-cell-click'));
-  cloneTable.querySelectorAll('.dre-toggle-cat').forEach(el => el.remove());
 
   const dataHoje = new Date().toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const tableHtml = '<table>' + cloneTable.innerHTML + '</table>';
@@ -15316,7 +15289,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-24 · sevegnani · analise-recolher';
+window.APP_BUILD = '2026-10-24 · sevegnani · seguranca';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
