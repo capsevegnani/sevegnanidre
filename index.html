@@ -95,6 +95,9 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
 }
 .nav-item:hover { background:#f5f4f2; color:#1f2937; }
 .nav-item.active { background:#fff1e6; color:#ea580c; }
+#nav-fluxo-projetado { color:#7c3aed; font-weight:600; }
+#nav-fluxo-projetado:hover { background:#f3e8ff; color:#6d28d9; }
+#nav-fluxo-projetado.active { background:#ede9fe; color:#6d28d9; }
 .nav-item svg { width:17px; height:17px; flex-shrink:0; }
 .sidebar-footer { padding:16px 14px; border-top:1px solid #e7e5e4; font-size:12px; color:#a8a29e; }
 .sidebar-footer .sf-user { font-weight:600; color:#1f2937; font-size:13px; margin-bottom:2px; }
@@ -482,12 +485,14 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .dre-toggle-cat { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; margin-right:6px; background:none; border:none; cursor:pointer; color:#a8a29e; font-size:9px; padding:0; vertical-align:middle; border-radius:4px; transition:.15s; }
 .dre-toggle-cat:hover { color:#ea580c; background:#fff1e6; }
 /* ── Fluxo de caixa projetado ── */
-.fp-scroll { overflow-x:auto; border:1px solid #e7e5e4; border-radius:10px; background:#fff; }
-.fp-table { border-collapse:collapse; width:100%; font-size:12px; }
-.fp-table th { background:#faf9f7; color:#0f766e; font-weight:800; font-size:11px; padding:9px 10px; text-align:right; white-space:nowrap; border-bottom:2px solid #0f766e; position:sticky; top:0; }
-.fp-table th:first-child { text-align:left; min-width:260px; position:sticky; left:0; z-index:2; }
+.fp-scroll { display:inline-block; max-width:100%; overflow-x:auto; border:1px solid #e7e5e4; border-radius:10px; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.fp-table { border-collapse:collapse; width:auto; font-size:12px; }
+.fp-table th:not(:first-child), .fp-table td:not(:first-child) { min-width:92px; }
+.fp-table th.fp-col-ano, .fp-table td.fp-col-ano { min-width:108px; }
+.fp-table th { background:#faf9f7; color:#0f766e; font-weight:800; font-size:10.5px; letter-spacing:.3px; padding:7px 10px; text-align:right; white-space:nowrap; border-bottom:2px solid #0f766e; position:sticky; top:0; }
+.fp-table th:first-child { text-align:left; min-width:300px; position:sticky; left:0; z-index:2; }
 .fp-table th.fp-mes-atual { background:#fff1e6; color:#ea580c; }
-.fp-table td { padding:6px 10px; text-align:right; white-space:nowrap; font-family:'DM Mono',monospace; font-size:11.5px; border-bottom:1px dashed #e7e5e4; color:#292524; }
+.fp-table td { padding:4px 10px; text-align:right; white-space:nowrap; font-family:'DM Mono',monospace; font-size:11.5px; border-bottom:1px dashed #e7e5e4; color:#292524; }
 .fp-table td:first-child { text-align:left; font-family:'Plus Jakarta Sans',sans-serif; position:sticky; left:0; background:inherit; z-index:1; }
 .fp-table tr { background:#fff; }
 .fp-table .fp-col-ano { font-weight:700; background:#faf9f7; border-left:1px solid #e7e5e4; }
@@ -498,7 +503,15 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .fp-row-cat td:first-child { padding-left:40px; font-size:12px; }
 .fp-row-orcado td, .fp-row-orcado td span, .dre-row-orcado td, .dre-row-orcado td span { color:#dc2626 !important; }
 .fp-row-emprestimo, .fp-row-emprestimo td { background:#b91c1c !important; color:#fff !important; }
-.fp-row-emprestimo .dre-toggle-cat { color:#fecaca; }
+.fp-row-emprestimo .dre-toggle-cat { color:#fff; }
+.fp-table .dre-toggle-cat { width:18px; height:18px; font-size:11px; color:#78716c; border:1px solid #e7e5e4; background:#fff; }
+.fp-row-emprestimo .dre-toggle-cat { background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.5); color:#fff; }
+.fp-row-cat.fp-row-cat-emp td { background:#fef2f2; }
+#page-fluxo-projetado .card .filter-row { gap:12px; }
+#page-fluxo-projetado .card .form-group { margin-bottom:0; }
+#page-fluxo-projetado .card .form-group label { font-size:11px; margin-bottom:3px; }
+#page-fluxo-projetado .card select { padding:6px 28px 6px 10px; font-size:12.5px; }
+#fp-info { font-size:11.5px !important; line-height:1.45; }
 .fp-row-caixa td { font-weight:800; }
 .fp-row-total td { font-weight:800; background:#faf9f7 !important; border-top:1.5px solid #d6d3d1; border-bottom:1.5px solid #d6d3d1; }
 .fp-row-saldo td { font-weight:800; background:#fff; border-bottom:1.5px solid #d6d3d1; }
@@ -1098,9 +1111,9 @@ tr.cob-dia-vazio > td {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
         Fluxo de Caixa Futuro
       </div>
-      <div class="nav-item" onclick="showPage('fluxo-projetado')" id="nav-fluxo-projetado">
+      <div class="nav-item" onclick="showPage('fluxo-projetado')" id="nav-fluxo-projetado" title="Fluxo de Caixa Projetado">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 2 4-5"/></svg>
-        Fluxo de Caixa Projetado
+        Fluxo de Caixa Proj.
       </div>
       <div class="nav-item" onclick="showPage('fluxo-diario')" id="nav-fluxo-diario">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -2772,9 +2785,9 @@ tr.cob-dia-vazio > td {
           </div>
           <div class="form-group" id="fp-nav-wrap"><label>Período</label>
             <div style="display:flex;gap:6px;align-items:center">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(-1)" title="Período anterior">◀</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(-1)" title="Mês anterior">◀</button>
               <span id="fp-periodo-lbl" style="font-weight:700;font-size:13px;min-width:120px;text-align:center"></span>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(1)" title="Próximo período">▶</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(1)" title="Próximo mês">▶</button>
               <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(0)" title="Voltar ao período atual">Hoje</button>
             </div>
           </div>
@@ -12471,7 +12484,7 @@ const _fpFmt = v => {
 
 // Janela de meses visível. Trimestre (padrão), quadrimestre e semestre
 // sempre terminam no mês atual (ex.: hoje 01/2027 → Nov/26, Dez/26, Jan/27).
-// As setas ◀ ▶ andam um período inteiro para trás/frente.
+// As setas ◀ ▶ andam um mês por vez.
 const FP_PERIODOS = { tri: 3, quad: 4, sem: 6 };
 let _fpDesloc = 0;
 function _fpJanela() {
@@ -12482,7 +12495,7 @@ function _fpJanela() {
     const r = []; for (let m = 1; m <= 12; m++) r.push(_fpMesKey(ano, m)); return r;
   }
   const n = FP_PERIODOS[per] || 3;
-  const fim = _fpAddMes(_fpMesKey(h.getFullYear(), h.getMonth() + 1), _fpDesloc * n);
+  const fim = _fpAddMes(_fpMesKey(h.getFullYear(), h.getMonth() + 1), _fpDesloc);
   const r = []; for (let i = n - 1; i >= 0; i--) r.push(_fpAddMes(fim, -i));
   return r;
 }
@@ -12655,6 +12668,19 @@ function renderFluxoProjetado() {
   });
   if (caixaMes[SEM_REC]) catsDoGrupo.__semgrp_ent__.push({ id:SEM_REC, nome:'Sem categoria (a receber)' });
   if (caixaMes[SEM_PAG]) catsDoGrupo.__semgrp_sai__.push({ id:SEM_PAG, nome:'Sem categoria (a pagar)' });
+  // Amortização de Empréstimos: junta as categorias de qualquer grupo com
+  // "amortiz" no nome (inclusive grupos duplicados ou de outro tipo).
+  const ehAmort = g => normText((g && g.nome) || '').includes('amortiz');
+  const gAmort = grupos.find(ehAmort);
+  if (gAmort) {
+    const idsAmort = new Set(db.dre_grupos.filter(ehAmort).map(g => g.id));
+    const ja = new Set(catsDoGrupo[gAmort.id].map(c => c.id));
+    db.dfc_cats.forEach(c => {
+      if (ja.has(c.id) || !idsAmort.has(c.grupo)) return;
+      catsDoGrupo[gAmort.id].push({ id:c.id, nome:c.nome });
+      Object.keys(catsDoGrupo).forEach(k => { if (k !== gAmort.id) catsDoGrupo[k] = catsDoGrupo[k].filter(x => x.id !== c.id); });
+    });
+  }
   Object.values(catsDoGrupo).forEach(a => a.sort((x,y) => x.nome.localeCompare(y.nome)));
 
   const secEnt = grupos.filter(g => g.tipo === 'entrada').map(g => ({ id:g.id, nome:g.nome }));
@@ -12739,12 +12765,13 @@ function renderFluxoProjetado() {
     // Grupo com categorias cadastradas sempre pode ser aberto; se nenhuma
     // tiver valor, mostra todas (ex.: Amortização de Empréstimos).
     if (!cats.length) cats = g.cats;
-    const aberto_ = _fpAbertos.has(g.id);
+    // Empréstimos ficam abertos por padrão (o "!" marca que o usuário recolheu)
+    const aberto_ = ehEmprestimo ? !_fpAbertos.has('!' + g.id) : _fpAbertos.has(g.id);
     const toggle = cats.length
-      ? `<button type="button" class="dre-toggle-cat" onclick="fpToggleGrupo('${g.id}')" title="${aberto_ ? 'Recolher' : 'Ver'} categorias">${aberto_ ? '▾' : '▸'}</button>`
+      ? `<button type="button" class="dre-toggle-cat" onclick="fpToggleGrupo('${ehEmprestimo ? '!' : ''}${g.id}')" title="${aberto_ ? 'Recolher' : 'Ver'} categorias">${aberto_ ? '▾' : '▸'}</button>`
       : '<span class="fp-toggle-vazio"></span>';
     let h = linhaHtml('fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : '') + (ehOrcado ? ' fp-row-orcado' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
-    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat' + (ehOrcado ? ' fp-row-orcado' : ''), c.nome, c.chave, c.ef, c.est); });
+    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat' + (ehOrcado ? ' fp-row-orcado' : '') + (ehEmprestimo ? ' fp-row-cat-emp' : ''), c.nome, c.chave, c.ef, c.est); });
     return h;
   }).join('');
 
@@ -12786,6 +12813,7 @@ function fpToggleGrupo(id) {
 function fpTodosGrupos(abrir) {
   _fpAbertos = new Set();
   if (abrir) { db.dre_grupos.forEach(g => _fpAbertos.add(g.id)); _fpAbertos.add('__semgrp_ent__'); _fpAbertos.add('__semgrp_sai__'); }
+  else db.dre_grupos.forEach(g => _fpAbertos.add('!' + g.id));
   _fpAbertosSet(_fpAbertos); renderFluxoProjetado();
 }
 
@@ -16657,7 +16685,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-26 · sevegnani · obras';
+window.APP_BUILD = '2026-10-26c · sevegnani · menu roxo';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
