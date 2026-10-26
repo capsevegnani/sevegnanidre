@@ -496,6 +496,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .fp-row-grupo td { font-weight:600; }
 .fp-row-cat td { color:#57534e; }
 .fp-row-cat td:first-child { padding-left:40px; font-size:12px; }
+.fp-row-orcado td, .fp-row-orcado td span, .dre-row-orcado td, .dre-row-orcado td span { color:#dc2626 !important; }
 .fp-row-emprestimo, .fp-row-emprestimo td { background:#b91c1c !important; color:#fff !important; }
 .fp-row-emprestimo .dre-toggle-cat { color:#fecaca; }
 .fp-row-caixa td { font-weight:800; }
@@ -1075,7 +1076,7 @@ tr.cob-dia-vazio > td {
     </div>
 
     <!-- ══ SELETOR GLOBAL DE EMPRESA ══ -->
-    <div id="empresa-switch" style="padding:10px 14px 12px;border-bottom:1px solid #e7e5e4;background:#fff8f3;">
+    <div id="empresa-switch" style="display:none;padding:10px 14px 12px;border-bottom:1px solid #e7e5e4;background:#fff8f3;">
       <label style="display:block;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9a3412;margin-bottom:5px;">Empresa</label>
       <select id="empresa-ativa" onchange="trocarEmpresa(this.value)"
               style="width:100%;padding:8px 10px;font-size:13px;font-weight:600;border:1.5px solid #ea580c;border-radius:6px;background:#fff;color:#3A3B3D;cursor:pointer;">
@@ -1220,6 +1221,22 @@ tr.cob-dia-vazio > td {
         <div class="nav-sub-item" onclick="showPage('dre-analise-cat')" id="nav-dre-analise-cat">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
           Análise por Categoria
+        </div>
+      </div>
+
+      <!-- GRUPO: OBRAS -->
+      <div class="nav-group-header open" onclick="toggleNavGroup('grp-obras',this)" style="margin-top:4px;">
+        <span>🏗️ OBRAS</span>
+        <span class="nav-group-arrow">▶</span>
+      </div>
+      <div class="nav-group-items" id="grp-obras" style="max-height:400px">
+        <div class="nav-sub-item" onclick="showPage('obras')" id="nav-obras">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><rect x="9" y="13" width="6" height="8"/></svg>
+          Cadastro de Obras
+        </div>
+        <div class="nav-sub-item" onclick="showPage('dre-obra')" id="nav-dre-obra">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          DRE da Obra
         </div>
       </div>
 
@@ -1573,7 +1590,7 @@ tr.cob-dia-vazio > td {
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearCustosFixosFiltros()">Limpar</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-custos-fixos-row">
-          <th>Despesas/Fornecedor</th><th>Item</th><th>Categoria</th><th>Vigência atual</th><th>Valor vigente</th><th>Situação</th><th>Vigências</th><th>Ações</th>
+          <th>Despesas/Fornecedor</th><th>Item</th><th>Categoria</th><th>Vigência atual</th><th>Valor mensal</th><th>Situação</th><th>Vigências</th><th>Ações</th>
         </tr></thead><tbody id="tb-custos-fixos"><tr><td colspan="8" class="empty-state">Nenhum lançamento marcado como custo fixo.</td></tr></tbody></table></div>
       </div>
       <div class="card" id="cf-detalhe-card" style="display:none">
@@ -2704,6 +2721,35 @@ tr.cob-dia-vazio > td {
       </div>
     </div>
 
+    <!-- ══ OBRAS ══ -->
+    <div class="page" id="page-obras">
+      <div class="page-header">
+        <div><div class="page-title">Cadastro de Obras</div><div class="page-sub" style="margin-bottom:0">Obras com data de início, previsão de pagamento e de conclusão. O lead time conta do início até a previsão de conclusão (ou até hoje, se não houver previsão).</div></div>
+        <button class="btn-novo" onclick="abrirNovaObra()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova obra
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-scroll"><table><thead><tr>
+          <th>Nº</th><th>Obra</th><th>Início</th><th>Prev. pagamento</th><th>Prev. conclusão</th><th>Lead time</th><th style="text-align:right">Imposto</th><th>Lançamentos</th><th>Ações</th>
+        </tr></thead><tbody id="tb-obras"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ DRE DA OBRA ══ -->
+    <div class="page" id="page-dre-obra">
+      <div class="page-header"><div>
+        <div class="page-title">DRE da Obra</div>
+        <div class="page-sub" style="margin-bottom:0">Receita, imposto (%), custo orçado e gastos vinculados a cada obra, com a margem bruta.</div>
+      </div></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="filter-row"><div class="form-group"><label>Obra</label>
+          <select id="do-obra" onchange="renderDreObra()" style="min-width:260px"><option value="">Todas as obras (resumo)</option></select>
+        </div></div>
+      </div>
+      <div id="do-wrap"></div>
+    </div>
+
     <!-- ══ FLUXO DE CAIXA FUTURO ══ -->
     <!-- ══ FLUXO DE CAIXA PROJETADO ══ -->
     <div class="page" id="page-fluxo-projetado">
@@ -2713,18 +2759,34 @@ tr.cob-dia-vazio > td {
       </div></div>
       <div class="card" style="margin-bottom:16px">
         <div class="filter-row" style="align-items:flex-end;flex-wrap:wrap">
-          <div class="form-group"><label>Ano</label>
+          <div class="form-group"><label>Analisar por</label>
+            <select id="fp-periodo" onchange="fpMudarPeriodo()">
+              <option value="tri" selected>Trimestre</option>
+              <option value="quad">Quadrimestre</option>
+              <option value="sem">Semestre</option>
+              <option value="ano">Ano completo</option>
+            </select>
+          </div>
+          <div class="form-group" id="fp-ano-wrap" style="display:none"><label>Ano</label>
             <select id="fp-ano" onchange="renderFluxoProjetado()"></select>
+          </div>
+          <div class="form-group" id="fp-nav-wrap"><label>Período</label>
+            <div style="display:flex;gap:6px;align-items:center">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(-1)" title="Período anterior">◀</button>
+              <span id="fp-periodo-lbl" style="font-weight:700;font-size:13px;min-width:120px;text-align:center"></span>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(1)" title="Próximo período">▶</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(0)" title="Voltar ao período atual">Hoje</button>
+            </div>
           </div>
           <div class="form-group"><label>Ponto de partida</label>
             <select id="fp-partida" onchange="renderFluxoProjetado()" style="min-width:280px">
               <option value="atual">Saldo atual das contas, no mês atual</option>
-              <option value="inicio">Saldo das contas em 1º de janeiro</option>
+              <option value="inicio">Saldo das contas no início do período</option>
             </select>
           </div>
           <div class="form-group" style="align-self:flex-end">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0 0 10px">
-              <input type="checkbox" id="fp-vazias" onchange="renderFluxoProjetado()" style="width:auto;margin:0;accent-color:#ea580c" />
+              <input type="checkbox" id="fp-vazias" checked onchange="renderFluxoProjetado()" style="width:auto;margin:0;accent-color:#ea580c" />
               Mostrar categorias sem valor
             </label>
           </div>
@@ -2732,7 +2794,7 @@ tr.cob-dia-vazio > td {
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(true)">▾ Expandir</button>
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(false)">▸ Recolher</button>
             <button class="btn btn-secondary btn-sm" onclick="fpExportar()">⬇ Excel</button>
-            <button class="btn btn-secondary btn-sm" id="fp-btn-restaurar" onclick="fpRestaurarAno()">↺ Voltar tudo ao automático</button>
+            <button class="btn btn-secondary btn-sm" id="fp-btn-restaurar" onclick="fpRestaurarAno()">↺ Voltar período ao automático</button>
           </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #f5f5f4">
@@ -2997,6 +3059,7 @@ tr.cob-dia-vazio > td {
         </div>
         <div class="lanc-g1">
           <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','l-catdre')">+</button></label><select id="l-catdre"><option value="">Nenhuma</option></select></div>
+          <div class="form-group"><label>Obra</label><select id="l-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
         </div>
       </div>
 
@@ -3048,12 +3111,12 @@ tr.cob-dia-vazio > td {
         </label>
         <div id="l-custofixo-box" style="display:none;margin-top:12px;border-top:1px dashed #e7e5e4;padding-top:12px;">
           <div style="font-size:12px;color:#78716c;margin-bottom:10px;">
-            Informe o período em que esse custo vale. Deixe o <b>Fim</b> em branco (ou marque “Indeterminado”) para uma vigência sem data final.
+            Informe o período em que esse custo vale. O <b>valor mensal</b> é sempre o <b>Valor</b> informado lá em cima no lançamento — ele se repete em cada mês da vigência (ex.: novembro a dezembro = 2 meses com esse valor). Deixe o <b>Fim</b> em branco (ou marque “Indeterminado”) para uma vigência sem data final.
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end;">
             <div class="form-group" style="margin:0"><label>Início da vigência *</label><input type="date" id="l-vig-inicio" /></div>
             <div class="form-group" style="margin:0"><label>Fim da vigência</label><input type="date" id="l-vig-fim" /></div>
-            <div class="form-group" style="margin:0"><label>Valor no período (R$)</label><input type="number" step="0.01" id="l-vig-valor" placeholder="usa o valor da parcela" /></div>
+            <input type="hidden" id="l-vig-valor" />
             <div class="form-group" style="margin:0"><label>Observação</label><input type="text" id="l-vig-obs" placeholder="Ex.: reajuste IGPM" /></div>
           </div>
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;margin-bottom:12px;">
@@ -3109,6 +3172,7 @@ tr.cob-dia-vazio > td {
         </div>
         <div class="lanc-g1">
           <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','lr-catdre')">+</button></label><select id="lr-catdre"><option value="">Nenhuma</option></select></div>
+          <div class="form-group"><label>Nº da obra</label><select id="lr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
         </div>
       </div>
 
@@ -3265,6 +3329,7 @@ tr.cob-dia-vazio > td {
     </div>
     <div class="grid3">
       <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','elr-catdre')">+</button></label><select id="elr-catdre"><option value="">Nenhuma</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label>Nº da obra</label><select id="elr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
     </div>
     <div class="grid3">
       <div class="form-group"><label>Parcelas</label>
@@ -3819,6 +3884,7 @@ tr.cob-dia-vazio > td {
     </div>
     <div class="grid3">
       <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','edit-catdre')">+</button></label><select id="edit-catdre"><option value="">Nenhuma</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label>Obra</label><select id="edit-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
     </div>
     <div class="grid3">
       <div class="form-group"><label>Parcelas</label>
@@ -3871,12 +3937,12 @@ tr.cob-dia-vazio > td {
       </label>
       <div id="edit-custofixo-box" style="display:none;margin-top:12px;border-top:1px dashed #e7e5e4;padding-top:12px;">
         <div style="font-size:12px;color:#78716c;margin-bottom:10px;">
-          Informe o período em que esse custo vale. Deixe o <b>Fim</b> em branco (ou marque “Indeterminado”) para uma vigência sem data final.
+          Informe o período em que esse custo vale. O <b>valor mensal</b> é sempre o <b>Valor</b> informado lá em cima no lançamento — ele se repete em cada mês da vigência (ex.: novembro a dezembro = 2 meses com esse valor). Deixe o <b>Fim</b> em branco (ou marque “Indeterminado”) para uma vigência sem data final.
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end;">
           <div class="form-group" style="margin:0"><label>Início da vigência *</label><input type="date" id="edit-vig-inicio" /></div>
           <div class="form-group" style="margin:0"><label>Fim da vigência</label><input type="date" id="edit-vig-fim" /></div>
-          <div class="form-group" style="margin:0"><label>Valor no período (R$)</label><input type="number" step="0.01" id="edit-vig-valor" placeholder="usa o valor da parcela" /></div>
+          <input type="hidden" id="edit-vig-valor" />
           <div class="form-group" style="margin:0"><label>Observação</label><input type="text" id="edit-vig-obs" placeholder="Ex.: reajuste IGPM" /></div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;">
@@ -4154,6 +4220,30 @@ tr.cob-dia-vazio > td {
 </div>
 
 <!-- ══ MODAL DETALHE DE CONTA DO DRE ══ -->
+<div class="modal-overlay" id="modal-obra">
+  <div class="modal" style="width:560px;padding:24px" role="dialog" aria-labelledby="ob-titulo">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
+      <div id="ob-titulo" style="font-size:16px;font-weight:800;color:#1c1917">Nova obra</div>
+      <button type="button" class="dre-det-x" onclick="closeModal('modal-obra')" aria-label="Fechar">&times;</button>
+    </div>
+    <input type="hidden" id="ob-id" />
+    <div style="display:grid;grid-template-columns:110px 1fr;gap:10px">
+      <div class="form-group"><label>Nº da obra</label><input type="text" id="ob-numero" /></div>
+      <div class="form-group"><label>Nome da obra *</label><input type="text" id="ob-nome" placeholder="Ex.: Casa Moacir" /></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <div class="form-group"><label>Data de início</label><input type="date" id="ob-inicio" /></div>
+      <div class="form-group"><label>Previsão de pagamento</label><input type="date" id="ob-prev-pag" /></div>
+      <div class="form-group"><label>Previsão de conclusão</label><input type="date" id="ob-prev-conc" /></div>
+      <div class="form-group"><label>% imposto s/ receita</label><input type="number" step="0.01" id="ob-imposto" placeholder="0,00" /></div>
+    </div>
+    <div class="form-group"><label>Observação</label><input type="text" id="ob-obs" /></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-obra')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarObra()">Salvar</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-fp-celula">
   <div class="modal" style="width:460px;padding:24px" role="dialog" aria-labelledby="fp-ed-title">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
@@ -4170,7 +4260,7 @@ tr.cob-dia-vazio > td {
     </div>
     <label id="fp-ed-seguintes-wrap" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;margin-top:4px">
       <input type="checkbox" id="fp-ed-seguintes" style="width:auto;margin:0;accent-color:#ea580c" />
-      Aplicar também aos meses seguintes deste ano
+      Aplicar também aos meses seguintes visíveis
     </label>
     <div class="fp-ed-botoes">
       <button class="btn btn-primary btn-sm" onclick="fpAplicar('manual')">✎ Salvar valor manual</button>
@@ -4287,6 +4377,8 @@ const PAGES_CONFIG = [
   { id:'dre-grupos',        label:'DRE Grupos',          grupo:'dre'     },
   { id:'dre-demonstrativo', label:'DRE Demonstrativo',   grupo:'dre'     },
   { id:'dre-analise-cat',   label:'DRE Análise por Categoria', grupo:'dre' },
+  { id:'obras',             label:'Cadastro de Obras',   grupo:'obras'   },
+  { id:'dre-obra',          label:'DRE da Obra',         grupo:'obras'   },
 ];
 
 // ══════════════════════════════════════════
@@ -4619,7 +4711,7 @@ function limparTexto(v) {
 // parcelas de um lançamento, por exemplo). Os demais são identificadores
 // internos, que nunca contêm texto digitado pelo usuário.
 const CAMPOS_SEM_LIMPEZA = {
-  parcela_datas: 1, value: 1, key: 1, id: 1, empresa_id: 1
+  parcela_datas: 1, value: 1, key: 1, id: 1, empresa_id: 1, obra_id: 1
 };
 
 // Percorre objetos e listas limpando todo campo de texto.
@@ -4711,8 +4803,17 @@ const TABELAS_POR_EMPRESA = [
   'faturamento','recebimentos','pedidos_cancelados','reposicoes'
 ];
 
-function empresaAtual() {
-  try { return localStorage.getItem(EMPRESA_KEY) || ''; } catch(e) { return ''; }
+// Empresa única: o sistema trabalha sempre com a Sevegnani. Não há mais
+// troca de empresa — as telas mostram todos os registros e todo lançamento
+// novo é gravado automaticamente na Sevegnani.
+function empresaAtual() { return ''; }
+try { localStorage.removeItem(EMPRESA_KEY); } catch(e) {}
+const EMPRESA_PADRAO_NOME = 'Sevegnani';
+function empresaPadrao() {
+  const lista = (db.empresas || []);
+  const e = lista.find(x => normText(x.apelido || '').includes('sevegnani') || normText(x.nome || '').includes('sevegnani'))
+         || lista.find(x => x.ativo !== false && x.ativo !== 'nao') || lista[0];
+  return e ? e.id : '';
 }
 
 function empresaNome(id) {
@@ -4812,7 +4913,10 @@ async function loadAllData() {
       // 20 — Modelos de mensagem de cobrança (WhatsApp)
       sbFetch('config', 'GET', null, '?key=eq.cobranca_mensagens&limit=1'),
       // 21 — Auditoria: histórico de alterações (tabela `config`)
-      sbFetch('config', 'GET', null, '?key=like.audit:*&order=key.desc&limit=3000')
+      sbFetch('config', 'GET', null, '?key=like.audit:*&order=key.desc&limit=3000'),
+      // 22/23 — Obras e vínculos lançamento→obra (tabela `config`)
+      cfgFetchPrefix(OBRA_PREFIX),
+      cfgFetchPrefix(OBRALANC_PREFIX)
     ]);
 
     const val = (i) => results[i].status === 'fulfilled' ? results[i].value : null;
@@ -4865,6 +4969,7 @@ async function loadAllData() {
     db.pedidos_cancelados = val(15) || [];
     db.reposicoes = val(16) || [];
     db.empresas = val(17) || [];
+    carregarObrasDe(val(22), val(23));
 
     // Segurança: registros antigos, gravados antes desta proteção existir,
     // são limpos aqui na leitura.
@@ -4879,6 +4984,7 @@ async function loadAllData() {
     (val(5) || []).forEach(m => { db.metas[m.tipo] = { val: m.val, inicio: m.inicio, fim: m.fim }; });
     popularSeletorEmpresa();
     populateEmpresaSelects();
+    populateObraSelects();
     bumpDbVer(); // [OTIMIZADO] dados novos => reconstrói índices e parcelas
   } catch(e) {
     console.error('Erro ao carregar dados:', e);
@@ -5057,7 +5163,7 @@ function _finalizarLogin(found) {
   if (sll) sll.textContent = prev ? 'Último acesso: ' + fmtTs(prev.ts) : 'Primeiro acesso';
   // Mostrar/ocultar nav admin
   const isAdmin = found.role === 'admin';
-  ['nav-label-admin','nav-item-usuarios','nav-item-empresas','nav-item-auditoria'].forEach(id => {
+  ['nav-label-admin','nav-item-usuarios','nav-item-auditoria'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = isAdmin ? '' : 'none';
   });
@@ -5165,6 +5271,8 @@ function showPage(p) {
   if (p === 'dre-grupos')        { carregarDreGrupoClasses().then(renderDreGrupos); }
   if (p === 'dre-demonstrativo') { carregarVarEstoque().then(carregarDreGrupoClasses).then(renderDre); }
   if (p === 'dre-analise-cat')   { popularCategoriasAnalise(); renderAnaliseCategoria(); }
+  if (p === 'obras')             renderObras();
+  if (p === 'dre-obra')          renderDreObra();
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
 }
@@ -5205,6 +5313,8 @@ function renderPaginaAtual() {
   if (p === 'dre-grupos')        { carregarDreGrupoClasses().then(renderDreGrupos); }
   if (p === 'dre-demonstrativo') { carregarVarEstoque().then(carregarDreGrupoClasses).then(renderDre); }
   if (p === 'dre-analise-cat')   { popularCategoriasAnalise(); renderAnaliseCategoria(); }
+  if (p === 'obras')             renderObras();
+  if (p === 'dre-obra')          renderDreObra();
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
 }
@@ -5471,7 +5581,7 @@ async function saveFornecedor() {
     cat: document.getElementById('f-cat').value,
     obs: document.getElementById('f-obs').value };
   const result = await sbFetch('fornecedores', 'POST', rec);
-  if(!result) { alert('\u274c Erro ao salvar fornecedor. Verifique sua conex\u00e3o e tente novamente.'); return; }
+  if(!result) { alert('\u274c Erro ao salvar fornecedor.' + sbErroMsg()); return; }
   db.fornecedores.push(rec);
   clearFornecedor(); renderFornecedores(); populateFornSelects(); fecharFormModalSeAberto('form-forn');
 }
@@ -5579,7 +5689,7 @@ async function saveProduto() {
     preco: parseFloat(document.getElementById('p-preco').value)||0,
     obs: document.getElementById('p-obs').value };
   const rP = await sbFetch('produtos', 'POST', recP);
-  if(!rP) { alert('❌ Erro ao salvar produto. Verifique sua conexão e tente novamente.'); return; }
+  if(!rP) { alert('❌ Erro ao salvar produto.' + sbErroMsg()); return; }
   db.produtos.push(recP);
   clearProduto(); renderProdutos(); populateProdSelects();
   closeModal('modal-novo-prod');
@@ -5882,7 +5992,7 @@ async function salvarCadastroRapido() {
   }
 
   const ok = await sbFetch(cfg.tabela, 'POST', rec);
-  if (!ok) { alert('❌ Erro ao salvar. Verifique sua conexão e tente novamente.'); return; }
+  if (!ok) { alert('❌ Erro ao salvar.' + sbErroMsg()); return; }
   db[cfg.lista].push(rec);
 
   // Recarrega os selects e as listas afetadas
@@ -5942,6 +6052,8 @@ function popularSeletorEmpresa() {
 // Dashboard), deixando claro se o número na tela é de uma empresa só ou
 // do consolidado do grupo.
 function atualizarTagsEmpresa() {
+  document.querySelectorAll('.empresa-tag').forEach(el => { el.style.display = 'none'; });
+  return;
   const emp = empresaAtual();
   const txt = emp ? empresaNome(emp) : 'Consolidado';
   const cor = emp ? '#ea580c' : '#57534e';
@@ -5973,12 +6085,14 @@ function pintarSeletorEmpresa() {
 // Preenche todos os selects de empresa dos formulários (class="sel-empresa"),
 // já deixando marcada a empresa ativa quando houver uma.
 function populateEmpresaSelects() {
-  const atual = empresaAtual();
+  const padrao = empresaPadrao();
   document.querySelectorAll('select.sel-empresa').forEach(sel => {
-    const anterior = sel.value;
     sel.innerHTML = '<option value="">Selecione...</option>' +
-      empresasAtivas().map(e => `<option value="${e.id}">${e.apelido || e.nome}</option>`).join('');
-    sel.value = anterior || atual || '';
+      (db.empresas || []).map(e => `<option value="${e.id}">${e.apelido || e.nome}</option>`).join('');
+    sel.value = padrao || '';
+    // Empresa única: o campo fica oculto em todos os formulários
+    const grupo = sel.closest('.form-group');
+    if (grupo) grupo.style.display = 'none';
   });
 }
 
@@ -5998,14 +6112,8 @@ async function trocarEmpresa(id) {
 // Empresa que deve ser gravada em um lançamento novo.
 // Se o usuário está no consolidado, ele precisa escolher no formulário.
 function empresaDoForm(selectId) {
-  const sel = document.getElementById(selectId);
-  const val = sel ? sel.value : '';
-  if (val) return val;
-  const atual = empresaAtual();
-  if (atual) return atual;
-  alert('Selecione a empresa deste lançamento.\n\nVocê está no modo "Consolidado", então é preciso indicar a qual empresa o registro pertence.');
-  if (sel) sel.focus();
-  return null;
+  // Empresa única: sempre Sevegnani (undefined = campo não enviado ao banco)
+  return empresaPadrao() || undefined;
 }
 
 // ── CRUD ────────────────────────────────────
@@ -6027,7 +6135,7 @@ async function saveEmpresa() {
     ativo: true
   };
   const ok = await sbFetch('empresas', 'POST', nova);
-  if (!ok) { alert('❌ Erro ao salvar. Verifique se a tabela "empresas" foi criada no Supabase (rode o script SQL) e se o GRANT foi aplicado.'); return; }
+  if (!ok) { alert('❌ Erro ao salvar a empresa.' + sbErroMsg()); return; }
   db.empresas.push(nova);
   clearEmpresaForm();
   fecharFormModalSeAberto('form-empresa');
@@ -6190,7 +6298,8 @@ async function saveLancamento() {
     lanc.parcela_datas = _marcarTodasParcelasPagas(lanc.parcela_datas, parcelas, dtpagoNovo);
   }
   const rL = await sbFetch('lancamentos', 'POST', lanc);
-  if(!rL) { alert('❌ Erro ao salvar lançamento. Verifique sua conexão e tente novamente.'); return; }
+  if(!rL) { alert('❌ Erro ao salvar lançamento.' + sbErroMsg()); return; }
+  if (campoValor('l-obra')) await obraVincular('p', lanc.id, campoValor('l-obra'));
   if (ehCustoFixo) {
     const okCf = await cfSalvarNoBanco(lanc.id, true, _vigTemp.l);
     if (!okCf) alert('⚠ O lançamento foi salvo, mas as vigências do custo fixo não puderam ser gravadas.' + sbErroMsg());
@@ -6210,6 +6319,7 @@ function clearLancamento() {
   set('l-forn','');
   set('l-prod','');
   set('l-catdre','');
+  set('l-obra','');
   set('l-tipo-pag','');
   set('l-banco','');
   set('l-parcelas','1');
@@ -6350,6 +6460,9 @@ function editLancamento(id) {
   populateDreCatSelects();
   const ecd = document.getElementById('edit-catdre');
   if (ecd) ecd.value = l.cat_dre || '';
+  populateObraSelects();
+  const eob = document.getElementById('edit-obra');
+  if (eob) eob.value = obraDoLanc('p', l.id);
   // Data do pagamento (só aparece quando o lançamento está como Pago)
   const edtp = document.getElementById('edit-dtpago');
   if (edtp) edtp.value = l.dtpago || '';
@@ -6427,6 +6540,7 @@ async function updateLancamento() {
   if (!okU) { alert('❌ Não foi possível salvar a edição no banco de dados.' + sbErroMsg()); return; }
   const okCfE = await cfSalvarNoBanco(l.id, ehCustoFixoEdit, _vigTemp.edit);
   if (!okCfE) alert('⚠ O lançamento foi salvo, mas o custo fixo/vigências não puderam ser gravados.' + sbErroMsg());
+  await obraVincular('p', l.id, campoValor('edit-obra'));
   // Se a empresa foi trocada para uma diferente da ativa no seletor, o
   // registro tem que sumir da lista atual (senão fica aparecendo na empresa errada).
   if (!pertenceEmpresaAtiva(l.empresa_id)) db.lancamentos = db.lancamentos.filter(x => x.id !== l.id);
@@ -6974,7 +7088,7 @@ function enhanceSearchableSelect(select, opts) {
 async function criarFornecedorRapido(nome) {
   const novo = { id: uid(), nome, cnpj:'', contato:'', tel:'', email:'', cat:'', obs:'' };
   const ok = await sbFetch('fornecedores', 'POST', novo);
-  if (!ok) { alert('❌ Erro ao cadastrar fornecedor. Verifique sua conexão e tente novamente.'); return null; }
+  if (!ok) { alert('❌ Erro ao cadastrar fornecedor.' + sbErroMsg()); return null; }
   db.fornecedores.push(novo);
   populateFornSelects();
   return novo.id;
@@ -6982,7 +7096,7 @@ async function criarFornecedorRapido(nome) {
 async function criarClienteRapido(nome) {
   const novo = { id: uid(), nome, cnpj:'', contato:'', tel:'', email:'', cat:'', obs:'' };
   const ok = await sbFetch('clientes', 'POST', novo);
-  if (!ok) { alert('❌ Erro ao cadastrar cliente. Verifique sua conexão e tente novamente.'); return null; }
+  if (!ok) { alert('❌ Erro ao cadastrar cliente.' + sbErroMsg()); return null; }
   db.clientes.push(novo);
   populateClienteSelects();
   return novo.id;
@@ -7567,7 +7681,7 @@ async function salvarCategoriaPago() {
   const l = db.lancamentos.find(x => x.id === lancId);
   if (!l) { closeModal('modal-editar-categoria-pago'); return; }
   const res = await sbFetch('lancamentos', 'PATCH', { cat_dre: catId }, `?id=eq.${lancId}`);
-  if (!res) { alert('❌ Erro ao salvar categoria.'); return; }
+  if (!res) { alert('❌ Erro ao salvar categoria.' + sbErroMsg()); return; }
   l.cat_dre = catId;
   closeModal('modal-editar-categoria-pago');
   renderPagas(); renderApagar(); renderLancamentos();
@@ -7782,7 +7896,7 @@ function clearPagasFiltros() {
 // Consolidado não dá para saber a qual empresa o número pertence, então
 // pedimos que o usuário escolha uma empresa antes de lançar.
 function exigirEmpresaAtiva(oQue) {
-  const emp = empresaAtual();
+  const emp = empresaPadrao();
   if (!emp) {
     alert(`Selecione uma empresa no topo do menu antes de lançar ${oQue}.\n\nNo modo "Consolidado" não é possível saber a qual empresa o valor pertence.`);
     return null;
@@ -9312,7 +9426,7 @@ function applyNavPermissions() {
     item.style.display = allowed.includes(pg) ? '' : 'none';
   });
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
-  ['grp-pagar','grp-receber','grp-dfc','grp-dre'].forEach(grpId => {
+  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-obras'].forEach(grpId => {
     const grp = document.getElementById(grpId);
     if(!grp) return;
     const visivel = grp.querySelectorAll('.nav-sub-item:not([style*="none"])').length > 0;
@@ -9341,6 +9455,7 @@ async function renderUsuariosAdmin() {
     const pagReceber = pagsVisiveis.filter(pg=>pg.grupo==='receber');
     const pagDfc     = pagsVisiveis.filter(pg=>pg.grupo==='dfc');
     const pagDre     = pagsVisiveis.filter(pg=>pg.grupo==='dre');
+    const pagObras   = pagsVisiveis.filter(pg=>pg.grupo==='obras');
     const buildPerms = (pgs) => pgs.map(pg => {
       const checked = (u.pages || []).includes(pg.id);
       const disabled = isAdmin ? ' disabled-perm' : '';
@@ -9362,7 +9477,9 @@ async function renderUsuariosAdmin() {
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📊 DFC</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagDfc)}</div>
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📈 DRE</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagDre)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagDre)}</div>
+      <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🏗️ Obras</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagObras)}</div>
     </div>`;
 
     // Último login deste usuário
@@ -9566,7 +9683,7 @@ async function saveCliente() {
     cat: document.getElementById('cl-cat').value,
     obs: document.getElementById('cl-obs').value };
   const rCl = await sbFetch('clientes','POST',rec);
-  if(!rCl) { alert('❌ Erro ao salvar cliente. Verifique sua conexão e tente novamente.'); return; }
+  if(!rCl) { alert('❌ Erro ao salvar cliente.' + sbErroMsg()); return; }
   db.clientes.push(rec);
   clearCliente(); renderClientes(); populateClienteSelects(); fecharFormModalSeAberto('form-cli');
 }
@@ -9644,7 +9761,7 @@ async function saveProdVenda() {
     preco:parseFloat(document.getElementById('pv-preco').value)||0,
     obs:document.getElementById('pv-obs').value };
   const rPV = await sbFetch('prodvenda','POST',rec);
-  if(!rPV) { alert('❌ Erro ao salvar produto de venda. Verifique sua conexão e tente novamente.'); return; }
+  if(!rPV) { alert('❌ Erro ao salvar produto de venda.' + sbErroMsg()); return; }
   db.prodvenda.push(rec);
   clearProdVenda(); renderProdVenda(); populateProdVendaSelects();
   closeModal('modal-novo-pv');
@@ -9750,7 +9867,8 @@ async function saveLancReceber() {
     lanc.parcela_datas = _marcarTodasParcelasPagas(lanc.parcela_datas, parcelas, dtrecebidoNovo);
   }
   const rLR = await sbFetch('lancreceber','POST',lanc);
-  if(!rLR) { alert('❌ Erro ao salvar lançamento. Verifique sua conexão e tente novamente.'); return; }
+  if(!rLR) { alert('❌ Erro ao salvar lançamento.' + sbErroMsg()); return; }
+  if (campoValor('lr-obra')) await obraVincular('r', lanc.id, campoValor('lr-obra'));
   const pertence = pertenceEmpresaAtiva(lanc.empresa_id);
   if (pertence) db.lancreceber.push(lanc);
   clearLancReceber(); closeModal('modal-novo-lr'); renderLancReceber(); renderAReceber(); renderRecebido();
@@ -9763,6 +9881,7 @@ function clearLancReceber() {
   set('lr-cliente','');
   set('lr-prod','');
   set('lr-catdre','');
+  set('lr-obra','');
   set('lr-parcelas','1');
   set('lr-financeiro','nao');
   set('lr-recebido','nao');
@@ -9884,6 +10003,9 @@ function editLancReceber(id) {
   populateDreCatSelects();
   const ecd = document.getElementById('elr-catdre');
   if (ecd) ecd.value = l.cat_dre || '';
+  populateObraSelects();
+  const eob = document.getElementById('elr-obra');
+  if (eob) eob.value = obraDoLanc('r', l.id);
   // Populate manual parcela dates if present
   if (l.parcelas > 1) {
     toggleParcelaDates('elr-parcelas', 'elr-parcela-dates');
@@ -9929,6 +10051,7 @@ async function updateLancReceber() {
   }
   const okU = await sbFetch('lancreceber','PATCH',{empresa_id:l.empresa_id,dtvenda:l.dtvenda,dtprev:l.dtprev,nf:l.nf,cliente:l.cliente,prod:l.prod,valor:l.valor,parcelas:l.parcelas,financeiro:l.financeiro,recebido:l.recebido,dtrecebido:l.dtrecebido,banco:l.banco,obs:l.obs,cat_dre:l.cat_dre,parcela_datas:l.parcela_datas},`?id=eq.${id}`);
   if (!okU) { alert('❌ Não foi possível salvar a edição no banco de dados.' + sbErroMsg()); return; }
+  await obraVincular('r', l.id, campoValor('elr-obra'));
   // Se a empresa foi trocada para uma diferente da ativa no seletor, o
   // registro tem que sumir da lista atual (senão fica aparecendo na empresa errada).
   if (!pertenceEmpresaAtiva(l.empresa_id)) db.lancreceber = db.lancreceber.filter(x => x.id !== l.id);
@@ -10434,7 +10557,8 @@ async function saveDfcCategoria() {
   const rec = { id: uid(), nome, grupo,
     tipo: document.getElementById('dfc-cat-tipo').value,
     obs: document.getElementById('dfc-cat-obs').value };
-  await sbFetch('dfc_categorias', 'POST', rec);
+  const _okCat = await sbFetch('dfc_categorias', 'POST', rec);
+  if (!_okCat) { alert('❌ Erro ao salvar categoria.' + sbErroMsg()); return; }
   db.dfc_cats.push(rec);
   clearDfcCategoria(); fecharFormModalSeAberto('form-dfccat'); renderDfcCategorias(); populateDfcCatSelects(); populateDfcCatProdSelects(); popularCategoriasAnalise(); popularFiltrosGrupoCategoriaTodos();
 }
@@ -10559,7 +10683,7 @@ async function saveDfcLancamento() {
     recorrente: document.getElementById('dfc-lan-recorrente').value,
     obs: document.getElementById('dfc-lan-obs').value };
   const okD = await sbFetch('dfc_lancamentos','POST',rec);
-  if (!okD) { alert('❌ Erro ao salvar lançamento. Verifique sua conexão e tente novamente.'); return; }
+  if (!okD) { alert('❌ Erro ao salvar lançamento.' + sbErroMsg()); return; }
   const pertence = pertenceEmpresaAtiva(rec.empresa_id);
   if (pertence) db.dfc_lans.push(rec);
   clearDfcLancamento(); renderDfcLancamentos(); populateDfcYearSelects();
@@ -10910,7 +11034,7 @@ async function saveDreGrupo() {
     ordem: parseInt(document.getElementById('dre-grp-ordem').value) || (db.dre_grupos.length + 1),
     obs: document.getElementById('dre-grp-obs').value };
   const res = await sbFetch('dre_grupos', 'POST', rec);
-  if (!res) { alert('❌ Erro ao salvar grupo. Verifique se a tabela "dre_grupos" existe no Supabase.'); return; }
+  if (!res) { alert('❌ Erro ao salvar grupo.' + sbErroMsg()); return; }
   db.dre_grupos.push(rec);
   db.dre_grupos.sort((a,b) => (a.ordem||0) - (b.ordem||0));
   // Classe do custo (Fixo/Variável) — só para grupos de Saída
@@ -11713,7 +11837,10 @@ function renderDre() {
 
     let html = `<tr class="${cls}"><td>${toggleHtml}${g.nome}</td>${cells}${mostrarAcum ? totalCell : ''}</tr>`;
     if (temFilhos && expandido) {
-      catsDoGrupo.forEach(c => { html += linhaCategoria(c.id, c.nome, g.tipo); });
+      catsDoGrupo.forEach(c => {
+        const lc = linhaCategoria(c.id, c.nome, g.tipo);
+        html += isGrupoOrcado(g) ? lc.replace(/<tr class="/g, '<tr class="dre-row-orcado ').replace(/<tr>/g, '<tr class="dre-row-orcado">') : lc;
+      });
       if (temSemCategoria) html += linhaCategoria(SEM_CAT, 'Sem categoria', g.tipo);
     }
     return html;
@@ -11755,7 +11882,7 @@ function renderDre() {
       if (g.id === ultimoSubtotalId) return linhaFinal(g, 'dre-row-final');
       return linhaValor(g, 'dre-row-subtotal', false);
     }
-    return linhaValor(g, 'dfc-row-sub', true);
+    return linhaValor(g, 'dfc-row-sub' + (isGrupoOrcado(g) ? ' dre-row-orcado' : ''), true);
   }).join('');
 
   // ── Ponto de Equilíbrio (R$) = Custos Fixos ÷ (Margem de Contribuição ÷ Receita)
@@ -12342,66 +12469,98 @@ const _fpFmt = v => {
   return v < 0 ? `(${s})` : s;
 };
 
+// Janela de meses visível. Trimestre (padrão), quadrimestre e semestre
+// sempre terminam no mês atual (ex.: hoje 01/2027 → Nov/26, Dez/26, Jan/27).
+// As setas ◀ ▶ andam um período inteiro para trás/frente.
+const FP_PERIODOS = { tri: 3, quad: 4, sem: 6 };
+let _fpDesloc = 0;
+function _fpJanela() {
+  const per = (document.getElementById('fp-periodo') || {}).value || 'tri';
+  const h = new Date();
+  if (per === 'ano') {
+    const ano = parseInt((document.getElementById('fp-ano') || {}).value) || h.getFullYear();
+    const r = []; for (let m = 1; m <= 12; m++) r.push(_fpMesKey(ano, m)); return r;
+  }
+  const n = FP_PERIODOS[per] || 3;
+  const fim = _fpAddMes(_fpMesKey(h.getFullYear(), h.getMonth() + 1), _fpDesloc * n);
+  const r = []; for (let i = n - 1; i >= 0; i--) r.push(_fpAddMes(fim, -i));
+  return r;
+}
+function fpNavegar(d) { _fpDesloc = d === 0 ? 0 : _fpDesloc + d; renderFluxoProjetado(); }
+function fpMudarPeriodo() { _fpDesloc = 0; renderFluxoProjetado(); }
+function _fpAjK(chave, k) { return _fpAj(parseInt(k.slice(0, 4)), chave, parseInt(k.slice(5, 7))); }
+function _fpSetAjK(chave, k, val) { _fpSetAj(parseInt(k.slice(0, 4)), chave, parseInt(k.slice(5, 7)), val); }
+function _fpTxtMes(k) { return `${meses[parseInt(k.slice(5, 7))]} / ${k.slice(0, 4)}`; }
+function isGrupoOrcado(g) {
+  const n = normText((g && g.nome) || '');
+  return n.includes('orcado') && n.includes('projeto');
+}
+
 function renderFluxoProjetado() {
   const wrap = document.getElementById('fp-tabela-wrap');
   if (!wrap) return;
-  const ano = parseInt((document.getElementById('fp-ano') || {}).value) || new Date().getFullYear();
+  const periodo = (document.getElementById('fp-periodo') || {}).value || 'tri';
+  const anoWrap = document.getElementById('fp-ano-wrap');
+  if (anoWrap) anoWrap.style.display = periodo === 'ano' ? '' : 'none';
+  const navWrap = document.getElementById('fp-nav-wrap');
+  if (navWrap) navWrap.style.display = periodo === 'ano' ? 'none' : '';
+  const MS = _fpJanela();
   const hoje = new Date();
   const anoAtual = hoje.getFullYear(), mesAtual = hoje.getMonth() + 1;
+  const keyAtual = _fpMesKey(anoAtual, mesAtual);
+  const iniJan = MS[0] + '-01';
+  const fimKey = MS[MS.length - 1];
+  const contemAtual = MS.includes(keyAtual);
+  const futuro = MS[0] > keyAtual;
   const partidaEl = document.getElementById('fp-partida');
-  // Ano passado: só faz sentido partir do saldo de 1º de janeiro
-  if (partidaEl) partidaEl.disabled = ano !== anoAtual;
-  const partida = (ano === anoAtual && partidaEl) ? partidaEl.value : 'inicio';
+  if (partidaEl) partidaEl.disabled = !contemAtual;
+  const partida = (contemAtual && partidaEl) ? partidaEl.value : 'inicio';
   const mostrarVazias = !!((document.getElementById('fp-vazias') || {}).checked);
   if (_fpAbertos === null) _fpAbertos = _fpAbertosGet();
+  const lblPer = document.getElementById('fp-periodo-lbl');
+  if (lblPer) lblPer.textContent = _fpRotuloMes(MS[0]) + ' a ' + _fpRotuloMes(fimKey);
 
   if (!db.dre_grupos.length) {
     wrap.innerHTML = '<div class="empty-state" style="padding:32px">Cadastre os grupos em <b>DRE → Grupos</b> para montar o fluxo projetado.</div>';
     return;
   }
 
-  const iniAno = `${ano}-01-01`;
-  const iniMesAtual = `${anoAtual}-${String(mesAtual).padStart(2,'0')}-01`;
-  const mesInicioAcum = (partida === 'atual') ? mesAtual : 1;
+  const iniMesAtual = keyAtual + '-01';
+  const idxInicioAcum = (partida === 'atual') ? MS.indexOf(keyAtual) : 0;
 
   // ── 1. Linhas de categoria (auto) ────────────────────────────────
   const SEM_REC = '__semcat_rec__', SEM_PAG = '__semcat_pag__';
-  const caixaMes = {};               // caixa[cat][mes] = valor com sinal (+ entra, − sai)
+  const caixaMes = {};
   _fpItens = {};
   const garantir = id => {
-    if (!caixaMes[id]) { caixaMes[id] = {}; _fpItens[id] = {}; for (let m=1;m<=12;m++){ caixaMes[id][m]=0; _fpItens[id][m]=[]; } }
+    if (!caixaMes[id]) { caixaMes[id] = {}; _fpItens[id] = {}; MS.forEach(k => { caixaMes[id][k] = 0; _fpItens[id][k] = []; }); }
   };
-  let caixaAbertura = 0;             // ajuste no caixa de janeiro (anos futuros)
+  let caixaAbertura = 0;             // em aberto antes do 1º mês (janela futura)
   const catValida = id => id && db.dfc_cats.some(c => c.id === id);
+  const naJanela = dt => !!dt && MS.includes(dt.slice(0, 7));
 
   const lancar = (catId, semCat, dt, valorSinal, item) => {
+    const k = dt.slice(0, 7);
+    if (!MS.includes(k)) return;
     const id = catValida(catId) ? catId : semCat;
-    const p = dt.split('-');
-    const m = parseInt(p[1]);
     garantir(id);
-    caixaMes[id][m] += valorSinal;
-    _fpItens[id][m].push(item);
+    caixaMes[id][k] += valorSinal;
+    _fpItens[id][k].push(item);
   };
-
-  // Item realizado (pago/recebido): entra pela data efetiva
   const realizado = (dt, catId, semCat, valorSinal, item) => {
-    if (!dt || parseInt(dt.slice(0,4)) !== ano) return;
-    const m = parseInt(dt.slice(5,7));
-    // "Partir do saldo atual": o que já foi pago neste mês ou antes já está
-    // dentro do saldo das contas. Nos meses anteriores ele aparece só como
-    // referência (o saldo acumulado começa no mês atual).
-    if (partida === 'atual' && m >= mesAtual) return;
+    if (!naJanela(dt)) return;
+    // "Partir do saldo atual": o que já foi pago no mês atual já está no saldo.
+    if (partida === 'atual' && dt.slice(0, 7) >= keyAtual) return;
     lancar(catId, semCat, dt, valorSinal, item);
   };
-  // Item em aberto: entra pelo vencimento; vencido vai para o mês atual
   const aberto = (venc, catId, semCat, valorSinal, item) => {
     let dt = venc || '';
     if (!dt || dt < iniMesAtual) {
-      if (ano === anoAtual) dt = iniMesAtual;
-      else if (ano > anoAtual) { caixaAbertura += valorSinal; return; }
-      else return;                          // ano passado: só o que foi realizado
-    } else if (dt < iniAno) { caixaAbertura += valorSinal; return; }
-    if (parseInt(dt.slice(0,4)) !== ano) return;
+      if (contemAtual) dt = iniMesAtual;
+      else if (futuro) { caixaAbertura += valorSinal; return; }
+      else return;                          // período passado: só o realizado
+    } else if (dt < iniJan) { caixaAbertura += valorSinal; return; }
+    if (dt.slice(0, 7) > fimKey) return;
     item.status = (venc && venc < today() ? 'Vencido · ' : '') + item.status;
     lancar(catId, semCat, dt, valorSinal, item);
   };
@@ -12422,23 +12581,48 @@ function renderFluxoProjetado() {
       prod:(p.prod ? getProdVendaNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
       valor:v, status:'A Receber' });
   });
+  const mesesReaisLanc = {};          // lançamento → meses que já têm parcela real
   getParcelas(true).forEach(p => {
     const dt = p.dtpago || p.venc;
+    (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || dt || '').slice(0, 7));
     realizado(dt, p.catId, SEM_PAG, -(p.valParc || 0), {
       tipo:'pagar', id:p.lancId, nf:p.nf||'', data:dt, nome:getFornNome(p.forn),
       prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
       valor:p.valParc||0, status:'Pago' });
   });
   getParcelas(false).forEach(p => {
+    (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || '').slice(0, 7));
     if (!(p.valParc > 0.005)) return;
     aberto(p.venc, p.catId, SEM_PAG, -(p.valParc || 0), {
       tipo:'pagar', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getFornNome(p.forn),
       prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
       valor:p.valParc||0, status:'A Pagar' });
   });
-  // Lançamentos extras do DFC (não passam pelas contas bancárias)
+  // Custos fixos: repete o valor do lançamento em cada mês da vigência
+  // (do mês atual em diante) que ainda não tem parcela lançada.
+  db.lancamentos.forEach(l => {
+    if (!cfEhCustoFixo(l.id)) return;
+    const reais = mesesReaisLanc[l.id] || new Set();
+    const prodObj = l.prod ? db.produtos.find(x => x.id === l.prod) : null;
+    const catId = l.cat_dre || (prodObj ? prodObj.cat : '') || '';
+    vigOrdenar((cfDadosDoLanc(l.id) || {}).vigencias || []).forEach(v => {
+      if (!v.inicio) return;
+      const valor = (v.valor != null && v.valor !== '') ? (parseFloat(v.valor) || 0) : (l.valor || 0);
+      if (valor < 0.005) return;
+      const dia = parseInt((v.inicio || '').slice(8, 10)) || 1;
+      cfMesesVigencia(v, fimKey).forEach(k => {
+        if (k < keyAtual || reais.has(k)) return;
+        const ult = new Date(parseInt(k.slice(0, 4)), parseInt(k.slice(5, 7)), 0).getDate();
+        let dt = k + '-' + String(Math.min(dia, ult)).padStart(2, '0');
+        if (dt < today()) dt = today();
+        aberto(dt, catId, SEM_PAG, -valor, {
+          tipo:'pagar', id:l.id, nf:'', data:dt, nome:getFornNome(l.forn),
+          prod:(l.prod ? getProdNome(l.prod) : '') + ' · custo fixo', valor, status:'Custo fixo (projetado)' });
+      });
+    });
+  });
   (db.dfc_lans || []).forEach(l => {
-    if (!l.data || parseInt(l.data.slice(0,4)) !== ano || !catValida(l.cat)) return;
+    if (!naJanela(l.data) || !catValida(l.cat)) return;
     const sinal = getDfcCatTipo(l.cat) === 'entrada' ? 1 : -1;
     lancar(l.cat, '', l.data, sinal * (l.valor || 0), {
       tipo:'dfc', id:'', nf:'', data:l.data, nome:'Lançamento DFC', prod:l.desc || '',
@@ -12446,19 +12630,18 @@ function renderFluxoProjetado() {
   });
 
   // ── 2. Caixa (saldo das contas) ──────────────────────────────────
-  const caixaAuto = {}; for (let m=1;m<=12;m++) caixaAuto[m] = 0;
+  const caixaAuto = {}; MS.forEach(k => caixaAuto[k] = 0);
   const contaIds = new Set(db.bancos.map(b => b.id));
-  const saldoEm = data => {                // saldo de todas as contas antes de "data"
+  const saldoEm = data => {
     let s = db.bancos.reduce((t,b) => t + (b.saldo_inicial || 0), 0);
     getParcelasReceber(true).forEach(p => { if (contaIds.has(p.banco) && p.dtrecebido && p.dtrecebido < data) s += (p.valParc || 0); });
     getParcelas(true).forEach(p => { if (contaIds.has(p.banco) && p.dtpago && p.dtpago < data) s -= (p.valParc || 0); });
     return s;
   };
   const saldoAtual = db.bancos.reduce((t,b) => t + getBancoSaldo(b), 0);
-  if (ano < anoAtual)                caixaAuto[1] = saldoEm(iniAno);
-  else if (ano > anoAtual)           caixaAuto[1] = saldoAtual + caixaAbertura;
-  else if (partida === 'atual')      caixaAuto[mesAtual] = saldoAtual;
-  else                               caixaAuto[1] = saldoEm(iniAno);
+  if (futuro)                                   caixaAuto[MS[0]] = saldoAtual + caixaAbertura;
+  else if (partida === 'atual' && contemAtual)  caixaAuto[keyAtual] = saldoAtual;
+  else                                          caixaAuto[MS[0]] = saldoEm(iniJan);
 
   // ── 3. Estrutura: grupos por seção ───────────────────────────────
   const grupos = [...db.dre_grupos].filter(g => g.tipo === 'entrada' || g.tipo === 'saida').sort((a,b)=>(a.ordem||0)-(b.ordem||0));
@@ -12484,25 +12667,24 @@ function renderFluxoProjetado() {
   let qtdAjustes = 0;
   const efetivo = (chave, nome, autoMes) => {
     const ef = {}, est = {};
-    for (let m=1;m<=12;m++) {
-      const aj = _fpAj(ano, chave, m);
-      if (aj && aj.m === 'zero')        { ef[m] = 0; est[m] = 'zero'; qtdAjustes++; }
-      else if (aj && aj.m === 'manual') { ef[m] = aj.v || 0; est[m] = 'manual'; qtdAjustes++; }
-      else                              { ef[m] = autoMes[m] || 0; est[m] = 'auto'; }
-    }
+    MS.forEach(k => {
+      const aj = _fpAjK(chave, k);
+      if (aj && aj.m === 'zero')        { ef[k] = 0; est[k] = 'zero'; qtdAjustes++; }
+      else if (aj && aj.m === 'manual') { ef[k] = aj.v || 0; est[k] = 'manual'; qtdAjustes++; }
+      else                              { ef[k] = autoMes[k] || 0; est[k] = 'auto'; }
+    });
     _fpLinhas[chave] = { nome, auto: autoMes, ef, est };
     return { ef, est };
   };
 
-  const MESES = [1,2,3,4,5,6,7,8,9,10,11,12];
   const linhasGrupo = (sec, sinalSec) => sec.map(g => {
     const cats = (catsDoGrupo[g.id] || []).map(c => {
-      const auto = {}; MESES.forEach(m => auto[m] = sinalSec * ((caixaMes[c.id] || {})[m] || 0));
+      const auto = {}; MS.forEach(k => auto[k] = sinalSec * ((caixaMes[c.id] || {})[k] || 0));
       const r = efetivo('cat:' + c.id, c.nome, auto);
-      const temValor = MESES.some(m => Math.abs(auto[m]) >= 0.005 || r.est[m] !== 'auto');
+      const temValor = MS.some(k => Math.abs(auto[k]) >= 0.005 || r.est[k] !== 'auto');
       return { ...c, chave:'cat:' + c.id, ...r, auto, temValor };
     });
-    const somaCats = {}; MESES.forEach(m => somaCats[m] = cats.reduce((t,c) => t + c.ef[m], 0));
+    const somaCats = {}; MS.forEach(k => somaCats[k] = cats.reduce((t,c) => t + c.ef[k], 0));
     const r = efetivo('grp:' + g.id, g.nome, somaCats);
     return { ...g, chave:'grp:' + g.id, cats, ...r, auto: somaCats };
   });
@@ -12514,81 +12696,87 @@ function renderFluxoProjetado() {
   // ── 5. Totais ─────────────────────────────────────────────────────
   const totEnt = {}, totSai = {}, saldoMes = {}, acum = {};
   let a = 0;
-  MESES.forEach(m => {
-    totEnt[m] = gEnt.reduce((t,g) => t + g.ef[m], 0) + cheque.ef[m] + caixa.ef[m];
-    totSai[m] = gSai.reduce((t,g) => t + g.ef[m], 0);
-    saldoMes[m] = totEnt[m] - totSai[m];
-    if (m >= mesInicioAcum) { a += saldoMes[m]; acum[m] = a; } else acum[m] = null;
+  MS.forEach((k, i) => {
+    totEnt[k] = gEnt.reduce((t,g) => t + g.ef[k], 0) + cheque.ef[k] + caixa.ef[k];
+    totSai[k] = gSai.reduce((t,g) => t + g.ef[k], 0);
+    saldoMes[k] = totEnt[k] - totSai[k];
+    if (i >= idxInicioAcum) { a += saldoMes[k]; acum[k] = a; } else acum[k] = null;
   });
-  const somaAno = obj => MESES.reduce((t,m) => t + (obj[m] || 0), 0);
+  const somaJan = obj => MS.reduce((t,k) => t + (obj[k] || 0), 0);
 
   // ── 6. HTML ───────────────────────────────────────────────────────
-  const thMeses = MESES.map(m => `<th class="${ano === anoAtual && m === mesAtual ? 'fp-mes-atual' : ''}">${MESES_ABR[m]}_${String(ano).slice(2)}</th>`).join('');
-  const celula = (chave, m, v, est, clicavel) => {
+  const thMeses = MS.map(k => `<th class="${k === keyAtual ? 'fp-mes-atual' : ''}">${_fpRotuloMes(k)}</th>`).join('');
+  const celula = (chave, k, v, est, clicavel) => {
     const linha = _fpLinhas[chave];
     let cls = '', tit = '';
-    const autoTxt = linha ? fmtBRL(linha.auto[m] || 0) : '';
+    const autoTxt = linha ? fmtBRL(linha.auto[k] || 0) : '';
     if (est === 'manual') { cls = 'fp-manual'; tit = `Valor manual · automático seria ${autoTxt}`; }
     else if (est === 'zero') { cls = 'fp-zero'; tit = `Zerado · automático seria ${autoTxt}`; }
     else tit = 'Automático';
-    const aj = _fpAj(ano, chave, m);
+    const aj = _fpAjK(chave, k);
     if (aj && aj.u) tit += ` · por ${aj.u}${aj.t ? ' em ' + fmtDate(aj.t.slice(0,10)) : ''}`;
     const conteudo = est === 'zero' ? '0,00' : _fpFmt(v);
     if (!clicavel) return `<td class="${cls}">${conteudo}</td>`;
-    return `<td class="fp-cell ${cls}" title="${esc(tit)} · clique para ajustar" onclick="fpAbrirCelula('${chave}',${m})">${conteudo}</td>`;
+    return `<td class="fp-cell ${cls}" title="${esc(tit)} · clique para ajustar" onclick="fpAbrirCelula('${chave}','${k}')">${conteudo}</td>`;
   };
   const linhaHtml = (cls, rotulo, chave, ef, est, opts = {}) => {
-    const tds = MESES.map(m => celula(chave, m, ef[m], est ? est[m] : 'auto', !!chave)).join('');
-    const marca = est && MESES.some(m => est[m] !== 'auto') ? ' <span class="fp-flag" title="Esta linha tem ajustes manuais">✎</span>' : '';
+    const tds = MS.map(k => celula(chave, k, ef[k], est ? est[k] : 'auto', !!chave)).join('');
+    const marca = est && MS.some(k => est[k] !== 'auto') ? ' <span class="fp-flag" title="Esta linha tem ajustes manuais">✎</span>' : '';
     const label = chave
       ? `<span class="fp-rotulo" onclick="fpAbrirCelula('${chave}','linha')" title="Ajustar a linha inteira">${opts.prefixo || ''}${esc(rotulo)}${marca}</span>`
       : `${opts.prefixo || ''}${esc(rotulo)}`;
-    const total = opts.totalAno !== undefined ? opts.totalAno : somaAno(ef);
+    const total = opts.totalAno !== undefined ? opts.totalAno : somaJan(ef);
     return `<tr class="${cls}"><td>${opts.toggle || ''}${label}</td>${tds}<td class="fp-col-ano">${_fpFmt(total)}</td></tr>`;
   };
   const linhaFixa = (cls, rotulo, vals, totalAno) =>
-    `<tr class="${cls}"><td>${rotulo}</td>${MESES.map(m => `<td>${vals[m] === null ? '' : _fpFmt(vals[m])}</td>`).join('')}<td class="fp-col-ano">${totalAno === null ? '' : _fpFmt(totalAno)}</td></tr>`;
+    `<tr class="${cls}"><td>${rotulo}</td>${MS.map(k => `<td>${vals[k] === null ? '' : _fpFmt(vals[k])}</td>`).join('')}<td class="fp-col-ano">${totalAno === null ? '' : _fpFmt(totalAno)}</td></tr>`;
 
   const blocoGrupos = (lista) => lista.map(g => {
     const n = normText(g.nome || '');
     const ehEmprestimo = n.includes('emprestimo') && !n.includes('captacao');
-    const cats = g.cats.filter(c => mostrarVazias || c.temValor);
+    const ehOrcado = isGrupoOrcado(g);
+    let cats = g.cats.filter(c => mostrarVazias || c.temValor);
+    // Grupo com categorias cadastradas sempre pode ser aberto; se nenhuma
+    // tiver valor, mostra todas (ex.: Amortização de Empréstimos).
+    if (!cats.length) cats = g.cats;
     const aberto_ = _fpAbertos.has(g.id);
     const toggle = cats.length
       ? `<button type="button" class="dre-toggle-cat" onclick="fpToggleGrupo('${g.id}')" title="${aberto_ ? 'Recolher' : 'Ver'} categorias">${aberto_ ? '▾' : '▸'}</button>`
       : '<span class="fp-toggle-vazio"></span>';
-    let h = linhaHtml('fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
-    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat', c.nome, c.chave, c.ef, c.est); });
+    let h = linhaHtml('fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : '') + (ehOrcado ? ' fp-row-orcado' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
+    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat' + (ehOrcado ? ' fp-row-orcado' : ''), c.nome, c.chave, c.ef, c.est); });
     return h;
   }).join('');
 
+  const nCol = MS.length + 2;
   let html = '';
-  html += `<tr class="fp-row-secao"><td colspan="14">Entradas</td></tr>`;
+  html += `<tr class="fp-row-secao"><td colspan="${nCol}">Entradas</td></tr>`;
   html += blocoGrupos(gEnt);
   html += linhaHtml('fp-row-grupo', 'Cheque especial', 'cheque', cheque.ef, cheque.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
   html += linhaHtml('fp-row-grupo fp-row-caixa', 'Caixa (saldo das contas)', 'caixa', caixa.ef, caixa.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
-  html += linhaFixa('fp-row-total', 'Total de entradas', totEnt, somaAno(totEnt));
-  html += `<tr class="fp-row-secao"><td colspan="14">Saídas</td></tr>`;
+  html += linhaFixa('fp-row-total', 'Total de entradas', totEnt, somaJan(totEnt));
+  html += `<tr class="fp-row-secao"><td colspan="${nCol}">Saídas</td></tr>`;
   html += blocoGrupos(gSai);
-  html += linhaFixa('fp-row-total', 'Total de saídas do mês', totSai, somaAno(totSai));
-  html += linhaFixa('fp-row-saldo', 'Saldo do mês (entradas − saídas)', saldoMes, somaAno(saldoMes));
-  html += linhaFixa('fp-row-acum', 'Saldo acumulado · necessidade de capital de giro', acum, acum[12]);
+  html += linhaFixa('fp-row-total', 'Total de saídas do mês', totSai, somaJan(totSai));
+  html += linhaFixa('fp-row-saldo', 'Saldo do mês (entradas − saídas)', saldoMes, somaJan(saldoMes));
+  html += linhaFixa('fp-row-acum', 'Saldo acumulado · necessidade de capital de giro', acum, acum[fimKey]);
 
-  const partidaTxt = (ano === anoAtual && partida === 'atual')
-    ? `Começa no saldo atual das contas (<b>${fmtBRL(saldoAtual)}</b>) em ${MESES_ABR[mesAtual]}. Os meses anteriores mostram o que já foi pago e recebido, só como referência.`
-    : (ano > anoAtual
-        ? `Começa em Jan com o saldo atual das contas mais o que ainda está em aberto antes de ${ano}.`
-        : `Começa no saldo das contas em 01/01/${ano}.`);
-  document.getElementById('fp-info').innerHTML = `${partidaTxt} Pago e recebido entram pela data do pagamento; em aberto, pelo vencimento (vencidos entram no mês atual).`;
+  const partidaTxt = (contemAtual && partida === 'atual')
+    ? `Começa no saldo atual das contas (<b>${fmtBRL(saldoAtual)}</b>) em ${_fpRotuloMes(keyAtual)}. Os meses anteriores mostram o que já foi pago e recebido, só como referência.`
+    : (futuro
+        ? `Começa em ${_fpRotuloMes(MS[0])} com o saldo atual das contas mais o que ainda está em aberto antes desse mês.`
+        : `Começa no saldo das contas em ${fmtDate(iniJan)}.`);
+  document.getElementById('fp-info').innerHTML = `${partidaTxt} A coluna <b>Acumulado</b> soma só os meses visíveis. Pago e recebido entram pela data do pagamento; em aberto, pelo vencimento (vencidos entram no mês atual). Custos fixos se repetem em cada mês da vigência.`;
   document.getElementById('fp-qtd-ajustes').textContent = qtdAjustes
-    ? `${qtdAjustes} ${qtdAjustes === 1 ? 'célula ajustada' : 'células ajustadas'} em ${ano}` : 'Nenhum ajuste manual neste ano';
+    ? `${qtdAjustes} ${qtdAjustes === 1 ? 'célula ajustada' : 'células ajustadas'} no período` : 'Nenhum ajuste manual no período';
   const btnRest = document.getElementById('fp-btn-restaurar');
   if (btnRest) btnRest.disabled = !qtdAjustes;
 
   wrap.innerHTML = `<div class="fp-scroll"><table class="fp-table">
-    <thead><tr><th>Fluxo de caixa projetado</th>${thMeses}<th class="fp-col-ano">Ano</th></tr></thead>
+    <thead><tr><th>Fluxo de caixa projetado</th>${thMeses}<th class="fp-col-ano">Acumulado</th></tr></thead>
     <tbody>${html}</tbody></table></div>`;
-  window._fpAnoRender = ano;
+  window._fpJanelaRender = MS.slice();
+  window._fpAnoRender = parseInt(fimKey.slice(0, 4));
 }
 
 function fpToggleGrupo(id) {
@@ -12603,25 +12791,27 @@ function fpTodosGrupos(abrir) {
 
 // ── Editor de célula / linha ─────────────────────────────────────────
 function fpAbrirCelula(chave, mes) {
-  const ano = window._fpAnoRender;
   const linha = _fpLinhas[chave];
   if (!linha) return;
-  _fpEdit = { chave, mes, ano };
+  _fpEdit = { chave, mes };
   const ehLinha = mes === 'linha';
+  const jan = window._fpJanelaRender || [];
   document.getElementById('fp-ed-title').textContent = linha.nome;
-  document.getElementById('fp-ed-sub').textContent = ehLinha ? `Linha inteira · ${ano}` : `${meses[mes]} / ${ano}`;
+  document.getElementById('fp-ed-sub').textContent = ehLinha
+    ? `Linha inteira · ${jan.length ? _fpRotuloMes(jan[0]) + ' a ' + _fpRotuloMes(jan[jan.length - 1]) : ''}`
+    : _fpTxtMes(mes);
   const ehGrupo = chave.startsWith('grp:');
   let info = '';
   if (ehLinha) {
     const autoAno = Object.values(linha.auto).reduce((t,v) => t + (v||0), 0);
     const efAno = Object.values(linha.ef).reduce((t,v) => t + (v||0), 0);
     const nAj = Object.values(linha.est).filter(e => e !== 'auto').length;
-    info = `<div class="fp-ed-linha"><span>Automático no ano</span><b>${fmtBRL(autoAno)}</b></div>
-            <div class="fp-ed-linha"><span>Valor usado no ano</span><b>${fmtBRL(efAno)}</b></div>
+    info = `<div class="fp-ed-linha"><span>Automático no período</span><b>${fmtBRL(autoAno)}</b></div>
+            <div class="fp-ed-linha"><span>Valor usado no período</span><b>${fmtBRL(efAno)}</b></div>
             <div class="fp-ed-linha"><span>Meses ajustados</span><b>${nAj}</b></div>`;
   } else {
     const est = linha.est[mes];
-    const aj = _fpAj(ano, chave, mes);
+    const aj = _fpAjK(chave, mes);
     const estTxt = est === 'manual' ? '<span class="fp-badge manual">✎ Manual</span>'
                  : est === 'zero' ? '<span class="fp-badge zero">⦸ Zerado</span>'
                  : '<span class="fp-badge auto">Automático</span>';
@@ -12639,20 +12829,21 @@ function fpAbrirCelula(chave, mes) {
   inp.value = (atual !== '' && Math.abs(atual) >= 0.005) ? new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(atual) : '';
   document.getElementById('fp-ed-seguintes-wrap').style.display = ehLinha ? 'none' : '';
   document.getElementById('fp-ed-seguintes').checked = false;
-  document.getElementById('fp-ed-lbl-valor').textContent = ehLinha ? 'Valor manual para todos os meses' : 'Valor manual';
+  document.getElementById('fp-ed-lbl-valor').textContent = ehLinha ? 'Valor manual para todos os meses visíveis' : 'Valor manual';
   openModal('modal-fp-celula');
   setTimeout(() => { inp.focus(); inp.select(); }, 50);
 }
 
 function _fpMesesAlvo() {
   const e = _fpEdit;
-  if (e.mes === 'linha') return [1,2,3,4,5,6,7,8,9,10,11,12];
-  if (document.getElementById('fp-ed-seguintes').checked) { const r = []; for (let m = e.mes; m <= 12; m++) r.push(m); return r; }
+  const jan = window._fpJanelaRender || [];
+  if (e.mes === 'linha') return jan.slice();
+  if (document.getElementById('fp-ed-seguintes').checked) return jan.filter(k => k >= e.mes);
   return [e.mes];
 }
 async function fpAplicar(modo) {
   if (!_fpEdit) return;
-  const { chave, ano } = _fpEdit;
+  const { chave } = _fpEdit;
   let valor = 0;
   if (modo === 'manual') {
     const txt = document.getElementById('fp-ed-valor').value.trim();
@@ -12661,24 +12852,28 @@ async function fpAplicar(modo) {
   }
   const mesesAlvo = _fpMesesAlvo();
   if (_fpEdit.mes === 'linha' && modo !== 'manual') {
-    const msg = modo === 'zero' ? 'Zerar esta linha em todos os meses do ano?' : 'Voltar esta linha para o valor automático em todos os meses do ano?';
+    const msg = modo === 'zero' ? 'Zerar esta linha em todos os meses visíveis?' : 'Voltar esta linha para o valor automático em todos os meses visíveis?';
     if (!confirm(msg)) return;
   }
   const marca = { u: (currentUser && (currentUser.nome || currentUser.user)) || '', t: new Date().toISOString() };
-  mesesAlvo.forEach(m => {
-    if (modo === 'auto') _fpSetAj(ano, chave, m, null);
-    else if (modo === 'zero') _fpSetAj(ano, chave, m, { m:'zero', ...marca });
-    else _fpSetAj(ano, chave, m, { m:'manual', v: valor, ...marca });
+  mesesAlvo.forEach(k => {
+    if (modo === 'auto') _fpSetAjK(chave, k, null);
+    else if (modo === 'zero') _fpSetAjK(chave, k, { m:'zero', ...marca });
+    else _fpSetAjK(chave, k, { m:'manual', v: valor, ...marca });
   });
   closeModal('modal-fp-celula');
   renderFluxoProjetado();
   await salvarFpAjustes();
 }
 async function fpRestaurarAno() {
-  const ano = window._fpAnoRender;
-  if (!_fpAjustes[ano]) return;
-  if (!confirm(`Voltar TODOS os valores de ${ano} para o automático? Os valores manuais e zerados deste ano serão apagados.`)) return;
-  delete _fpAjustes[ano];
+  const jan = window._fpJanelaRender || [];
+  if (!jan.length) return;
+  if (!confirm(`Voltar TODOS os valores de ${_fpRotuloMes(jan[0])} a ${_fpRotuloMes(jan[jan.length - 1])} para o automático? Os valores manuais e zerados desses meses serão apagados.`)) return;
+  jan.forEach(k => {
+    const a = _fpAjustes[parseInt(k.slice(0, 4))];
+    if (!a) return;
+    Object.keys(a).forEach(linha => _fpSetAjK(linha, k, null));
+  });
   renderFluxoProjetado();
   await salvarFpAjustes();
 }
@@ -12694,12 +12889,12 @@ function _fpItensGrupo(gid, mes) {
 }
 function fpVerLancamentos() {
   if (!_fpEdit) return;
-  const { chave, mes, ano } = _fpEdit;
+  const { chave, mes } = _fpEdit;
   const linha = _fpLinhas[chave];
   const itens = (chave.startsWith('cat:') ? (((_fpItens[chave.slice(4)] || {})[mes]) || []) : _fpItensGrupo(chave.slice(4), mes))
     .slice().sort((a,b) => (a.data||'').localeCompare(b.data||''));
   closeModal('modal-fp-celula');
-  _dreDetalheRender(linha ? linha.nome : 'Lançamentos', `${meses[mes]} / ${ano} · valores automáticos`, itens, { origem:'fp', chave, mes });
+  _dreDetalheRender(linha ? linha.nome : 'Lançamentos', `${_fpTxtMes(mes)} · valores automáticos`, itens, { origem:'fp', chave, mes });
 }
 
 // Exporta a tabela atual para Excel (CSV com ponto e vírgula)
@@ -12716,7 +12911,8 @@ function fpExportar() {
   const blob = new Blob(['﻿' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `fluxo-caixa-projetado-${window._fpAnoRender || ''}.csv`;
+  const _jn = window._fpJanelaRender || [];
+  a.download = `fluxo-caixa-projetado-${_jn.length ? _jn[0] + '_a_' + _jn[_jn.length - 1] : ''}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
@@ -12919,7 +13115,7 @@ function _dreDetReabrir() {
     abrirDetalheAcCategoria(ctx.chave, ctx.mes);
   } else if (ctx.origem === 'fp') {
     renderFluxoProjetado();
-    _fpEdit = { chave: ctx.chave, mes: ctx.mes, ano: window._fpAnoRender };
+    _fpEdit = { chave: ctx.chave, mes: ctx.mes };
     fpVerLancamentos();
   } else if (ctx.origem === 'acg') {
     if (typeof renderAnaliseCategoria === 'function') renderAnaliseCategoria();
@@ -13353,7 +13549,7 @@ async function saveBanco() {
     saldo_inicial: parseFloat(document.getElementById('bnk-saldo').value)||0,
     obs:    document.getElementById('bnk-obs').value };
   const res = await sbFetch('bancos','POST',rec);
-  if (!res) { alert('Erro ao salvar! Verifique se a tabela "bancos" existe no Supabase e o RLS está configurado.'); return; }
+  if (!res) { alert('❌ Erro ao salvar a conta.' + sbErroMsg()); return; }
   db.bancos.push(rec);
   clearBanco(); renderBancos(); populateBancoSelects(); renderFluxoBancoDiario(); renderDashboard(); fecharFormModalSeAberto('form-bnk');
 }
@@ -13452,7 +13648,7 @@ async function saveTransferencia() {
   // entre as empresas — por isso não é vinculada a nenhuma empresa.
   const rec = { id: uid(), data, origem, destino, valor, obs: obs || '' };
   const res = await sbFetch('transferencias', 'POST', rec);
-  if (!res) { alert('Erro ao salvar! Verifique se a tabela "transferencias" existe no Supabase e o RLS está configurado.'); return; }
+  if (!res) { alert('❌ Erro ao salvar a transferência.' + sbErroMsg()); return; }
   db.transferencias.push(rec);
   clearTransferencia();
   closeModal('modal-transf');
@@ -13760,6 +13956,8 @@ function renderAnaliseFluxo() {
 
 async function initApp() {
   await loadAllData();
+  await seedSevegnani();
+  populateObraSelects();
   populateYearSelects();
   populateDfcYearSelects();
   restaurarFiltrosDash();
@@ -14691,7 +14889,7 @@ async function importarLinha(tipo, r) {
 
   if(tipo === 'pagar') {
     const lanc = {
-      id: uid(), empresa_id: empresaAtual() || null,
+      id: uid(), empresa_id: empresaPadrao() || null,
       dtcompra: r.dataRef, dtprev: r.venc, nf: r.nf||'',
       forn: idAlvo, prod: '', valor: r.valor, parcelas: 1,
       financeiro: 'sim', pago: 'nao', tipo_pag: '', banco: '',
@@ -14703,7 +14901,7 @@ async function importarLinha(tipo, r) {
     db.lancamentos.push(lanc);
   } else {
     const lanc = {
-      id: uid(), empresa_id: empresaAtual() || null,
+      id: uid(), empresa_id: empresaPadrao() || null,
       dtvenda: r.dataRef, dtprev: r.venc, nf: r.nf||'',
       cliente: idAlvo, prod: '', valor: r.valor, parcelas: 1,
       financeiro: 'sim', recebido: 'nao', tipo_pag: '', banco: '',
@@ -15068,7 +15266,7 @@ async function confirmarCancelamento() {
   const registro = {
     id: uid(),
     lanc_orig_id: l.id,
-    empresa_id: l.empresa_id || empresaAtual() || null,
+    empresa_id: l.empresa_id || empresaPadrao() || null,
     cliente: l.cliente || '',
     prod: l.prod || '',
     valor: l.valor || 0,
@@ -15248,7 +15446,7 @@ async function restaurarPedidoCancelado(id) {
   if (!confirm('Restaurar este pedido para Contas a Receber?')) return;
   const lanc = {
     id: p.lanc_orig_id || uid(),
-    empresa_id: p.empresa_id || empresaAtual() || null,
+    empresa_id: p.empresa_id || empresaPadrao() || null,
     cliente: p.cliente || '', prod: p.prod || '',
     valor: p.valor || 0, parcelas: p.parcelas || 1,
     dtvenda: p.dtvenda || null, dtprev: p.dtprev || null,
@@ -15351,7 +15549,7 @@ async function confirmarReposicao() {
   const registro = {
     id: uid(),
     lanc_orig_id: l.id,
-    empresa_id: l.empresa_id || empresaAtual() || null,
+    empresa_id: l.empresa_id || empresaPadrao() || null,
     cliente: l.cliente || '',
     prod: l.prod || '',
     valor: l.valor || 0,
@@ -15531,7 +15729,7 @@ async function restaurarReposicao(id) {
   if (!confirm('Restaurar este pedido para Contas a Receber?')) return;
   const lanc = {
     id: p.lanc_orig_id || uid(),
-    empresa_id: p.empresa_id || empresaAtual() || null,
+    empresa_id: p.empresa_id || empresaPadrao() || null,
     cliente: p.cliente || '', prod: p.prod || '',
     valor: p.valor || 0, parcelas: p.parcelas || 1,
     dtvenda: p.dtvenda || null, dtprev: p.dtprev || null,
@@ -15617,6 +15815,27 @@ function vigStatus(lista, ref) {
   return { label:'Encerrado', cls:'badge-red' };
 }
 
+// Meses (AAAA-MM) cobertos por uma vigência. Sem fim: até 12 meses à frente
+// do mês atual (só para exibição).
+function cfMesesVigencia(v, limite) {
+  if (!v || !v.inicio) return [];
+  const ini = v.inicio.slice(0, 7);
+  let fim = v.fim ? v.fim.slice(0, 7) : null;
+  if (!fim) { const h = new Date(); fim = _fpAddMes(_fpMesKey(h.getFullYear(), h.getMonth() + 1), 11); }
+  if (limite && fim > limite) fim = limite;
+  const r = []; let k = ini;
+  while (k <= fim && r.length < 240) { r.push(k); k = _fpAddMes(k, 1); }
+  return r;
+}
+function _fpMesKey(y, m) { return y + '-' + String(m).padStart(2, '0'); }
+function _fpAddMes(key, n) {
+  let y = parseInt(key.slice(0, 4)), m = parseInt(key.slice(5, 7)) + n;
+  while (m > 12) { m -= 12; y++; }
+  while (m < 1)  { m += 12; y--; }
+  return _fpMesKey(y, m);
+}
+function _fpRotuloMes(k) { return MESES_ABR[parseInt(k.slice(5, 7))] + '/' + k.slice(2, 4); }
+
 function vigTextoPeriodo(v) {
   if (!v) return '—';
   return (v.inicio ? fmtDate(v.inicio) : '—') + ' → ' + (v.fim ? fmtDate(v.fim) : 'Indeterminado');
@@ -15656,9 +15875,6 @@ function toggleCustoFixoBox(prefix) {
     // Sugere início e valor a partir do que já foi digitado no lançamento.
     const ini = document.getElementById(prefix + '-vig-inicio');
     if (ini && !ini.value) ini.value = campoValor(prefix + '-dtprev') || campoValor(prefix + '-dtcompra') || today();
-    const val = document.getElementById(prefix + '-vig-valor');
-    const tot = campoValor(prefix + '-valor');
-    if (val && !val.value && tot) val.value = tot;
   }
   renderVigencias(prefix);
 }
@@ -15772,9 +15988,11 @@ function renderVigencias(prefix) {
     const badge    = ativa
       ? '<span class="badge badge-green">Vigente</span>'
       : ((v.inicio && v.inicio > hoje) ? '<span class="badge badge-blue">Futura</span>' : '<span class="badge badge-gray">Encerrada</span>');
-    const valorTxt = (v.valor == null || v.valor === '')
-      ? '<span style="color:#a8a29e">valor do lançamento</span>'
-      : fmtBRL(v.valor);
+    const _vTopo = parseFloat(campoValor(prefix + '-valor')) || 0;
+    const _vMes  = (v.valor == null || v.valor === '') ? _vTopo : v.valor;
+    const _qMes  = cfMesesVigencia(v).length;
+    const valorTxt = fmtBRL(_vMes) + ' <span style="color:#a8a29e;font-weight:400">/mês</span>' +
+      (_qMes ? ` <span style="color:#78716c;font-weight:400">· ${_qMes} ${_qMes === 1 ? 'mês' : 'meses'}${v.fim ? ' = ' + fmtBRL(_vMes * _qMes) : ''}</span>` : '');
     return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;border:1px solid ${editando ? '#ea580c' : '#e7e5e4'};background:${editando ? '#fff8f3' : '#fff'};border-radius:6px;margin-bottom:6px;">
       <span style="font-family:DM Mono,monospace;font-size:12px;color:#44403c;min-width:190px">${vigTextoPeriodo(v)}</span>
       <span style="font-family:DM Mono,monospace;font-size:12px;font-weight:600;min-width:110px">${valorTxt}</span>
@@ -15918,7 +16136,7 @@ function renderCustosFixos() {
     // parcela do lançamento (que é o desembolso recorrente do período).
     const valorRef = (alvo && alvo.valor != null && alvo.valor !== '')
       ? alvo.valor
-      : ((l.valor || 0) / nParc);
+      : (l.valor || 0);
     return {
       lancId: l.id, empresa_id: l.empresa_id,
       forn: l.forn, prod: l.prod, catId,
@@ -15951,7 +16169,7 @@ function renderCustosFixos() {
     { key:'prod',    label:'Item',                get:i => i.prod ? getProdNome(i.prod) : null },
     { key:'cat',     label:'Categoria',           get:i => i.catId ? getDreCatNome(i.catId) : null },
     { key:'periodo', label:'Vigência atual',      get:i => i.inicio || '', display:i => i.periodo },
-    { key:'valor',   label:'Valor vigente',       get:i => i.valorRef, display:i => fmtBRL(i.valorRef) },
+    { key:'valor',   label:'Valor mensal',       get:i => i.valorRef, display:i => fmtBRL(i.valorRef) },
     { key:'status',  label:'Situação',            get:i => i.status },
     { key:'qtd',     label:'Vigências',           get:i => i.qtd },
     { key:'acoes',   label:'Ações',               get:() => '', noFilter:true }
@@ -15969,7 +16187,7 @@ function renderCustosFixos() {
   if (kpi) kpi.innerHTML = `
     <div class="card kpi"><div class="kpi-val">${itens.length}</div><div class="kpi-lbl">Custos fixos cadastrados</div></div>
     <div class="card kpi"><div class="kpi-val" style="color:#16a34a">${vigentes.length}</div><div class="kpi-lbl">Vigentes ${fData ? 'em ' + fmtDate(fData) : 'hoje'}</div></div>
-    <div class="card kpi"><div class="kpi-val" style="color:#ea580c">${fmtBRL(totalMensal)}</div><div class="kpi-lbl">Total do período vigente</div></div>
+    <div class="card kpi"><div class="kpi-val" style="color:#ea580c">${fmtBRL(totalMensal)}</div><div class="kpi-lbl">Total mensal vigente</div></div>
     <div class="card kpi"><div class="kpi-val" style="color:#d97706">${encerrando}</div><div class="kpi-lbl">Vigências encerrando em 60 dias</div></div>`;
 
   if (!itens.length) {
@@ -16012,7 +16230,7 @@ function verVigenciasCustoFixo(lancId) {
   const hoje = today();
   if (tit) tit.textContent = 'Vigências — ' + getFornNome(l.forn) + (l.prod ? ' · ' + getProdNome(l.prod) : '');
   if (body) body.innerHTML = (vigs.length ? `<div class="table-scroll"><table>
-      <thead><tr><th>Início</th><th>Fim</th><th>Valor</th><th>Situação</th><th>Observação</th></tr></thead>
+      <thead><tr><th>Início</th><th>Fim</th><th>Valor mensal</th><th>Meses</th><th>Situação</th><th>Observação</th></tr></thead>
       <tbody>${vigs.map(v => {
         const ativa = (!v.inicio || v.inicio <= hoje) && (!v.fim || v.fim >= hoje);
         const badge = ativa ? '<span class="badge badge-green">Vigente</span>'
@@ -16020,7 +16238,8 @@ function verVigenciasCustoFixo(lancId) {
         return `<tr>
           <td style="font-family:DM Mono,monospace;font-size:12px">${v.inicio ? fmtDate(v.inicio) : '—'}</td>
           <td style="font-family:DM Mono,monospace;font-size:12px">${v.fim ? fmtDate(v.fim) : 'Indeterminado'}</td>
-          <td style="font-family:DM Mono,monospace">${(v.valor == null || v.valor === '') ? fmtBRL((l.valor||0)/(l.parcelas||1)) + ' <span style="color:#a8a29e;font-size:11px">(do lançamento)</span>' : fmtBRL(v.valor)}</td>
+          <td style="font-family:DM Mono,monospace">${(v.valor == null || v.valor === '') ? fmtBRL(l.valor||0) : fmtBRL(v.valor)}</td>
+          <td style="font-size:11px;color:#57534e;max-width:320px">${cfMesesVigencia(v).map(_fpRotuloMes).join(' · ')}${v.fim ? '' : ' …'}</td>
           <td>${badge}</td>
           <td style="font-size:12px;color:#57534e">${v.obs || '—'}</td>
         </tr>`;
@@ -16031,6 +16250,391 @@ function verVigenciasCustoFixo(lancId) {
      </div>`;
   card.style.display = '';
   card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// OBRAS
+// Cadastro de obras e vínculo de cada lançamento (a pagar / a receber) a
+// uma obra. Tudo fica na tabela `config` que já existe — não é preciso
+// criar tabela nem coluna nova no Supabase:
+//   obra:<id>                 → JSON com os dados da obra
+//   obralanc:p:<lancamento>   → id da obra (lançamento a pagar)
+//   obralanc:r:<lancamento>   → id da obra (lançamento a receber)
+// ══════════════════════════════════════════════════════════════════════
+const OBRA_PREFIX = 'obra:';
+const OBRALANC_PREFIX = 'obralanc:';
+
+// Lê todas as linhas da `config` com um prefixo, página por página.
+async function cfgFetchPrefix(prefix) {
+  const out = [];
+  for (let off = 0; off < 100000; off += 1000) {
+    const rows = await sbFetch('config', 'GET', null, `?key=like.${encodeURIComponent(prefix)}*&order=key&limit=1000&offset=${off}`);
+    if (!rows) return off === 0 ? null : out;
+    out.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return out;
+}
+async function cfgUpsert(key, valor) {
+  const f = `?key=eq.${encodeURIComponent(key)}`;
+  const ex = await sbFetch('config', 'GET', null, f + '&select=id');
+  if (ex === null) return false;
+  return ex.length
+    ? await sbFetch('config', 'PATCH', { value: valor }, f)
+    : await sbFetch('config', 'POST', { id: uid(), key, value: valor });
+}
+async function cfgDelete(key) {
+  return await sbFetch('config', 'DELETE', null, `?key=eq.${encodeURIComponent(key)}`);
+}
+
+function carregarObrasDe(rowsObras, rowsVinc) {
+  db.obras = [];
+  (rowsObras || []).forEach(c => {
+    try { const o = JSON.parse(c.value); if (o && o.id) db.obras.push(o); } catch(e) {}
+  });
+  ordenarObras();
+  db.obraLanc = { p: {}, r: {} };
+  (rowsVinc || []).forEach(c => {
+    const resto = String(c.key || '').slice(OBRALANC_PREFIX.length);   // p:<id> / r:<id>
+    const tipo = resto.slice(0, 1), id = resto.slice(2);
+    if ((tipo === 'p' || tipo === 'r') && id && c.value) db.obraLanc[tipo][id] = String(c.value).replace(/^"|"$/g, '');
+  });
+}
+
+function ordenarObras() {
+  (db.obras || []).sort((a, b) => String(a.numero || '').localeCompare(String(b.numero || ''), 'pt-BR', { numeric: true }) || (a.nome || '').localeCompare(b.nome || ''));
+}
+function obraDoLanc(tipo, id) { return (db.obraLanc && db.obraLanc[tipo] && db.obraLanc[tipo][id]) || ''; }
+function getObra(id) { return (db.obras || []).find(o => o.id === id) || null; }
+function obraRotulo(o) { return o ? ((o.numero ? o.numero + ' — ' : '') + (o.nome || '')) : '—'; }
+
+async function obraVincular(tipo, lancId, obraId) {
+  if (!db.obraLanc) db.obraLanc = { p: {}, r: {} };
+  obraId = obraId || '';
+  if (obraId === obraDoLanc(tipo, lancId)) return true;
+  const key = OBRALANC_PREFIX + tipo + ':' + lancId;
+  let ok;
+  if (obraId) { ok = await cfgUpsert(key, obraId); if (ok) db.obraLanc[tipo][lancId] = obraId; }
+  else { ok = await cfgDelete(key); if (ok) delete db.obraLanc[tipo][lancId]; }
+  if (!ok) alert('⚠ O lançamento foi salvo, mas não foi possível gravar a obra vinculada.' + sbErroMsg());
+  return !!ok;
+}
+
+function populateObraSelects() {
+  const ativas = (db.obras || []);
+  document.querySelectorAll('select.sel-obra').forEach(sel => {
+    const v = sel.value;
+    sel.innerHTML = '<option value="">Nenhuma</option>' +
+      ativas.map(o => `<option value="${o.id}">${esc(obraRotulo(o))}</option>`).join('');
+    sel.value = v;
+  });
+  const f = document.getElementById('do-obra');
+  if (f) {
+    const v = f.value;
+    f.innerHTML = '<option value="">Todas as obras (resumo)</option>' + ativas.map(o => `<option value="${o.id}">${esc(obraRotulo(o))}</option>`).join('');
+    f.value = v;
+  }
+}
+
+// Lead time: do início até a previsão de conclusão; sem previsão, até hoje.
+function obraLeadTime(o) {
+  if (!o || !o.dt_inicio) return null;
+  const fim = o.dt_prev_conclusao || today();
+  return { dias: diffDias(o.dt_inicio, fim), base: o.dt_prev_conclusao ? 'previsão' : 'hoje' };
+}
+
+// ── Cadastro ───────────────────────────────────────────────────────────
+function abrirNovaObra() {
+  ['ob-id','ob-numero','ob-nome','ob-inicio','ob-prev-pag','ob-prev-conc','ob-imposto','ob-obs'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const nums = (db.obras || []).map(o => parseInt(o.numero)).filter(n => !isNaN(n));
+  document.getElementById('ob-numero').value = String((nums.length ? Math.max(...nums) : 0) + 1);
+  document.getElementById('ob-titulo').textContent = 'Nova obra';
+  document.getElementById('ob-inicio').value = today();
+  openModal('modal-obra');
+}
+function editarObra(id) {
+  const o = getObra(id); if (!o) return;
+  const set = (k, v) => { const el = document.getElementById(k); if (el) el.value = v == null ? '' : v; };
+  set('ob-id', o.id); set('ob-numero', o.numero); set('ob-nome', o.nome);
+  set('ob-inicio', o.dt_inicio); set('ob-prev-pag', o.dt_prev_pagamento); set('ob-prev-conc', o.dt_prev_conclusao);
+  set('ob-imposto', o.imposto_pct); set('ob-obs', o.obs);
+  document.getElementById('ob-titulo').textContent = 'Editar obra';
+  openModal('modal-obra');
+}
+async function salvarObra() {
+  const id = campoValor('ob-id') || uid();
+  const nome = (campoValor('ob-nome') || '').trim();
+  if (!nome) { alert('Informe o nome da obra.'); return; }
+  const antiga = getObra(id) || {};
+  const o = Object.assign({}, antiga, {
+    id, nome,
+    numero: (campoValor('ob-numero') || '').trim(),
+    dt_inicio: campoValor('ob-inicio') || '',
+    dt_prev_pagamento: campoValor('ob-prev-pag') || '',
+    dt_prev_conclusao: campoValor('ob-prev-conc') || '',
+    imposto_pct: campoValor('ob-imposto') === '' ? null : (parseFloat(campoValor('ob-imposto')) || 0),
+    obs: campoValor('ob-obs') || ''
+  });
+  if (o.dt_prev_conclusao && o.dt_inicio && o.dt_prev_conclusao < o.dt_inicio) { alert('A previsão de conclusão não pode ser antes do início.'); return; }
+  if ((db.obras || []).some(x => x.id !== id && o.numero && String(x.numero) === o.numero)) { alert('Já existe uma obra com o número ' + o.numero + '.'); return; }
+  const ok = await cfgUpsert(OBRA_PREFIX + id, JSON.stringify(o));
+  if (!ok) { alert('❌ Erro ao salvar a obra.' + sbErroMsg()); return; }
+  db.obras = (db.obras || []).filter(x => x.id !== id).concat([o]);
+  ordenarObras();
+  closeModal('modal-obra');
+  populateObraSelects(); renderObras(); renderDreObra();
+}
+async function excluirObra(id) {
+  const o = getObra(id); if (!o) return;
+  const nVinc = Object.values(db.obraLanc.p).filter(x => x === id).length + Object.values(db.obraLanc.r).filter(x => x === id).length;
+  if (!confirm(`Excluir a obra "${obraRotulo(o)}"?` + (nVinc ? `\n\n${nVinc} lançamento(s) estão vinculados a ela e ficarão sem obra.` : ''))) return;
+  const ok = await cfgDelete(OBRA_PREFIX + id);
+  if (!ok) { alert('❌ Erro ao excluir a obra.' + sbErroMsg()); return; }
+  db.obras = db.obras.filter(x => x.id !== id);
+  for (const t of ['p', 'r']) for (const lid of Object.keys(db.obraLanc[t])) {
+    if (db.obraLanc[t][lid] === id) { await cfgDelete(OBRALANC_PREFIX + t + ':' + lid); delete db.obraLanc[t][lid]; }
+  }
+  populateObraSelects(); renderObras(); renderDreObra();
+}
+
+function renderObras() {
+  if (!paginaVisivel('obras')) return;
+  const tb = document.getElementById('tb-obras');
+  if (!tb) return;
+  const lista = db.obras || [];
+  if (!lista.length) { tb.innerHTML = '<tr><td colspan="9" class="empty-state">Nenhuma obra cadastrada. Clique em “+ Nova obra”.</td></tr>'; return; }
+  tb.innerHTML = lista.map(o => {
+    const lt = obraLeadTime(o);
+    const nP = Object.values(db.obraLanc.p).filter(x => x === o.id).length;
+    const nR = Object.values(db.obraLanc.r).filter(x => x === o.id).length;
+    return `<tr>
+      <td style="font-family:DM Mono,monospace;font-weight:700">${esc(o.numero || '—')}</td>
+      <td><b>${esc(o.nome || '')}</b>${o.obs ? `<div style="font-size:11px;color:#78716c">${esc(o.obs)}</div>` : ''}</td>
+      <td>${o.dt_inicio ? fmtDate(o.dt_inicio) : '—'}</td>
+      <td>${o.dt_prev_pagamento ? fmtDate(o.dt_prev_pagamento) : '—'}</td>
+      <td>${o.dt_prev_conclusao ? fmtDate(o.dt_prev_conclusao) : '<span style="color:#a8a29e">não informada</span>'}</td>
+      <td>${lt ? `<b>${lt.dias}</b> dias <span style="font-size:11px;color:#78716c">(até ${lt.base})</span>` : '—'}</td>
+      <td style="text-align:right">${o.imposto_pct == null ? '—' : String(o.imposto_pct).replace('.', ',') + '%'}</td>
+      <td style="text-align:center">${nP} pagar · ${nR} receber</td>
+      <td class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="abrirDreDaObra('${o.id}')">DRE</button>
+        <button class="btn btn-secondary btn-sm" onclick="editarObra('${o.id}')">Editar</button>
+        <button class="btn btn-secondary btn-sm" style="color:#b91c1c" onclick="excluirObra('${o.id}')">Excluir</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── DRE da obra ───────────────────────────────────────────────────────
+function isLancOrcado(l) {
+  const prodObj = l.prod ? db.produtos.find(x => x.id === l.prod) : null;
+  const catId = l.cat_dre || (prodObj ? prodObj.cat : '') || '';
+  const cat = catId ? db.dfc_cats.find(c => c.id === catId) : null;
+  const grp = cat ? db.dre_grupos.find(g => g.id === cat.grupo) : null;
+  if (cat && isGrupoOrcado(cat)) return true;
+  if (grp && isGrupoOrcado(grp)) return true;
+  const fn = normText(getFornNome(l.forn) || '');
+  return fn.includes('orcado') && fn.includes('projeto');
+}
+
+function calcObra(o) {
+  const lancsP = db.lancamentos.filter(l => obraDoLanc('p', l.id) === o.id);
+  const lancsR = db.lancreceber.filter(l => obraDoLanc('r', l.id) === o.id);
+  const receita = lancsR.reduce((t, l) => t + (parseFloat(l.valor) || 0), 0);
+  const recebido = getParcelasReceber(true).filter(p => obraDoLanc('r', p.lancId) === o.id).reduce((t, p) => t + (p.valParc || 0), 0);
+  const pct = parseFloat(o.imposto_pct) || 0;
+  const imposto = receita * pct / 100;
+  const liquida = receita - imposto;
+  const orcados = lancsP.filter(isLancOrcado), gastosL = lancsP.filter(l => !isLancOrcado(l));
+  const orcado = orcados.reduce((t, l) => t + (parseFloat(l.valor) || 0), 0);
+  const gastos = gastosL.reduce((t, l) => t + (parseFloat(l.valor) || 0), 0);
+  const ids = new Set(gastosL.map(l => l.id));
+  const gastosPagos = getParcelas(true).filter(p => ids.has(p.lancId)).reduce((t, p) => t + (p.valParc || 0), 0);
+  const margem = liquida - gastos;
+  const margemProj = liquida - orcado;
+  return { o, lancsP, lancsR, orcados, gastosL, receita, recebido, pct, imposto, liquida, orcado, gastos, gastosPagos,
+           margem, margemPct: liquida ? margem / liquida * 100 : null,
+           margemProj, margemProjPct: liquida ? margemProj / liquida * 100 : null,
+           consumo: orcado ? gastos / orcado * 100 : null };
+}
+
+function abrirDreDaObra(id) {
+  showPage('dre-obra');
+  const sel = document.getElementById('do-obra');
+  if (sel) { sel.value = id; renderDreObra(); }
+}
+
+async function salvarImpostoObra(id, txt) {
+  const o = getObra(id); if (!o) return;
+  const v = String(txt || '').trim();
+  o.imposto_pct = v === '' ? null : (parseFloat(v.replace(',', '.')) || 0);
+  const ok = await cfgUpsert(OBRA_PREFIX + id, JSON.stringify(o));
+  if (!ok) alert('❌ Não foi possível salvar o % de imposto.' + sbErroMsg());
+  renderDreObra(); renderObras();
+}
+
+function renderDreObra() {
+  if (!paginaVisivel('dre-obra')) return;
+  const wrap = document.getElementById('do-wrap');
+  if (!wrap) return;
+  populateObraSelects();
+  const obras = db.obras || [];
+  if (!obras.length) { wrap.innerHTML = '<div class="card"><div class="empty-state">Nenhuma obra cadastrada. Cadastre em <b>Obras → Cadastro de Obras</b>.</div></div>'; return; }
+  const selId = campoValor('do-obra');
+  const pctTxt = v => v == null ? '—' : v.toFixed(1).replace('.', ',') + '%';
+  const cor = v => v < 0 ? '#dc2626' : '#166534';
+
+  if (!selId) {
+    const linhas = obras.map(calcObra);
+    const tot = k => linhas.reduce((t, r) => t + r[k], 0);
+    const totLiq = tot('liquida'), totMarg = tot('margem');
+    wrap.innerHTML = `<div class="card"><div class="table-scroll"><table>
+      <thead><tr><th>Obra</th><th style="text-align:right">Receita</th><th style="text-align:right">Imposto</th><th style="text-align:right">Receita líquida</th><th style="text-align:right;color:#dc2626">Custo orçado</th><th style="text-align:right">Gastos</th><th style="text-align:right">Margem bruta</th><th style="text-align:right">Margem %</th><th style="text-align:right">Margem projetada</th><th></th></tr></thead>
+      <tbody>${linhas.map(r => `<tr>
+        <td><b>${esc(obraRotulo(r.o))}</b></td>
+        <td style="text-align:right">${fmtBRL(r.receita)}</td>
+        <td style="text-align:right">${fmtBRL(r.imposto)} <span style="font-size:11px;color:#78716c">(${pctTxt(r.pct)})</span></td>
+        <td style="text-align:right">${fmtBRL(r.liquida)}</td>
+        <td style="text-align:right;color:#dc2626">${fmtBRL(r.orcado)}</td>
+        <td style="text-align:right">${fmtBRL(r.gastos)}</td>
+        <td style="text-align:right;font-weight:700;color:${cor(r.margem)}">${fmtBRL(r.margem)}</td>
+        <td style="text-align:right;color:${cor(r.margem)}">${pctTxt(r.margemPct)}</td>
+        <td style="text-align:right;color:${cor(r.margemProj)}">${fmtBRL(r.margemProj)}</td>
+        <td><button class="btn btn-secondary btn-sm" onclick="abrirDreDaObra('${r.o.id}')">Detalhar</button></td>
+      </tr>`).join('')}</tbody>
+      <tfoot><tr style="font-weight:800;background:#faf9f7">
+        <td>Total</td><td style="text-align:right">${fmtBRL(tot('receita'))}</td><td style="text-align:right">${fmtBRL(tot('imposto'))}</td>
+        <td style="text-align:right">${fmtBRL(totLiq)}</td><td style="text-align:right;color:#dc2626">${fmtBRL(tot('orcado'))}</td>
+        <td style="text-align:right">${fmtBRL(tot('gastos'))}</td><td style="text-align:right;color:${cor(totMarg)}">${fmtBRL(totMarg)}</td>
+        <td style="text-align:right">${pctTxt(totLiq ? totMarg / totLiq * 100 : null)}</td><td style="text-align:right">${fmtBRL(tot('margemProj'))}</td><td></td>
+      </tr></tfoot></table></div>
+      <div style="font-size:12px;color:#78716c;margin-top:8px">Margem bruta = receita líquida − gastos vinculados. Margem projetada = receita líquida − custo orçado. Percentuais sobre a receita líquida.</div></div>`;
+    return;
+  }
+
+  const o = getObra(selId);
+  if (!o) { wrap.innerHTML = ''; return; }
+  const r = calcObra(o);
+  const lt = obraLeadTime(o);
+  const linha = (rot, v, opts = {}) => `<tr class="${opts.cls || ''}"><td style="${opts.bold ? 'font-weight:800' : ''}${opts.red ? ';color:#dc2626' : ''}">${rot}</td><td style="text-align:right;font-family:DM Mono,monospace;${opts.bold ? 'font-weight:800;' : ''}color:${opts.red ? '#dc2626' : (opts.corV != null ? cor(opts.corV) : '#1f2937')}">${fmtBRL(v)}</td><td style="text-align:right;font-size:12px;color:#78716c">${opts.pct != null ? pctTxt(opts.pct) : ''}</td></tr>`;
+  const pRec = v => r.receita ? v / r.receita * 100 : null;
+  const listaL = (arr, tipo) => arr.length ? arr.map(l => `<tr>
+      <td>${fmtDate(tipo === 'r' ? l.dtvenda : l.dtcompra)}</td>
+      <td>${esc(tipo === 'r' ? getClienteNome(l.cliente) : getFornNome(l.forn))}</td>
+      <td>${esc(tipo === 'r' ? (l.prod ? getProdVendaNome(l.prod) : '') : (l.prod ? getProdNome(l.prod) : ''))}</td>
+      <td>${esc(l.nf || '')}</td>
+      <td style="text-align:right;font-family:DM Mono,monospace">${fmtBRL(parseFloat(l.valor) || 0)}</td>
+      <td><button class="btn btn-secondary btn-sm" onclick="${tipo === 'r' ? 'editLancReceber' : 'editLancamento'}('${l.id}')">Abrir</button></td>
+    </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Nenhum lançamento vinculado.</td></tr>';
+
+  wrap.innerHTML = `
+    <div class="grid4" style="margin-bottom:16px">
+      <div class="card kpi"><div class="kpi-val">${fmtBRL(r.receita)}</div><div class="kpi-lbl">Receita da obra</div></div>
+      <div class="card kpi"><div class="kpi-val" style="color:${cor(r.margem)}">${fmtBRL(r.margem)}</div><div class="kpi-lbl">Margem bruta (${pctTxt(r.margemPct)})</div></div>
+      <div class="card kpi"><div class="kpi-val" style="color:#dc2626">${pctTxt(r.consumo)}</div><div class="kpi-lbl">Orçamento consumido</div></div>
+      <div class="card kpi"><div class="kpi-val">${lt ? lt.dias + ' dias' : '—'}</div><div class="kpi-lbl">Lead time ${lt ? '(até ' + lt.base + ')' : ''}</div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:10px">
+        <div class="card-title" style="margin:0">DRE — ${esc(obraRotulo(o))}</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <label style="margin:0;font-weight:700">% de imposto sobre a receita</label>
+          <input type="text" inputmode="decimal" value="${o.imposto_pct == null ? '' : String(o.imposto_pct).replace('.', ',')}" placeholder="0,00" style="width:90px;text-align:right" onchange="salvarImpostoObra('${o.id}', this.value)" />
+        </div>
+      </div>
+      <div style="font-size:12px;color:#78716c;margin-bottom:10px">Início: <b>${o.dt_inicio ? fmtDate(o.dt_inicio) : '—'}</b> · Previsão de pagamento: <b>${o.dt_prev_pagamento ? fmtDate(o.dt_prev_pagamento) : '—'}</b> · Previsão de conclusão: <b>${o.dt_prev_conclusao ? fmtDate(o.dt_prev_conclusao) : 'não informada'}</b></div>
+      <div class="table-scroll"><table class="dfc-table" style="width:100%">
+        <thead><tr><th style="text-align:left">Conta</th><th style="text-align:right">Valor</th><th style="text-align:right">% receita</th></tr></thead>
+        <tbody>
+          ${linha('Receita bruta da obra', r.receita, { bold: true, pct: r.receita ? 100 : null })}
+          ${linha('&nbsp;&nbsp;Já recebido', r.recebido, { pct: pRec(r.recebido) })}
+          ${linha(`(−) Impostos (${pctTxt(r.pct)})`, -r.imposto, { pct: pRec(r.imposto) })}
+          ${linha('= Receita líquida', r.liquida, { bold: true, pct: pRec(r.liquida) })}
+          ${linha('(−) Custo orçado do projeto (projetado)', -r.orcado, { red: true, pct: pRec(r.orcado) })}
+          ${linha('= Margem projetada', r.margemProj, { bold: true, corV: r.margemProj, pct: pRec(r.margemProj) })}
+          ${linha('(−) Gastos vinculados à obra', -r.gastos, { pct: pRec(r.gastos) })}
+          ${linha('&nbsp;&nbsp;dos quais já pagos', r.gastosPagos, { pct: pRec(r.gastosPagos) })}
+          ${linha('= Margem bruta da obra', r.margem, { bold: true, corV: r.margem, pct: pRec(r.margem) })}
+          ${linha('Saldo do orçamento (orçado − gasto)', r.orcado - r.gastos, { corV: r.orcado - r.gastos })}
+        </tbody></table></div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="card-title">Receitas vinculadas (${r.lancsR.length})</div>
+      <div class="table-scroll"><table><thead><tr><th>Data</th><th>Cliente</th><th>Produto</th><th>NF</th><th style="text-align:right">Valor</th><th></th></tr></thead><tbody>${listaL(r.lancsR, 'r')}</tbody></table></div></div>
+    <div class="card" style="margin-bottom:16px"><div class="card-title" style="color:#dc2626">Custo orçado vinculado (${r.orcados.length})</div>
+      <div class="table-scroll"><table><thead><tr><th>Data</th><th>Fornecedor</th><th>Item</th><th>NF</th><th style="text-align:right">Valor</th><th></th></tr></thead><tbody>${listaL(r.orcados, 'p')}</tbody></table></div></div>
+    <div class="card"><div class="card-title">Gastos vinculados (${r.gastosL.length})</div>
+      <div class="table-scroll"><table><thead><tr><th>Data</th><th>Fornecedor</th><th>Item</th><th>NF</th><th style="text-align:right">Valor</th><th></th></tr></thead><tbody>${listaL(r.gastosL, 'p')}</tbody></table></div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// CADASTROS INICIAIS (rodam uma vez; não duplicam o que já existe)
+// ══════════════════════════════════════════════════════════════════════
+const SEED_FORNECEDORES = ['DAY BRASIL','PROJETO ALUMINIO','BOLD','CUSTO ORÇADO DE PROJETO','ALUSUPRA','ALUVALE','ALUMIFER','ALUMINIO SÃO JOSE','KRG INDUSTRIA','MS FECHADURAS','ALLOY ALUMINIO','ITALAJES','REAL VIDROS','EMBRAVID','NM VIDROS','VIPPEL','FORTFER','ALL DRYWALL','TECNO OBRAS','3N','CONTRACT','EUROTEMPER','BARBIERI','VIDROMAX','REAL PVC','ANCORA','BERTOLDI','GESSNER','ZICKUR','POSSAMAI','FRETE DE PRODUÇÃO','MADEPLACA','MERCADO LIVRE','CICAMPO','MEGA','CARTAO VIACREDI','STRADA','BONGO BAU','BONGO','FERMAG','BALANCIM','ANDAIMES','CIRCULAR GRANDE','CONSERTO MAQUINA','CAVALETE VIDRO','MANUTENÇÃO GALPÃO','VENTOSAS','TORO','CARTAO UNICREDI','CARTAO SICOOB'];
+const SEED_OBRAS = ['CASA MOACIR','LUCA ESCRITORIO','BENJAMIN EXTRA','HOTEL'];
+const SEED_ORCADO_NOME = 'Custo Orçado de Projeto';
+
+async function _seedFlag(key) {
+  const r = await sbFetch('config', 'GET', null, `?key=eq.${encodeURIComponent(key)}&select=id&limit=1`);
+  return r === null ? null : r.length > 0;
+}
+async function _seedMarcar(key) { await sbFetch('config', 'POST', { id: uid(), key, value: today() }); }
+
+async function seedSevegnani() {
+  try {
+    // 1. Fornecedores da lista
+    if (await _seedFlag('seed_fornecedores_v1') === false) {
+      const existentes = new Set(db.fornecedores.map(f => normText(f.nome || '')));
+      const novos = SEED_FORNECEDORES.filter(n => !existentes.has(normText(n)))
+        .map(nome => ({ id: uid(), nome, cnpj: '', contato: '', tel: '', email: '', cat: '', obs: '' }));
+      let ok = true;
+      if (novos.length) {
+        const r = await sbFetch('fornecedores', 'POST', novos);
+        if (r) db.fornecedores.push(...(Array.isArray(r) && r.length ? r : novos));
+        else { ok = false; console.warn('[SEED] fornecedores não gravados', _sbUltimoErro); }
+      }
+      if (ok) await _seedMarcar('seed_fornecedores_v1');
+    }
+    // 2. Grupo + categoria "Custo Orçado de Projeto" logo abaixo do produto
+    if (!window._dreGruposError) {
+      let g = db.dre_grupos.find(isGrupoOrcado);
+      if (!g) {
+        const saidas = [...db.dre_grupos].sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+        const nn = x => normText(x.nome || '');
+        const base = saidas.find(x => x.tipo === 'saida' && nn(x).includes('produto') && nn(x).includes('despesa'))
+                  || saidas.find(x => x.tipo === 'saida' && nn(x).includes('produto') && !nn(x).includes('vendid'))
+                  || saidas.find(x => x.id === getGrupoCpvId());
+        const ordem = base ? (base.ordem || 0) + 1 : (saidas.length + 1);
+        // abre espaço: quem estava dessa posição em diante desce uma linha
+        for (const x of saidas.filter(x => (x.ordem || 0) >= ordem)) {
+          const ok = await sbFetch('dre_grupos', 'PATCH', { ordem: (x.ordem || 0) + 1 }, `?id=eq.${encodeURIComponent(x.id)}`);
+          if (ok) x.ordem = (x.ordem || 0) + 1;
+        }
+        g = { id: uid(), nome: SEED_ORCADO_NOME, tipo: 'saida', ordem, obs: 'Custo orçado/projetado das obras (aparece em vermelho)' };
+        const r = await sbFetch('dre_grupos', 'POST', g);
+        if (r) { db.dre_grupos.push(g); db.dre_grupos.sort((a, b) => (a.ordem || 0) - (b.ordem || 0)); }
+        else g = null;
+      }
+      if (g && !db.dfc_cats.some(c => c.grupo === g.id && isGrupoOrcado(c))) {
+        const c = { id: uid(), nome: SEED_ORCADO_NOME, grupo: g.id, tipo: 'saida', obs: '' };
+        if (await sbFetch('dfc_categorias', 'POST', c)) db.dfc_cats.push(c);
+      }
+    }
+    // 3. Obras da lista
+    if (await _seedFlag('seed_obras_v1') === false) {
+      const existentes = new Set((db.obras || []).map(o => normText(o.nome || '')));
+      let n = (db.obras || []).map(o => parseInt(o.numero)).filter(x => !isNaN(x)).reduce((a, b) => Math.max(a, b), 0);
+      let ok = true;
+      for (const nome of SEED_OBRAS) {
+        if (existentes.has(normText(nome))) continue;
+        const o = { id: uid(), numero: String(++n), nome, dt_inicio: '', dt_prev_pagamento: '', dt_prev_conclusao: '', imposto_pct: null, obs: '' };
+        if (await cfgUpsert(OBRA_PREFIX + o.id, JSON.stringify(o))) db.obras.push(o); else ok = false;
+      }
+      ordenarObras();
+      if (ok) await _seedMarcar('seed_obras_v1');
+    }
+  } catch (e) { console.error('[SEED] falha', e); }
 }
 
 async function removerCustoFixo(lancId) {
@@ -16053,7 +16657,7 @@ function clearCustosFixosFiltros() {
 
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-10-25 · sevegnani · fluxo-projetado';
+window.APP_BUILD = '2026-10-26 · sevegnani · obras';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
