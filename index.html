@@ -759,6 +759,38 @@ td.fp-zero::before { content:'⦸ '; font-size:9px; text-decoration:none; displa
 @media (max-width:700px){ .frase-dia { padding:16px 18px 16px 46px; } .frase-dia-txt { font-size:14px; } }
 
 /* Botão "+" de cadastro rápido ao lado dos campos de seleção */
+/* ── Painel executivo (Dashboard) ── */
+.ex-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:4px 0 12px; }
+.ex-head h2 { font-family:'Sora',sans-serif; font-size:17px; font-weight:800; color:#1c1917; margin:0; }
+.ex-head .ex-per { font-size:12px; color:#a8a29e; font-weight:600; }
+.ex-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+.ex-kpi { background:#fff; border:1px solid #e7e5e4; border-radius:14px; padding:14px 16px; position:relative; overflow:hidden; }
+.ex-kpi::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--exc,#ea580c); }
+.ex-kpi .l { font-size:11px; font-weight:700; color:#78716c; text-transform:uppercase; letter-spacing:.5px; }
+.ex-kpi .v { font-family:'DM Mono',monospace; font-size:19px; font-weight:800; color:#1c1917; margin-top:6px; white-space:nowrap; }
+.ex-kpi .d { font-size:11px; margin-top:4px; color:#a8a29e; }
+.ex-up { color:#16a34a; font-weight:700; } .ex-down { color:#dc2626; font-weight:700; }
+.ex-grid2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:16px; }
+.ex-grid2 > .card { margin:0; min-width:0; }
+.ex-gauges { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+.ex-gauge-st { display:inline-block; margin-top:6px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:.4px; }
+.ex-st-ok { background:#dcfce7; color:#15803d; } .ex-st-at { background:#fef3c7; color:#b45309; } .ex-st-cr { background:#fee2e2; color:#b91c1c; }
+.ex-alertas { display:flex; flex-direction:column; gap:8px; }
+.ex-alerta { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; font-size:13px; line-height:1.4; border:1px solid; }
+.ex-alerta b { font-weight:800; }
+.ex-alerta.cr { background:#fef2f2; border-color:#fecaca; color:#7f1d1d; }
+.ex-alerta.at { background:#fffbeb; border-color:#fde68a; color:#78350f; }
+.ex-alerta.ok { background:#f0fdf4; border-color:#bbf7d0; color:#14532d; }
+.ex-alerta .ac { display:block; font-size:11.5px; opacity:.85; margin-top:2px; }
+.ex-chart-box { position:relative; height:280px; }
+.ex-tab { width:100%; border-collapse:collapse; font-size:12.5px; }
+.ex-tab th { text-align:left; font-size:10.5px; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; padding:6px 4px; border-bottom:1px solid #f5f4f2; }
+.ex-tab td { padding:7px 4px; border-bottom:1px solid #f5f4f2; }
+.ex-tab td.n { text-align:right; font-family:'DM Mono',monospace; font-weight:700; white-space:nowrap; }
+.ex-bar { height:6px; background:#f5f4f2; border-radius:4px; overflow:hidden; margin-top:3px; }
+.ex-bar > i { display:block; height:100%; background:#ea580c; border-radius:4px; }
+.ex-sec { font-size:13px; font-weight:800; color:#57534e; text-transform:uppercase; letter-spacing:.6px; margin:22px 0 10px; padding-top:14px; border-top:1px dashed #e7e5e4; }
+@media (max-width:900px){ .ex-grid2 { grid-template-columns:1fr; } .ex-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 .label-add { display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .btn-add-inline {
   border:1px solid #fed7aa; background:#fff1e6; color:#ea580c;
@@ -2877,6 +2909,53 @@ tr.cob-dia-vazio > td {
         </div>
       </div>
 
+      <!-- ═══ PAINEL EXECUTIVO ═══ -->
+      <div id="exec-panel">
+        <div class="ex-head">
+          <div><h2>📊 Painel Executivo</h2><div class="ex-per" id="ex-periodo"></div></div>
+        </div>
+        <div class="ex-kpis" id="ex-kpis"></div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">🧭 Saúde financeira</div>
+          <div class="ex-gauges" id="ex-gauges"></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">⚡ Pontos de atenção e decisões</div>
+          <div class="ex-alertas" id="ex-alertas"></div>
+        </div>
+        <div class="ex-grid2">
+          <div class="card">
+            <div class="card-title">📈 Faturamento × Despesas × Resultado <span style="font-weight:400;color:#a8a29e;font-size:12px">— últimos 12 meses</span></div>
+            <div class="ex-chart-box"><canvas id="ex-chart-evol"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🔮 Projeção de caixa <span style="font-weight:400;color:#a8a29e;font-size:12px">— próximas 13 semanas</span></div>
+            <div class="ex-chart-box"><canvas id="ex-chart-proj"></canvas></div>
+          </div>
+        </div>
+        <div class="ex-grid2">
+          <div class="card">
+            <div class="card-title">🧾 Para onde vai o dinheiro <span style="font-weight:400;color:#a8a29e;font-size:12px">— despesas por categoria no período</span></div>
+            <div class="ex-chart-box"><canvas id="ex-chart-cat"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">⏳ Envelhecimento (aging) — a receber × a pagar em aberto</div>
+            <div class="ex-chart-box"><canvas id="ex-chart-aging"></canvas></div>
+          </div>
+        </div>
+        <div class="ex-grid2">
+          <div class="card">
+            <div class="card-title">🚨 Maiores devedores (vencidos)</div>
+            <div id="ex-devedores"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🎯 Concentração de clientes <span style="font-weight:400;color:#a8a29e;font-size:12px">— faturamento últimos 12 meses</span></div>
+            <div id="ex-concentracao"></div>
+          </div>
+        </div>
+        <div class="ex-sec">Detalhes operacionais</div>
+      </div>
+
       <!-- Medidores de Metas do DRE (Venda, CPV, Margem, Lucro) -->
       <div class="card" style="margin-bottom:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
@@ -3073,7 +3152,7 @@ tr.cob-dia-vazio > td {
         </div>
         <div class="lanc-g1">
           <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','l-catdre')">+</button></label><select id="l-catdre"><option value="">Nenhuma</option></select></div>
-          <div class="form-group"><label>Obra</label><select id="l-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
+          <div class="form-group"><label class="label-add">Obra<button type="button" class="btn-add-inline" title="Cadastrar nova obra" onclick="abrirNovaObra('l-obra')">+</button></label><select id="l-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
         </div>
       </div>
 
@@ -3185,7 +3264,7 @@ tr.cob-dia-vazio > td {
         </div>
         <div class="lanc-g1">
           <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','lr-catdre')">+</button></label><select id="lr-catdre"><option value="">Nenhuma</option></select></div>
-          <div class="form-group"><label>Nº da obra</label><select id="lr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
+          <div class="form-group"><label class="label-add">Nº da obra<button type="button" class="btn-add-inline" title="Cadastrar nova obra" onclick="abrirNovaObra('lr-obra')">+</button></label><select id="lr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
         </div>
       </div>
 
@@ -3342,7 +3421,7 @@ tr.cob-dia-vazio > td {
     </div>
     <div class="grid3">
       <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','elr-catdre')">+</button></label><select id="elr-catdre"><option value="">Nenhuma</option></select></div>
-      <div class="form-group" style="grid-column:span 2"><label>Nº da obra</label><select id="elr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label class="label-add">Nº da obra<button type="button" class="btn-add-inline" title="Cadastrar nova obra" onclick="abrirNovaObra('elr-obra')">+</button></label><select id="elr-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
     </div>
     <div class="grid3">
       <div class="form-group"><label>Parcelas</label>
@@ -3897,7 +3976,7 @@ tr.cob-dia-vazio > td {
     </div>
     <div class="grid3">
       <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','edit-catdre')">+</button></label><select id="edit-catdre"><option value="">Nenhuma</option></select></div>
-      <div class="form-group" style="grid-column:span 2"><label>Obra</label><select id="edit-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
+      <div class="form-group" style="grid-column:span 2"><label class="label-add">Obra<button type="button" class="btn-add-inline" title="Cadastrar nova obra" onclick="abrirNovaObra('edit-obra')">+</button></label><select id="edit-obra" class="sel-obra"><option value="">Nenhuma</option></select></div>
     </div>
     <div class="grid3">
       <div class="form-group"><label>Parcelas</label>
@@ -4233,7 +4312,7 @@ tr.cob-dia-vazio > td {
 </div>
 
 <!-- ══ MODAL DETALHE DE CONTA DO DRE ══ -->
-<div class="modal-overlay" id="modal-obra">
+<div class="modal-overlay" id="modal-obra" style="z-index:300">
   <div class="modal" style="width:560px;padding:24px" role="dialog" aria-labelledby="ob-titulo">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
       <div id="ob-titulo" style="font-size:16px;font-weight:800;color:#1c1917">Nova obra</div>
@@ -8389,7 +8468,270 @@ function renderDashboard() {
 
   renderDashCharts();
   renderMetasGauges();
+  try { renderPainelExecutivo(); } catch (e) { console.error('Painel executivo:', e); }
 }
+
+// ══════════════════════════════════════════
+// PAINEL EXECUTIVO — indicadores para tomada de decisão
+// Usa o filtro Ano/Mês do topo. Sem filtro => mês atual.
+// ══════════════════════════════════════════
+function renderPainelExecutivo() {
+  const wrap = document.getElementById('exec-panel');
+  if (!wrap) return;
+  const hoje = today();
+  const now = new Date();
+  const kAno = parseInt((document.getElementById('kpi-ano') || {}).value) || 0;
+  const kMes = parseInt((document.getElementById('kpi-mes') || {}).value) || 0;
+
+  // ── Período analisado e período anterior (para comparação) ──
+  let ini, fim, iniAnt, fimAnt, rotulo, rotAnt;
+  const ymd = (y, m, d) => `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const ultDia = (y, m) => new Date(y, m, 0).getDate();
+  if (kAno && !kMes) {
+    ini = ymd(kAno,1,1); fim = ymd(kAno,12,31);
+    iniAnt = ymd(kAno-1,1,1); fimAnt = ymd(kAno-1,12,31);
+    rotulo = String(kAno); rotAnt = String(kAno-1);
+  } else {
+    const y = kAno || now.getFullYear();
+    const m = kMes || (now.getMonth()+1);
+    ini = ymd(y,m,1); fim = ymd(y,m,ultDia(y,m));
+    const ya = m === 1 ? y-1 : y, ma = m === 1 ? 12 : m-1;
+    iniAnt = ymd(ya,ma,1); fimAnt = ymd(ya,ma,ultDia(ya,ma));
+    rotulo = `${meses[m]}/${y}`; rotAnt = `${mesesAbr[ma]}/${ya}`;
+  }
+  const dentro = (d, a, b) => !!d && d >= a && d <= b;
+  const addDias = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+
+  // ── Bases ──
+  const fatEm = (a, b) => db.lancreceber.reduce((s,l) => s + (dentro(l.dtvenda || l.dtcompra, a, b) ? (l.valor||0) : 0), 0);
+  const despEm = (a, b) => db.lancamentos.reduce((s,l) => s + (dentro(l.dtcompra, a, b) ? (l.valor||0) : 0), 0);
+  const fat = fatEm(ini, fim), fatAnt = fatEm(iniAnt, fimAnt);
+  const desp = despEm(ini, fim), despAnt = despEm(iniAnt, fimAnt);
+  const res = fat - desp, resAnt = fatAnt - despAnt;
+  const margem = fat > 0 ? res / fat * 100 : null;
+
+  const saldoCaixa = (db.bancos || []).reduce((s,b) => s + (getBancoSaldo(b)||0), 0);
+
+  // Em aberto (considera baixas parciais da cobrança no a receber)
+  const recAbertas = getParcelasReceber(false).map(p => {
+    const baixas = (typeof cobTotalBaixas === 'function') ? cobTotalBaixas(p.lancId, p.parcIdx) : 0;
+    return Object.assign({}, p, { aberto: Math.max(0, p.valParc - baixas), dref: p.venc || p.dtvenda || hoje });
+  }).filter(p => p.aberto > 0.005);
+  const pagAbertas = getParcelas(false).map(p => Object.assign({}, p, { aberto: p.valParc, dref: p.venc || p.dtcompra || hoje }));
+
+  const recTotal = recAbertas.reduce((s,p) => s + p.aberto, 0);
+  const recVencido = recAbertas.filter(p => p.dref < hoje).reduce((s,p) => s + p.aberto, 0);
+  const pagVencido = pagAbertas.filter(p => p.dref < hoje).reduce((s,p) => s + p.aberto, 0);
+  const lim30 = addDias(hoje, 30);
+  const rec30 = recAbertas.filter(p => p.dref >= hoje && p.dref <= lim30).reduce((s,p) => s + p.aberto, 0);
+  const pag30 = pagAbertas.filter(p => p.dref <= lim30).reduce((s,p) => s + p.aberto, 0); // inclui vencidas
+
+  // Caixa efetivo no período (o que entrou e saiu de fato)
+  const recebidoPer = getParcelasReceber(true).filter(p => dentro(p.dtrecebido, ini, fim)).reduce((s,p) => s + p.valParc, 0);
+  const pagoPer = getParcelas(true).filter(p => dentro(p.dtpago, ini, fim)).reduce((s,p) => s + p.valParc, 0);
+
+  // Gasto médio diário (pagos nos últimos 90 dias) => cobertura de caixa
+  const ini90 = addDias(hoje, -90);
+  const pago90 = getParcelas(true).filter(p => dentro(p.dtpago, ini90, hoje)).reduce((s,p) => s + p.valParc, 0);
+  const gastoDia = pago90 / 90;
+  const cobertura = gastoDia > 0 ? saldoCaixa / gastoDia : null;
+
+  // Custos fixos no período
+  let custoFixo = 0;
+  if (typeof cfEhCustoFixo === 'function') {
+    db.lancamentos.forEach(l => { if (dentro(l.dtcompra, ini, fim) && cfEhCustoFixo(l.id)) custoFixo += (l.valor||0); });
+  }
+  const pesoFixo = fat > 0 ? custoFixo / fat * 100 : null;
+
+  const liquidez = pag30 > 0 ? (saldoCaixa + rec30) / pag30 : null;
+  const inadimpl = recTotal > 0 ? recVencido / recTotal * 100 : 0;
+
+  // ── Cabeçalho ──
+  document.getElementById('ex-periodo').textContent = `Período analisado: ${rotulo} · comparado com ${rotAnt} · posição de caixa em ${fmtDate(hoje)}`;
+
+  // ── KPIs ──
+  const delta = (atual, ant, maiorMelhor = true) => {
+    if (!ant) return `<span>sem base em ${rotAnt}</span>`;
+    const v = (atual - ant) / Math.abs(ant) * 100;
+    const bom = maiorMelhor ? v >= 0 : v <= 0;
+    return `<span class="${bom ? 'ex-up' : 'ex-down'}">${v >= 0 ? '▲' : '▼'} ${Math.abs(v).toFixed(1)}%</span> vs ${rotAnt}`;
+  };
+  const kpi = (l, v, d, cor) => `<div class="ex-kpi" style="--exc:${cor}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`;
+  const fluxo = recebidoPer - pagoPer;
+  const nVendas = db.lancreceber.filter(l => dentro(l.dtvenda || l.dtcompra, ini, fim)).length;
+  const nVendasAnt = db.lancreceber.filter(l => dentro(l.dtvenda || l.dtcompra, iniAnt, fimAnt)).length;
+  const ticket = nVendas ? fat / nVendas : 0, ticketAnt = nVendasAnt ? fatAnt / nVendasAnt : 0;
+  document.getElementById('ex-kpis').innerHTML = [
+    kpi('Faturamento', fmtBRL(fat), delta(fat, fatAnt, true), '#ea580c'),
+    kpi('Ticket médio', fmtBRL(ticket), `${nVendas} venda${nVendas === 1 ? '' : 's'} · ${delta(ticket, ticketAnt, true)}`, '#9333ea'),
+    kpi('Despesas', fmtBRL(desp), delta(desp, despAnt, false), '#78716c'),
+    kpi('Resultado', `<span class="${res >= 0 ? 'saldo-positivo' : 'saldo-negativo'}">${fmtBRL(res)}</span>`,
+        margem == null ? 'sem faturamento' : `margem ${margem.toFixed(1)}% · ${delta(res, resAnt, true)}`, res >= 0 ? '#16a34a' : '#dc2626'),
+    kpi('Geração de caixa', `<span class="${fluxo >= 0 ? 'saldo-positivo' : 'saldo-negativo'}">${fmtBRL(fluxo)}</span>`,
+        `entrou ${fmtBRL(recebidoPer)} · saiu ${fmtBRL(pagoPer)}`, fluxo >= 0 ? '#16a34a' : '#dc2626'),
+    kpi('Saldo em caixa', `<span class="${saldoCaixa >= 0 ? 'saldo-positivo' : 'saldo-negativo'}">${fmtBRL(saldoCaixa)}</span>`,
+        cobertura == null ? 'sem pagamentos nos últimos 90 dias' : `cobre ~${Math.round(cobertura)} dias de gastos`, '#2563eb'),
+    kpi('A receber em aberto', fmtBRL(recTotal), `<span class="${recVencido > 0 ? 'ex-down' : ''}">${fmtBRL(recVencido)} vencido</span>`, '#0d9488'),
+    kpi('A pagar em aberto', fmtBRL(pagAbertas.reduce((s,p) => s + p.aberto, 0)), `<span class="${pagVencido > 0 ? 'ex-down' : ''}">${fmtBRL(pagVencido)} vencido</span>`, '#b45309'),
+  ].join('');
+
+  // ── Velocímetros ──
+  const st = (n) => n === 2 ? '<span class="ex-gauge-st ex-st-ok">Saudável</span>' : n === 1 ? '<span class="ex-gauge-st ex-st-at">Atenção</span>' : '<span class="ex-gauge-st ex-st-cr">Crítico</span>';
+  const corSt = (n) => n === 2 ? '#16a34a' : n === 1 ? '#d97706' : '#dc2626';
+  const g = [];
+  const gauge = (titulo, val, max, meta, txt, metaTxt, dica, nivel) =>
+    g.push(cardGauge(titulo, val == null ? '<div style="width:100%;max-width:210px;height:118px;display:flex;align-items:center;justify-content:center;color:#d6d3d1;font-size:12px;">sem dados no período</div>' : speedometerSVG(val/max, meta/max, corSt(nivel), txt),
+      val == null ? '' : st(nivel), metaTxt, dica));
+  // 1. Liquidez 30 dias (maior melhor; ideal >= 1,2)
+  { const n = liquidez == null ? 2 : liquidez >= 1.2 ? 2 : liquidez >= 1 ? 1 : 0;
+    gauge('Liquidez 30 dias', liquidez == null ? null : Math.min(liquidez, 3), 3, 1.2,
+      liquidez == null ? '—' : liquidez.toFixed(2) + 'x', 'ideal: ≥ 1,20x',
+      '(caixa + receber 30d) ÷ pagar 30d', n); }
+  // 2. Inadimplência (menor melhor; ideal <= 5%)
+  { const n = inadimpl <= 5 ? 2 : inadimpl <= 15 ? 1 : 0;
+    gauge('Inadimplência', inadimpl, 40, 5, inadimpl.toFixed(1) + '%', 'limite: ≤ 5%', 'vencido ÷ total a receber', n); }
+  // 3. Margem do período (maior melhor; ideal >= 15%)
+  { const n = margem == null ? 1 : margem >= 15 ? 2 : margem >= 5 ? 1 : 0;
+    gauge('Margem do período', margem == null ? null : Math.max(0, margem), 50, 15,
+      margem == null ? '—' : margem.toFixed(1) + '%', 'ideal: ≥ 15%', 'resultado ÷ faturamento', n); }
+  // 4. Cobertura de caixa em dias (maior melhor; ideal >= 30)
+  { const n = cobertura == null ? 1 : cobertura >= 30 ? 2 : cobertura >= 15 ? 1 : 0;
+    gauge('Cobertura de caixa', cobertura == null ? null : Math.max(0, Math.min(cobertura, 90)), 90, 30,
+      cobertura == null ? '—' : Math.round(cobertura) + ' dias', 'ideal: ≥ 30 dias', 'saldo ÷ gasto médio diário (90d)', n); }
+  // 5. Peso dos custos fixos (menor melhor; ideal <= 35%)
+  { const n = pesoFixo == null ? 1 : pesoFixo <= 35 ? 2 : pesoFixo <= 50 ? 1 : 0;
+    gauge('Peso dos custos fixos', pesoFixo == null ? null : Math.min(pesoFixo, 100), 100, 35,
+      pesoFixo == null ? '—' : pesoFixo.toFixed(1) + '%', 'ideal: ≤ 35%', 'custo fixo ÷ faturamento', n); }
+  document.getElementById('ex-gauges').innerHTML = g.join('');
+
+  // ── Projeção de caixa (13 semanas) ──
+  const semLabels = [], semSaldo = [], semEnt = [], semSai = [];
+  let saldoProj = saldoCaixa, menorSaldo = Infinity, dataMenor = null, primeiraNeg = null;
+  for (let w = 0; w < 13; w++) {
+    const a = addDias(hoje, w*7), b = addDias(hoje, w*7 + 6);
+    // semana 0 também carrega o que já está vencido
+    const ent = recAbertas.filter(p => (w === 0 ? p.dref <= b : (p.dref >= a && p.dref <= b))).reduce((s,p) => s + p.aberto, 0);
+    const sai = pagAbertas.filter(p => (w === 0 ? p.dref <= b : (p.dref >= a && p.dref <= b))).reduce((s,p) => s + p.aberto, 0);
+    saldoProj += ent - sai;
+    semLabels.push(fmtDate(a).slice(0,5)); semSaldo.push(Math.round(saldoProj*100)/100); semEnt.push(ent); semSai.push(-sai);
+    if (saldoProj < menorSaldo) { menorSaldo = saldoProj; dataMenor = b; }
+    if (saldoProj < 0 && !primeiraNeg) primeiraNeg = b;
+  }
+
+  // ── Evolução 12 meses ──
+  const evLab = [], evFat = [], evDesp = [], evRes = [];
+  for (let i = 11; i >= 0; i--) {
+    const base = new Date(parseInt(fim.slice(0,4)), parseInt(fim.slice(5,7)) - 1 - i, 1);
+    const y = base.getFullYear(), m = base.getMonth()+1;
+    const a = ymd(y,m,1), b = ymd(y,m,ultDia(y,m));
+    const f = fatEm(a,b), d = despEm(a,b);
+    evLab.push(`${mesesAbr[m]}/${String(y).slice(2)}`); evFat.push(f); evDesp.push(d); evRes.push(f - d);
+  }
+  const ini12 = (() => { const b = new Date(parseInt(fim.slice(0,4)), parseInt(fim.slice(5,7)) - 12, 1); return ymd(b.getFullYear(), b.getMonth()+1, 1); })();
+
+  // ── Despesas por categoria ──
+  const porCat = {};
+  getParcelas(false).concat(getParcelas(true)).forEach(p => {
+    if (!dentro(p.dtcompra, ini, fim)) return;
+    const k = p.catId || '';
+    porCat[k] = (porCat[k]||0) + p.valParc;
+  });
+  let catArr = Object.entries(porCat).map(([k,v]) => ({ nome: k ? getDreCatNome(k) : 'Sem categoria', v })).sort((a,b) => b.v - a.v);
+  if (catArr.length > 8) { const resto = catArr.slice(7).reduce((s,x) => s + x.v, 0); catArr = catArr.slice(0,7).concat([{ nome:'Outras', v:resto }]); }
+
+  // ── Aging ──
+  const faixas = ['A vencer','1–30 d','31–60 d','61–90 d','> 90 d'];
+  const faixa = (d) => { if (d >= hoje) return 0; const n = diffDias(d, hoje); return n <= 30 ? 1 : n <= 60 ? 2 : n <= 90 ? 3 : 4; };
+  const agRec = [0,0,0,0,0], agPag = [0,0,0,0,0];
+  recAbertas.forEach(p => agRec[faixa(p.dref)] += p.aberto);
+  pagAbertas.forEach(p => agPag[faixa(p.dref)] += p.aberto);
+
+  // ── Devedores ──
+  const dev = {};
+  recAbertas.filter(p => p.dref < hoje).forEach(p => {
+    const k = p.cliente || '';
+    if (!dev[k]) dev[k] = { v:0, n:0, maisAntigo:p.dref };
+    dev[k].v += p.aberto; dev[k].n++; if (p.dref < dev[k].maisAntigo) dev[k].maisAntigo = p.dref;
+  });
+  const devArr = Object.entries(dev).map(([k,o]) => Object.assign({ nome: k ? getClienteNome(k) : '—' }, o)).sort((a,b) => b.v - a.v).slice(0,6);
+  document.getElementById('ex-devedores').innerHTML = devArr.length
+    ? `<table class="ex-tab"><thead><tr><th>Cliente</th><th style="text-align:right">Parc.</th><th style="text-align:right">Atraso máx.</th><th style="text-align:right">Vencido</th></tr></thead><tbody>${
+        devArr.map(d => `<tr><td>${d.nome}</td><td class="n">${d.n}</td><td class="n" style="color:#dc2626">${diffDias(d.maisAntigo, hoje)} d</td><td class="n">${fmtBRL(d.v)}</td></tr>`).join('')
+      }</tbody></table>`
+    : '<div style="color:#16a34a;font-size:13px;padding:8px">✅ Nenhum recebível vencido.</div>';
+
+  // ── Concentração de clientes (12 meses) ──
+  const cli = {};
+  db.lancreceber.forEach(l => { const d = l.dtvenda || l.dtcompra; if (dentro(d, ini12, fim)) cli[l.cliente||''] = (cli[l.cliente||'']||0) + (l.valor||0); });
+  const totCli = Object.values(cli).reduce((s,v) => s + v, 0);
+  const cliArr = Object.entries(cli).map(([k,v]) => ({ nome: k ? getClienteNome(k) : '—', v, pct: totCli ? v/totCli*100 : 0 })).sort((a,b) => b.v - a.v);
+  const top1 = cliArr[0] ? cliArr[0].pct : 0;
+  const top3 = cliArr.slice(0,3).reduce((s,x) => s + x.pct, 0);
+  document.getElementById('ex-concentracao').innerHTML = cliArr.length
+    ? `<div style="font-size:12px;color:#78716c;margin-bottom:8px">Top 3 clientes = <b style="color:${top3 > 60 ? '#dc2626' : top3 > 40 ? '#d97706' : '#16a34a'}">${top3.toFixed(1)}%</b> do faturamento</div>
+       <table class="ex-tab"><tbody>${cliArr.slice(0,6).map(c => `<tr><td>${c.nome}<div class="ex-bar"><i style="width:${Math.min(100,c.pct).toFixed(1)}%"></i></div></td><td class="n">${c.pct.toFixed(1)}%</td><td class="n">${fmtBRL(c.v)}</td></tr>`).join('')}</tbody></table>`
+    : '<div style="color:#a8a29e;font-size:13px;padding:8px">Sem faturamento nos últimos 12 meses.</div>';
+
+  // ── Alertas / decisões ──
+  const al = [];
+  const add = (tipo, txt, acao) => al.push({ tipo, html: `<div class="ex-alerta ${tipo}"><span>${tipo === 'cr' ? '🔴' : tipo === 'at' ? '🟠' : '🟢'}</span><div>${txt}${acao ? `<span class="ac">👉 ${acao}</span>` : ''}</div></div>` });
+  if (primeiraNeg) add('cr', `Caixa projetado fica <b>negativo na semana de ${fmtDate(primeiraNeg)}</b> (mínimo ${fmtBRL(menorSaldo)}).`, 'Antecipar recebimentos, renegociar prazos com fornecedores ou programar capital de giro.');
+  else if (menorSaldo < gastoDia * 15 && gastoDia > 0) add('at', `Caixa projetado chega a <b>${fmtBRL(menorSaldo)}</b> em ${fmtDate(dataMenor)} — abaixo de 15 dias de gastos.`, 'Segurar despesas não essenciais nesse intervalo.');
+  if (pagVencido > 0) add('cr', `<b>${fmtBRL(pagVencido)}</b> em contas a pagar <b>vencidas</b>.`, 'Priorizar pagamento para evitar juros, multa e restrição com fornecedores.');
+  if (recVencido > 0) add(inadimpl > 15 ? 'cr' : 'at', `<b>${fmtBRL(recVencido)}</b> a receber vencido (${inadimpl.toFixed(1)}% da carteira)${devArr[0] ? `; maior devedor: <b>${devArr[0].nome}</b>` : ''}.`, 'Acionar a cobrança dos maiores valores primeiro.');
+  if (liquidez != null && liquidez < 1) add('cr', `Liquidez de 30 dias em <b>${liquidez.toFixed(2)}x</b>: os compromissos superam caixa + recebimentos previstos.`, `Faltam cerca de ${fmtBRL(pag30 - saldoCaixa - rec30)} para cobrir os próximos 30 dias.`);
+  if (margem != null && margem < 0) add('cr', `Resultado <b>negativo</b> em ${rotulo} (${margem.toFixed(1)}% de margem).`, 'Rever preços e as maiores categorias de despesa.');
+  else if (margem != null && margem < 10) add('at', `Margem baixa em ${rotulo}: <b>${margem.toFixed(1)}%</b>.`, 'Avaliar reajuste de preços ou corte nas maiores despesas.');
+  if (despAnt > 0 && desp > despAnt * 1.15 && fat <= fatAnt * 1.15) add('at', `Despesas subiram <b>${((desp/despAnt - 1)*100).toFixed(0)}%</b> vs ${rotAnt} sem crescimento proporcional do faturamento.`, catArr[0] ? `Maior peso: <b>${catArr[0].nome}</b> (${fmtBRL(catArr[0].v)}).` : '');
+  if (fatAnt > 0 && fat < fatAnt * 0.85) add('at', `Faturamento caiu <b>${((1 - fat/fatAnt)*100).toFixed(0)}%</b> vs ${rotAnt}.`, 'Verificar pipeline comercial e obras em andamento.');
+  if (top1 > 30) add('at', `Dependência de cliente: <b>${cliArr[0].nome}</b> representa <b>${top1.toFixed(0)}%</b> do faturamento (12 meses).`, 'Diversificar a carteira para reduzir risco.');
+  if (pesoFixo != null && pesoFixo > 50) add('at', `Custos fixos consomem <b>${pesoFixo.toFixed(0)}%</b> do faturamento.`, 'Estrutura pesada para o volume atual — revisar contratos recorrentes.');
+  if (!al.length) add('ok', 'Nenhum ponto crítico identificado. Indicadores dentro dos limites.', 'Bom momento para planejar investimentos ou reforçar reserva.');
+  const ordem = { cr:0, at:1, ok:2 };
+  document.getElementById('ex-alertas').innerHTML = al.sort((a,b) => ordem[a.tipo] - ordem[b.tipo]).map(a => a.html).join('');
+
+  // ── Gráficos ──
+  if (typeof Chart === 'undefined') return;
+  const brlCurto = v => { const a = Math.abs(v); return (v < 0 ? '-' : '') + (a >= 1e6 ? 'R$ ' + (a/1e6).toFixed(1) + 'M' : a >= 1e3 ? 'R$ ' + (a/1e3).toFixed(0) + 'k' : 'R$ ' + a.toFixed(0)); };
+  const tt = { callbacks: { label: c => `${c.dataset.label}: ${fmtBRL(c.parsed.y)}` } };
+  const base = (extra) => Object.assign({
+    responsive:true, maintainAspectRatio:false, animation:{ duration:400 },
+    interaction:{ mode:'index', intersect:false },
+    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, usePointStyle:true, font:{ size:11 } } }, tooltip:tt, datalabels:{ display:false } },
+    scales:{ x:{ grid:{ display:false }, ticks:{ font:{ size:10 } } }, y:{ grid:{ color:'#f5f4f2' }, ticks:{ font:{ size:10 }, callback: brlCurto } } }
+  }, extra || {});
+  const mk = (id, cfg) => {
+    const el = document.getElementById(id); if (!el) return;
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(el.getContext('2d'), cfg);
+  };
+
+  mk('ex-chart-evol', { type:'bar', data:{ labels:evLab, datasets:[
+    { type:'line', label:'Resultado', data:evRes, borderColor:'#1f2937', backgroundColor:'#1f2937', borderWidth:2, tension:.3, pointRadius:3, order:0 },
+    { label:'Faturamento', data:evFat, backgroundColor:'#ea580c', borderRadius:4, order:1 },
+    { label:'Despesas', data:evDesp, backgroundColor:'#d6d3d1', borderRadius:4, order:2 },
+  ]}, options: base() });
+
+  mk('ex-chart-proj', { type:'bar', data:{ labels:semLabels, datasets:[
+    { type:'line', label:'Saldo projetado', data:semSaldo, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,.08)', fill:true, tension:.3, borderWidth:2.5,
+      pointRadius:3, pointBackgroundColor: semSaldo.map(v => v < 0 ? '#dc2626' : '#2563eb'), order:0 },
+    { label:'Entradas', data:semEnt, backgroundColor:'rgba(22,163,74,.55)', borderRadius:3, order:1 },
+    { label:'Saídas', data:semSai, backgroundColor:'rgba(220,38,38,.45)', borderRadius:3, order:2 },
+  ]}, options: base() });
+
+  mk('ex-chart-cat', { type:'bar', data:{ labels:catArr.map(c => c.nome.length > 28 ? c.nome.slice(0,27) + '…' : c.nome), datasets:[
+    { label:'Despesa', data:catArr.map(c => c.v), backgroundColor:catArr.map((c,i) => i === 0 ? '#ea580c' : i < 3 ? '#fb923c' : '#fdba74'), borderRadius:4, maxBarThickness:28 },
+  ]}, options: base({ indexAxis:'y',
+      plugins:{ legend:{ display:false }, datalabels:{ display:false },
+        tooltip:{ callbacks:{ label: c => { const t = catArr.reduce((s,x) => s + x.v, 0); return `${fmtBRL(c.parsed.x)} (${t ? (c.parsed.x/t*100).toFixed(1) : 0}%)`; } } } },
+      scales:{ x:{ grid:{ color:'#f5f4f2' }, ticks:{ font:{ size:10 }, callback: brlCurto } }, y:{ grid:{ display:false }, ticks:{ font:{ size:11 } } } } }) });
+
+  mk('ex-chart-aging', { type:'bar', data:{ labels:faixas, datasets:[
+    { label:'A receber', data:agRec, backgroundColor:'#0d9488', borderRadius:4, maxBarThickness:40 },
+    { label:'A pagar', data:agPag, backgroundColor:'#b45309', borderRadius:4, maxBarThickness:40 },
+  ]}, options: base() });
+}
+
 
 // ══════════════════════════════════════════
 // ITEM 3 — METAS DO DRE + MEDIDORES NO DASHBOARD
@@ -16418,7 +16760,9 @@ function obraLeadTime(o) {
 }
 
 // ── Cadastro ───────────────────────────────────────────────────────────
-function abrirNovaObra() {
+let _obraDestino = null; // select que recebe a obra recém-criada (cadastro rápido)
+function abrirNovaObra(destino) {
+  _obraDestino = (typeof destino === 'string') ? destino : null;
   ['ob-id','ob-numero','ob-nome','ob-inicio','ob-prev-pag','ob-prev-conc','ob-imposto','ob-obs'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
@@ -16430,6 +16774,7 @@ function abrirNovaObra() {
 }
 function editarObra(id) {
   const o = getObra(id); if (!o) return;
+  _obraDestino = null;
   const set = (k, v) => { const el = document.getElementById(k); if (el) el.value = v == null ? '' : v; };
   set('ob-id', o.id); set('ob-numero', o.numero); set('ob-nome', o.nome);
   set('ob-inicio', o.dt_inicio); set('ob-prev-pag', o.dt_prev_pagamento); set('ob-prev-conc', o.dt_prev_conclusao);
@@ -16459,6 +16804,11 @@ async function salvarObra() {
   ordenarObras();
   closeModal('modal-obra');
   populateObraSelects(); renderObras(); renderDreObra();
+  if (_obraDestino) {
+    const sel = document.getElementById(_obraDestino);
+    if (sel) { sel.value = id; sel.dispatchEvent(new Event('change')); }
+    _obraDestino = null;
+  }
 }
 async function excluirObra(id) {
   const o = getObra(id); if (!o) return;
