@@ -236,6 +236,25 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .filter-row > div:not(.form-group) { grid-column:-3/-1; display:flex !important; justify-content:flex-end; align-items:center; gap:8px; flex-wrap:wrap; }
 .filter-row .btn { height:34px; padding:0 14px !important; font-size:12px !important; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
 @media (max-width:600px){ .filter-row { grid-template-columns:1fr 1fr; } }
+/* Filtros com caixa de seleção ou campo largo: ocupam 2 colunas e não quebram */
+.filter-row > .form-group:has(input[type=checkbox]), .filter-row > .form-group:has(select[style*="min-width"]) { grid-column:span 2; }
+.filter-row select[style*="min-width"] { min-width:0 !important; }
+.filter-row > .form-group:has(input[type=checkbox]):not([style*="none"]) { display:flex !important; flex-direction:row !important; align-items:center !important; gap:7px !important; height:34px; align-self:end; }
+.filter-row > .form-group:has(input[type=checkbox]) label { display:flex !important; align-items:center; gap:7px; margin:0 !important; text-transform:none !important; letter-spacing:0 !important; font-size:12.5px !important; font-weight:600 !important; color:#44403c !important; overflow:visible !important; white-space:normal !important; line-height:1.25; cursor:pointer; }
+.filter-row input[type=checkbox] { width:15px !important; height:15px !important; margin:0 !important; flex:none; accent-color:#ea580c; }
+/* Fluxo de Caixa Projetado: filtros em linha (layout próprio) */
+#page-fluxo-projetado .filter-row.fp-filtros { display:flex !important; flex-wrap:wrap; align-items:flex-end !important; gap:12px 14px !important; }
+#page-fluxo-projetado .fp-filtros > .form-group { flex:0 0 auto !important; }
+#page-fluxo-projetado .fp-filtros #fp-periodo { width:150px !important; }
+#page-fluxo-projetado .fp-filtros #fp-ano { width:100px !important; }
+#page-fluxo-projetado .fp-filtros #fp-partida { width:270px !important; min-width:0 !important; }
+#page-fluxo-projetado #fp-nav-wrap > div { height:34px; display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #e7e5e4; border-radius:7px; padding:0 4px; }
+#page-fluxo-projetado #fp-nav-wrap .btn { height:26px !important; padding:0 9px !important; font-size:11.5px !important; }
+#page-fluxo-projetado #fp-periodo-lbl { min-width:110px !important; font-size:12.5px !important; white-space:nowrap; }
+#page-fluxo-projetado .fp-chk { display:flex !important; align-items:center; gap:7px; height:34px; margin:0 !important; cursor:pointer; text-transform:none !important; letter-spacing:0 !important; font-size:12.5px !important; font-weight:600 !important; color:#44403c !important; overflow:visible !important; white-space:nowrap; }
+#page-fluxo-projetado .fp-chk input { width:15px !important; height:15px !important; margin:0 !important; accent-color:#ea580c; }
+#page-fluxo-projetado .fp-filtros > .fp-acoes { flex:1 1 auto !important; display:flex !important; justify-content:flex-end; align-items:center; gap:8px; flex-wrap:wrap; }
+#page-fluxo-projetado .fp-acoes .btn { height:34px; }
 /* Tabelas listradas — Lançamentos a Pagar e a Receber */
 #page-lancamentos .table-scroll, #page-lancreceber .table-scroll { border:1px solid #ece9e5; border-radius:10px; }
 #page-lancamentos .table-scroll table, #page-lancreceber .table-scroll table { border-collapse:separate; border-spacing:0; width:100%; }
@@ -2821,7 +2840,7 @@ tr.cob-dia-vazio > td {
         <div class="page-sub" style="margin-bottom:0">Entradas e saídas mês a mês por grupo e categoria. Clique em qualquer valor para usar o automático, digitar um valor manual ou zerar.</div>
       </div></div>
       <div class="card" style="margin-bottom:16px">
-        <div class="filter-row" style="align-items:flex-end;flex-wrap:wrap">
+        <div class="filter-row fp-filtros">
           <div class="form-group"><label>Analisar por</label>
             <select id="fp-periodo" onchange="fpMudarPeriodo()">
               <option value="tri" selected>Trimestre</option>
@@ -2847,13 +2866,13 @@ tr.cob-dia-vazio > td {
               <option value="inicio">Saldo das contas no início do período</option>
             </select>
           </div>
-          <div class="form-group" style="align-self:flex-end">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0 0 10px">
+          <div class="form-group fp-chk-wrap">
+            <label class="fp-chk">
               <input type="checkbox" id="fp-vazias" checked onchange="renderFluxoProjetado()" style="width:auto;margin:0;accent-color:#ea580c" />
               Mostrar categorias sem valor
             </label>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-self:flex-end;margin-bottom:4px">
+          <div class="fp-acoes">
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(true)">▾ Expandir</button>
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(false)">▸ Recolher</button>
             <button class="btn btn-secondary btn-sm" onclick="fpExportar()">⬇ Excel</button>
