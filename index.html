@@ -227,6 +227,24 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .kpi-lbl { font-size:11px; color:#a8a29e; margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
 .filter-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px; }
 .filter-row .form-group { margin-bottom:0; min-width:140px; }
+/* Filtros compactos e lineares (todas as telas) */
+.filter-row { display:grid !important; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px 12px !important; align-items:end !important; background:#faf9f7; border:1px solid #eeece9; border-radius:10px; padding:12px 14px; margin-bottom:16px !important; }
+.filter-row > * { margin:0 !important; min-width:0 !important; width:auto !important; max-width:none !important; flex:none !important; }
+.filter-row .form-group label { display:block; font-size:10.5px !important; font-weight:700 !important; text-transform:uppercase; letter-spacing:.4px; color:#78716c !important; margin:0 0 4px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.filter-row input:not([type=checkbox]):not([type=radio]), .filter-row select, .filter-row .ef-combo-trigger { height:34px !important; min-height:34px !important; padding:6px 10px !important; font-size:12.5px !important; background-color:#fff; width:100% !important; box-sizing:border-box; border-radius:7px !important; }
+.filter-row .ef-combo-native { display:none !important; }
+.filter-row > div:not(.form-group) { grid-column:-3/-1; display:flex !important; justify-content:flex-end; align-items:center; gap:8px; flex-wrap:wrap; }
+.filter-row .btn { height:34px; padding:0 14px !important; font-size:12px !important; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+@media (max-width:600px){ .filter-row { grid-template-columns:1fr 1fr; } }
+/* Tabelas listradas — Lançamentos a Pagar e a Receber */
+#page-lancamentos .table-scroll, #page-lancreceber .table-scroll { border:1px solid #ece9e5; border-radius:10px; }
+#page-lancamentos .table-scroll table, #page-lancreceber .table-scroll table { border-collapse:separate; border-spacing:0; width:100%; }
+#page-lancamentos .table-scroll thead th, #page-lancreceber .table-scroll thead th { background:#f5f5f4 !important; color:#44403c !important; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; padding:10px 12px; border-bottom:1.5px solid #e7e5e4; white-space:nowrap; }
+#page-lancamentos .table-scroll tbody td, #page-lancreceber .table-scroll tbody td { padding:9px 12px; border-bottom:1px solid #f0ece8; }
+#page-lancamentos .table-scroll tbody tr:nth-child(even) > td, #page-lancreceber .table-scroll tbody tr:nth-child(even) > td { background-color:#fbf4ec; }
+#page-lancamentos .table-scroll tbody tr:nth-child(odd) > td, #page-lancreceber .table-scroll tbody tr:nth-child(odd) > td { background-color:#fff; }
+#page-lancamentos .table-scroll tbody tr:hover > td, #page-lancreceber .table-scroll tbody tr:hover > td { background-color:#ffe9d6 !important; }
+#page-lancamentos .table-scroll tbody tr:last-child > td, #page-lancreceber .table-scroll tbody tr:last-child > td { border-bottom:none; }
 .empty-state { text-align:center; padding:40px; color:#a8a29e; font-size:14px; }
 .actions { display:flex; gap:6px; }
 .modal-overlay { position:fixed; inset:0; background:rgba(15,30,58,0.5); z-index:200; display:flex; align-items:center; justify-content:center; display:none; }
@@ -6367,6 +6385,7 @@ async function saveLancamento() {
   const empresa_id = empresaDoForm('l-empresa');
   if (empresa_id === null) return;
   const parcelas = parseInt(document.getElementById('l-parcelas').value)||1;
+  if (!validarParcelasPagasForm('l-parcela-dates', parcelas, banco)) return;
   const lanc = {
     id: uid(),
     empresa_id,
@@ -6386,7 +6405,7 @@ async function saveLancamento() {
   };
   // Parcelado que já nasce pago: todas as parcelas recebem a data informada,
   // senão elas continuariam aparecendo em aberto em "Contas a Pagar".
-  if (parcelas > 1 && pago === 'sim') {
+  if (parcelas > 1 && pago === 'sim' && !_parcelasComDatasProprias('l-parcela-dates', parcelas)) {
     lanc.parcela_datas = _marcarTodasParcelasPagas(lanc.parcela_datas, parcelas, dtpagoNovo);
   }
   const rL = await sbFetch('lancamentos', 'POST', lanc);
@@ -6597,6 +6616,7 @@ async function updateLancamento() {
   }
   const _empEdit = empresaDoForm('edit-empresa');
   if (_empEdit === null) return;
+  if (!validarParcelasPagasForm('edit-parcela-dates', parseInt(document.getElementById('edit-parcelas').value)||1, banco)) return;
   l.empresa_id = _empEdit;
   l.dtcompra = document.getElementById('edit-dtcompra').value;
   l.dtprev = document.getElementById('edit-dtprev').value;
@@ -6618,7 +6638,7 @@ async function updateLancamento() {
   const _rawParcAntigo = l.parcela_datas;
   l.parcela_datas = l.parcelas > 1 ? buildParcelaDatasPreservando('edit-parcela-dates', l.parcelas, _rawParcAntigo) : null;
   l.dtpago = pago === 'sim' ? dtpagoEdit : '';
-  if (l.parcelas > 1 && pago === 'sim') {
+  if (l.parcelas > 1 && pago === 'sim' && !_parcelasComDatasProprias('edit-parcela-dates', l.parcelas)) {
     l.parcela_datas = _marcarTodasParcelasPagas(l.parcela_datas, l.parcelas, dtpagoEdit);
   }
   const okU = await sbFetch('lancamentos', 'PATCH', {
@@ -9570,6 +9590,7 @@ function toggleParcelaDates(selectId, containerid) {
 
   const auto = calcularParcelasAuto(containerid, n);
   container.style.display = '';
+  container.dataset.viaMaster = '';
   grid.innerHTML = Array.from({length: n}, (_, i) => `
     <div style="background:#faf9f8;border:1.5px solid #e7e5e4;border-radius:8px;padding:10px 12px;">
       <div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:8px;">Parcela ${i+1}/${n}</div>
@@ -9585,6 +9606,16 @@ function toggleParcelaDates(selectId, containerid) {
                value="${auto.valores[i] || ''}"
                oninput="marcarParcelaEditada(this); syncTotalParcelaValores('${containerid}',${n},'${selectId}')"
                style="font-size:12px;padding:6px 9px;width:100%" />
+      </div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #e7e5e4;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#15803d;cursor:pointer;margin:0;">
+          <input type="checkbox" id="${containerid}-pg${i+1}" onchange="toggleParcelaPagaForm('${containerid}',${i+1},${n})" style="width:15px;height:15px;accent-color:#16a34a;margin:0;" />
+          ${_rotuloPagoParcela(containerid)}
+        </label>
+        <div id="${containerid}-dpw${i+1}" style="display:none;margin-top:6px;">
+          <label style="font-size:10px;font-weight:600;color:#57534e;margin-bottom:3px;display:block;">Data ${_rotuloPagoParcela(containerid) === 'Recebido' ? 'do recebimento' : 'do pagamento'}</label>
+          <input type="date" id="${containerid}-dp${i+1}" style="font-size:12px;padding:6px 9px;width:100%" />
+        </div>
       </div>
     </div>`).join('');
 
@@ -9716,12 +9747,110 @@ function getManualParcelaValores(containerid, n) {
   return valores.some(v => v !== null) ? valores : null;
 }
 
+
+// ── Pago/Recebido por parcela no formulário ──
+function _ehParcelaReceber(containerid) { const p = _prefixoParcelas(containerid); return p === 'lr' || p === 'elr'; }
+function _rotuloPagoParcela(containerid) { return _ehParcelaReceber(containerid) ? 'Recebido' : 'Pago'; }
+function _temChecksParcelas(containerid) { return !!document.getElementById(containerid + '-pg1'); }
+let _syncandoParcelas = false;
+
+function toggleParcelaPagaForm(containerid, i, n) {
+  const chk = document.getElementById(`${containerid}-pg${i}`);
+  const wrap = document.getElementById(`${containerid}-dpw${i}`);
+  const dp = document.getElementById(`${containerid}-dp${i}`);
+  if (!chk) return;
+  const cont = document.getElementById(containerid); if (cont) cont.dataset.viaMaster = '';
+  if (wrap) wrap.style.display = chk.checked ? '' : 'none';
+  if (dp) {
+    if (chk.checked && !dp.value) { const venc = document.getElementById(`${containerid}-p${i}`); dp.value = venc ? venc.value : ''; }
+    if (!chk.checked) dp.value = '';
+  }
+  _sincronizarMasterParcelas(containerid, n);
+}
+
+// Mantém o "Pago?/Recebido?" geral coerente com as parcelas marcadas
+function _sincronizarMasterParcelas(containerid, n) {
+  const prefix = _prefixoParcelas(containerid);
+  const rec = _ehParcelaReceber(containerid);
+  const sel = document.getElementById(prefix + (rec ? '-recebido' : '-pago'));
+  const dt  = document.getElementById(prefix + (rec ? '-dtrecebido' : '-dtpago'));
+  if (!sel) return;
+  const st = _statusParcelasForm(containerid, n);
+  _syncandoParcelas = true;
+  try {
+    if (st.todas) {
+      sel.value = 'sim';
+      rec ? toggleDtRecebido(prefix) : toggleDtPago(prefix);
+      if (dt && st.ultima) dt.value = st.ultima;
+    } else if (sel.value === 'sim') {
+      sel.value = 'nao';
+      rec ? toggleDtRecebido(prefix) : toggleDtPago(prefix);
+    }
+  } finally { _syncandoParcelas = false; }
+}
+
+// Quando o usuário muda o status geral, todas as parcelas acompanham
+function _aplicarMasterNasParcelas(prefix, sim) {
+  if (_syncandoParcelas) return;
+  const containerid = prefix + '-parcela-dates';
+  if (!_temChecksParcelas(containerid)) return;
+  const cont = document.getElementById(containerid); if (cont) cont.dataset.viaMaster = sim ? '1' : '';
+  for (let i = 1; document.getElementById(`${containerid}-pg${i}`); i++) {
+    const chk = document.getElementById(`${containerid}-pg${i}`);
+    const wrap = document.getElementById(`${containerid}-dpw${i}`);
+    const dp = document.getElementById(`${containerid}-dp${i}`);
+    chk.checked = !!sim;
+    if (wrap) wrap.style.display = sim ? '' : 'none';
+    if (dp) {
+      if (sim && !dp.value) { const venc = document.getElementById(`${containerid}-p${i}`); dp.value = venc ? venc.value : ''; }
+      if (!sim) dp.value = '';
+    }
+  }
+}
+
+function _statusParcelasForm(containerid, n) {
+  const r = { qtd: 0, todas: false, faltaData: false, ultima: '', pagos: [], dtpagos: [] };
+  if (!_temChecksParcelas(containerid)) return r;
+  for (let i = 1; i <= n; i++) {
+    const chk = document.getElementById(`${containerid}-pg${i}`);
+    const dp = document.getElementById(`${containerid}-dp${i}`);
+    const ok = !!(chk && chk.checked);
+    const d = ok && dp ? (dp.value || '') : '';
+    r.pagos.push(ok); r.dtpagos.push(d);
+    if (ok) { r.qtd++; if (!d) r.faltaData = true; if (d && d > r.ultima) r.ultima = d; }
+  }
+  r.todas = r.qtd === n && n > 0;
+  return r;
+}
+
+// Validação antes de salvar: data obrigatória em cada parcela marcada e
+// banco obrigatório se houver ao menos uma parcela paga/recebida.
+function validarParcelasPagasForm(containerid, n, banco) {
+  if (n <= 1 || !_temChecksParcelas(containerid)) return true;
+  const st = _statusParcelasForm(containerid, n);
+  const rot = _ehParcelaReceber(containerid) ? 'recebimento' : 'pagamento';
+  if (st.faltaData) { alert(`Informe a data do ${rot} de cada parcela marcada.`); return false; }
+  if (st.qtd > 0 && !banco) { alert('Selecione o banco/conta antes de salvar: parcelas marcadas como pagas/recebidas precisam ter um banco vinculado.'); return false; }
+  return true;
+}
+
+// true quando as parcelas trazem suas próprias datas de pagamento (não sobrescrever)
+function _parcelasComDatasProprias(containerid, n) {
+  const cont = document.getElementById(containerid);
+  if (cont && cont.dataset.viaMaster === '1') return false; // marcado pelo status geral → usa a data geral
+  const st = _statusParcelasForm(containerid, n);
+  return st.todas && !st.faltaData;
+}
+
 // Monta o objeto unificado para salvar em parcela_datas
 function buildParcelaDatasPayload(containerid, n) {
   const datas = getManualParcelaDates(containerid, n);
   const valores = getManualParcelaValores(containerid, n);
-  if (!datas && !valores) return null;
-  return JSON.stringify({ datas: datas || [], valores: valores || [] });
+  const temChecks = _temChecksParcelas(containerid);
+  if (!datas && !valores && !temChecks) return null;
+  const obj = { datas: datas || [], valores: valores || [] };
+  if (temChecks) { const st = _statusParcelasForm(containerid, n); obj.pagos = st.pagos; obj.dtpagos = st.dtpagos; }
+  return JSON.stringify(obj);
 }
 
 function setManualParcelaDates(containerid, raw) {
@@ -9749,7 +9878,7 @@ function setManualParcelaValores(containerid, raw) {
 // Restaura datas E valores a partir do campo parcela_datas salvo
 function restoreParcelaFields(containerid, raw) {
   if (!raw) return;
-  const { datas, valores } = _parseParcelas(raw);
+  const { datas, valores, pagos, dtpagos } = _parseParcelas(raw);
   setTimeout(() => {
     datas.forEach((d, i) => {
       const el = document.getElementById(`${containerid}-p${i+1}`);
@@ -9758,6 +9887,16 @@ function restoreParcelaFields(containerid, raw) {
     valores.forEach((v, i) => {
       const el = document.getElementById(`${containerid}-v${i+1}`);
       if (el && v != null) { el.value = v; el.dataset.auto = ''; }
+    });
+    const contR = document.getElementById(containerid); if (contR && pagos.length) contR.dataset.viaMaster = '';
+    pagos.forEach((pg, i) => {
+      const chk = document.getElementById(`${containerid}-pg${i+1}`);
+      const wrap = document.getElementById(`${containerid}-dpw${i+1}`);
+      const dp = document.getElementById(`${containerid}-dp${i+1}`);
+      if (!chk) return;
+      chk.checked = !!pg;
+      if (wrap) wrap.style.display = pg ? '' : 'none';
+      if (dp) dp.value = pg ? (dtpagos[i] || '') : '';
     });
   }, 60);
 }
@@ -10205,6 +10344,7 @@ async function saveLancReceber() {
   const empresa_id = empresaDoForm('lr-empresa');
   if (empresa_id === null) return;
   const parcelas=parseInt(document.getElementById('lr-parcelas').value)||1;
+  if (!validarParcelasPagasForm('lr-parcela-dates', parcelas, banco)) return;
   const lanc={ id:uid(), empresa_id, dtvenda,
     dtprev:document.getElementById('lr-dtprev').value,
     nf:document.getElementById('lr-nf').value,
@@ -10220,7 +10360,7 @@ async function saveLancReceber() {
     dtrecebido: recebido === 'sim' ? dtrecebidoNovo : '',
     parcela_datas: parcelas > 1 ? buildParcelaDatasPayload('lr-parcela-dates', parcelas) : null };
   // Parcelado que já nasce recebido: todas as parcelas recebem a data informada
-  if (parcelas > 1 && recebido === 'sim') {
+  if (parcelas > 1 && recebido === 'sim' && !_parcelasComDatasProprias('lr-parcela-dates', parcelas)) {
     lanc.parcela_datas = _marcarTodasParcelasPagas(lanc.parcela_datas, parcelas, dtrecebidoNovo);
   }
   const rLR = await sbFetch('lancreceber','POST',lanc);
@@ -10385,6 +10525,7 @@ async function updateLancReceber() {
   if (!validarDataRecebimentoObrigatoria(recebido, dtrecebidoEdit, 'elr-dtrecebido')) return;
   const _empLR = empresaDoForm('elr-empresa');
   if (_empLR === null) return;
+  if (!validarParcelasPagasForm('elr-parcela-dates', parseInt(document.getElementById('elr-parcelas').value)||1, banco)) return;
   l.empresa_id = _empLR;
   l.dtvenda=document.getElementById('elr-dtvenda').value;
   l.dtprev=document.getElementById('elr-dtprev').value;
@@ -10403,7 +10544,7 @@ async function updateLancReceber() {
   // Preserva o status de recebimento de cada parcela ao reconstruir as datas
   l.parcela_datas = l.parcelas > 1 ? buildParcelaDatasPreservando('elr-parcela-dates', l.parcelas, l.parcela_datas) : null;
   l.dtrecebido = recebido === 'sim' ? dtrecebidoEdit : '';
-  if (l.parcelas > 1 && recebido === 'sim') {
+  if (l.parcelas > 1 && recebido === 'sim' && !_parcelasComDatasProprias('elr-parcela-dates', l.parcelas)) {
     l.parcela_datas = _marcarTodasParcelasPagas(l.parcela_datas, l.parcelas, dtrecebidoEdit);
   }
   const okU = await sbFetch('lancreceber','PATCH',{empresa_id:l.empresa_id,dtvenda:l.dtvenda,dtprev:l.dtprev,nf:l.nf,cliente:l.cliente,prod:l.prod,valor:l.valor,parcelas:l.parcelas,financeiro:l.financeiro,recebido:l.recebido,dtrecebido:l.dtrecebido,banco:l.banco,obs:l.obs,cat_dre:l.cat_dre,parcela_datas:l.parcela_datas},`?id=eq.${id}`);
@@ -16435,6 +16576,7 @@ function toggleDtPago(prefix, autoPreencher) {
   if (!sim && inp) inp.value = '';
   // A data NÃO é preenchida sozinha: o usuário precisa informar a data real.
   _marcarSecStatus(prefix, sim);
+  _aplicarMasterNasParcelas(prefix, sim);
 }
 
 // Recebido = Sim → abre o campo obrigatório da data real de recebimento
@@ -16447,6 +16589,7 @@ function toggleDtRecebido(prefix) {
   wrap.style.display = sim ? '' : 'none';
   if (!sim && inp) inp.value = '';
   _marcarSecStatus(prefix, sim);
+  _aplicarMasterNasParcelas(prefix, sim);
 }
 
 function _marcarSecStatus(prefix, sim) {
@@ -16494,6 +16637,7 @@ function _marcarTodasParcelasPagas(raw, n, dtpago) {
 // pagamento de cada parcela, que fica no mesmo campo.
 function buildParcelaDatasPreservando(containerid, n, rawAntigo) {
   const novo = buildParcelaDatasPayload(containerid, n);
+  if (_temChecksParcelas(containerid)) return novo; // status vem das parcelas do formulário
   const { pagos, dtpagos } = _parseParcelas(rawAntigo);
   if (!pagos.length && !dtpagos.length) return novo;
   let base;
