@@ -13605,10 +13605,7 @@ function renderFluxoProjetado() {
   getParcelas(true).forEach(p => {
     const dt = p.dtpago || p.venc;
     (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || dt || '').slice(0, 7));
-    realizado(dt, p.catId, SEM_PAG, -(p.valParc || 0), {
-      tipo:'pagar', id:p.lancId, nf:p.nf||'', data:dt, nome:getFornNome(p.forn),
-      prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
-      valor:p.valParc||0, status:'Pago' });
+    // Despesas já pagas não entram no fluxo projetado (só despesas em aberto)
   });
   getParcelas(false).forEach(p => {
     (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || '').slice(0, 7));
@@ -13801,7 +13798,7 @@ function renderFluxoProjetado() {
     : (futuro
         ? `Começa em ${_fpRotuloMes(MS[0])} com o saldo atual das contas mais o que ainda está em aberto antes desse mês.`
         : `Começa no saldo das contas em ${fmtDate(iniJan)}.`);
-  document.getElementById('fp-info').innerHTML = `${partidaTxt} A coluna <b>Acumulado</b> soma só os meses visíveis. Pago e recebido entram pela data do pagamento; em aberto, pelo vencimento (vencidos entram no mês atual). Custos fixos se repetem em cada mês da vigência.`;
+  document.getElementById('fp-info').innerHTML = `${partidaTxt} A coluna <b>Acumulado</b> soma só os meses visíveis. Despesas já pagas não entram; recebido entra pela data do recebimento; em aberto, pelo vencimento (vencidos entram no mês atual). Custos fixos se repetem em cada mês da vigência.`;
   document.getElementById('fp-qtd-ajustes').textContent = qtdAjustes
     ? `${qtdAjustes} ${qtdAjustes === 1 ? 'célula ajustada' : 'células ajustadas'} no período` : 'Nenhum ajuste manual no período';
   const btnRest = document.getElementById('fp-btn-restaurar');
