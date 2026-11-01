@@ -2646,7 +2646,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     <!-- ══ DFC DEMONSTRATIVO ══ -->
     <div class="page" id="page-dfc-demonstrativo">
       <div class="page-title">Demonstrativo de Fluxo de Caixa <span class="empresa-tag"></span></div>
-      <div class="page-sub">Visão mensal com acumulado do ano</div>
+      <div class="page-sub">Visão mensal com acumulado do ano — apenas o dinheiro que efetivamente entrou ou saiu da conta (pela data do pagamento/recebimento)</div>
 
       <!-- Filtro Ano -->
       <div class="card" style="padding:14px 20px;margin-bottom:16px;">
@@ -2659,7 +2659,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
             <input type="checkbox" id="dfc-incluir-pagar" checked onchange="renderDfc()" />
             Incluir Contas a Pagar
           </label>
-          <div style="display:flex;align-items:center;gap:4px;background:#faf9f7;border-radius:8px;padding:3px;">
+          <div style="display:none;align-items:center;gap:4px;background:#faf9f7;border-radius:8px;padding:3px;">
             <button id="btn-dfc-todos" onclick="setDfcFiltro('todos')" style="padding:5px 12px;font-size:12px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:#ea580c;color:#fff;">Todos</button>
             <button id="btn-dfc-apagar" onclick="setDfcFiltro('apagar')" style="padding:5px 12px;font-size:12px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:transparent;color:#57534e;">Contas a Pagar</button>
           </div>
@@ -2667,7 +2667,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
             <input type="checkbox" id="dfc-incluir-receber" checked onchange="renderDfc()" />
             Incluir Contas a Receber
           </label>
-          <div style="display:flex;align-items:center;gap:4px;background:#faf9f7;border-radius:8px;padding:3px;">
+          <div style="display:none;align-items:center;gap:4px;background:#faf9f7;border-radius:8px;padding:3px;">
             <button id="btn-dfc-rec-todos" onclick="setDfcFiltroRec('todos')" style="padding:5px 12px;font-size:12px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:#ea580c;color:#fff;">Todos</button>
             <button id="btn-dfc-rec-aberto" onclick="setDfcFiltroRec('aberto')" style="padding:5px 12px;font-size:12px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:transparent;color:#57534e;">Contas a Receber</button>
           </div>
@@ -11510,7 +11510,7 @@ function getDfcGrupoTipo(id) {
 function fmtDfcVal(v) {
   if (v === 0) return '<span class="dfc-val-zero">—</span>';
   const cls = v > 0 ? 'dfc-val-pos' : 'dfc-val-neg';
-  return `<span class="${cls}">${fmtBRL(Math.abs(v))}</span>`;
+  return `<span class="${cls}">${v < 0 ? '- ' : ''}${fmtBRL(Math.abs(v))}</span>`;
 }
 function fmtDfcResult(v) {
   if (v === 0) return '<span class="dfc-val-zero">R$ 0,00</span>';
@@ -11835,55 +11835,46 @@ function renderDfc() {
   // Guarda para o clique no número poder listar exatamente o que somou ali
   const _guardar = (m, gid, item) => { if (itens[m] && itens[m][gid]) itens[m][gid].push(item); };
 
-  // 1. Contas a Receber → Categoria do lançamento, senão do produto de venda, senão Receitas
+  // DFC = regime de caixa: só o dinheiro que efetivamente entrou/saiu da conta,
+  // pela data do recebimento/pagamento (parcelas em aberto não entram).
+  const _mesCaixa = (dt) => {
+    if (!dt) return 0;
+    const parts = dt.split('-');
+    return parseInt(parts[0]) === ano ? parseInt(parts[1]) : 0;
+  };
+
+  // 1. Recebimentos realizados → Categoria do lançamento, senão do produto de venda, senão Receitas
   if (inclReceber) {
-    db.lancreceber.forEach(l => {
-      if (dfcFiltroRec === 'aberto' && l.recebido === 'sim') return;
-      const dtRef = l.dtprev || l.dtvenda;
-      if (!dtRef) return;
-      const parts = dtRef.split('-');
-      if (parseInt(parts[0]) !== ano) return;
-      const m = parseInt(parts[1]);
-      const valParc = (l.valor||0) / (l.parcelas||1);
-      const catLanc = l.cat_dre ? db.dfc_cats.find(x => x.id === l.cat_dre) : null;
-      const prodObj = db.prodvenda.find(x => x.id === l.prod);
-      const catProd = !catLanc && prodObj && prodObj.cat ? db.dfc_cats.find(x => x.id === prodObj.cat) : null;
-      const catObj  = catLanc || catProd;
+    getParcelasReceber(true).forEach(p => {
+      const dt = p.dtrecebido || p.venc;
+      const m = _mesCaixa(dt);
+      if (!m) return;
+      const catObj  = p.catId ? db.dfc_cats.find(x => x.id === p.catId) : null;
       const grupoId = catObj ? catObj.grupo : (grupoPadraoReceita && grupoPadraoReceita.id);
       if (grupoId && dados[m][grupoId] !== undefined) {
+        const valParc = p.valParc || 0;
         dados[m][grupoId] += valParc * (catObj ? dreSinalCat(catObj.id, grupoId) : 1);
-        _guardar(m, grupoId, { kind: 'rec', lancId: l.id, cliente: l.cliente, prod: l.prod,
-          valParc, venc: dtRef, nf: l.nf, banco: l.banco, tipo_pag: l.tipo_pag,
-          parcIdx: 1, totalParc: l.parcelas || 1, isRecebido: l.recebido === 'sim' });
+        _guardar(m, grupoId, { kind: 'rec', lancId: p.lancId, cliente: p.cliente, prod: p.prod,
+          valParc, venc: p.venc, dtrecebido: dt, nf: p.nf, banco: p.banco, tipo_pag: p.tipoPag,
+          parcIdx: p.parcIdx, totalParc: p.totalParc, isRecebido: true });
       }
     });
   }
 
-  // 2. Contas a Pagar → Categoria do lançamento, senão do produto, senão Custos
+  // 2. Pagamentos realizados → Categoria do lançamento, senão do produto, senão Custos
   if (inclPagar) {
-    db.lancamentos.forEach(l => {
-      if (dfcFiltroPago === 'apagar' && l.pago === 'sim') return;
-      const n = l.parcelas || 1;
-      const valParc = (l.valor || 0) / n;
-      const catLanc = l.cat_dre ? db.dfc_cats.find(x => x.id === l.cat_dre) : null;
-      const prodObj = db.produtos.find(x => x.id === l.prod);
-      const catProd = !catLanc && prodObj && prodObj.cat ? db.dfc_cats.find(x => x.id === prodObj.cat) : null;
-      const catObj  = catLanc || catProd;
+    getParcelas(true).forEach(p => {
+      const dt = p.dtpago || p.venc;
+      const m = _mesCaixa(dt);
+      if (!m) return;
+      const catObj  = p.catId ? db.dfc_cats.find(x => x.id === p.catId) : null;
       const grupoId = catObj ? catObj.grupo : (grupoPadraoCusto && grupoPadraoCusto.id);
-      for (let i = 1; i <= n; i++) {
-        const venc = parcelaVencimento(l.dtprev, i, n) || l.dtcompra;
-        if (!venc) continue;
-        const parts = venc.split('-');
-        if (parseInt(parts[0]) !== ano) continue;
-        const m = parseInt(parts[1]);
-        if (grupoId && dados[m][grupoId] !== undefined) {
-          dados[m][grupoId] += valParc * (catObj ? dreSinalCat(catObj.id, grupoId) : 1);
-          const pagos = _parseParcelas(l.parcela_datas).pagos;
-          _guardar(m, grupoId, { kind: 'des', lancId: l.id, forn: l.forn, prod: l.prod,
-            valParc, venc, nf: l.nf, banco: l.banco, tipo_pag: l.tipo_pag,
-            parcIdx: i, totalParc: n,
-            isPago: n > 1 ? (pagos[i-1] === true) : (l.pago === 'sim') });
-        }
+      if (grupoId && dados[m][grupoId] !== undefined) {
+        const valParc = p.valParc || 0;
+        dados[m][grupoId] += valParc * (catObj ? dreSinalCat(catObj.id, grupoId) : 1);
+        _guardar(m, grupoId, { kind: 'des', lancId: p.lancId, forn: p.forn, prod: p.prod,
+          valParc, venc: p.venc, dtpago: dt, nf: p.nf, banco: p.banco, tipo_pag: p.tipoPag,
+          parcIdx: p.parcIdx, totalParc: p.totalParc, isPago: true });
       }
     });
   }
@@ -11934,11 +11925,11 @@ function renderDfc() {
     const cells = Array.from({length:12},(_,i)=>{
       const v = dados[i+1][g.id];
       if (!(v > 0)) return '<td><span class="dfc-val-zero">—</span></td>';
-      return `<td class="num-click" title="Ver lançamentos" onclick="abrirDetalheDfc('${g.id}',${i+1})">${fmtDfcVal(v)}</td>`;
+      return `<td class="num-click" title="Ver lançamentos" onclick="abrirDetalheDfc('${g.id}',${i+1})">${fmtDfcVal(g.tipo === 'entrada' ? v : -v)}</td>`;
     }).join('');
     const tot = totais[g.id];
     const celTot = tot > 0
-      ? `<td class="dfc-col-total num-click" title="Ver lançamentos do ano" onclick="abrirDetalheDfc('${g.id}',0)">${fmtDfcVal(tot)}</td>`
+      ? `<td class="dfc-col-total num-click" title="Ver lançamentos do ano" onclick="abrirDetalheDfc('${g.id}',0)">${fmtDfcVal(g.tipo === 'entrada' ? tot : -tot)}</td>`
       : '<td class="dfc-col-total"><span class="dfc-val-zero">—</span></td>';
     return `<tr class="dfc-row-sub"><td>${esc(g.nome)}</td>${cells}${celTot}</tr>`;
   };
@@ -11961,6 +11952,11 @@ function renderDfc() {
       ${saidaGrupos.length ? `<tr class="dfc-row-group"><td colspan="14">📤 SAÍDAS</td></tr>` + saidaGrupos.map(linha).join('') : ''}
       <tr><td colspan="14" style="padding:4px"></td></tr>
       ${linhaResult('🟢 Resultado Líquido (Entradas − Saídas)', liquido, totalLiquido)}
+      ${(() => { // Fluxo de caixa acumulado (após pagamentos e recebimentos)
+        let ac = 0; const acum = {};
+        for (let m = 1; m <= 12; m++) { ac += liquido[m]; acum[m] = ac; }
+        return linhaResult('📈 Fluxo de Caixa Acumulado', acum, ac);
+      })()}
     </tbody>
   </table>`;
 
@@ -12779,12 +12775,26 @@ function renderDre() {
     return `<td class="${cls}">${p < -0.05 ? `<span class="dfc-val-neg">${txt}</span>` : txt}</td>`;
   };
   const pctVazio = (totalCls) => `<td class="dre-pct${totalCls ? ' dfc-col-total' : ''}"></td>`;
+  // Coluna "%" ao lado de cada MÊS = Análise Horizontal: quanto a linha cresceu ou
+  // diminuiu em relação ao mês anterior. Receitas/despesas comparam o valor (em
+  // módulo); subtotais comparam o resultado. Verde = melhorou, vermelho = piorou
+  // (receita/resultado subindo é bom; despesa subindo é ruim).
+  const pctAH = (v, prev, modulo, bomSeSobe) => {
+    const a = modulo ? Math.abs(v) : v, b = modulo ? Math.abs(prev) : prev;
+    if (Math.abs(b) < 0.005) return `<td class="dre-pct"><span class="dfc-val-zero">—</span></td>`;
+    const p = ((a - b) / Math.abs(b)) * 100;
+    if (Math.abs(p) < 0.05) return `<td class="dre-pct">0.0%</td>`;
+    const txt = (p > 0 ? '+' : '−') + Math.abs(p).toFixed(1) + '%';
+    const bom = bomSeSobe ? p > 0 : p < 0;
+    return `<td class="dre-pct" title="Variação em relação ao mês anterior"><span class="${bom ? 'dfc-val-pos' : 'dfc-val-neg'}">${txt}</span></td>`;
+  };
 
   // linhaCalc[grupoId][col] = valor a exibir (assinado, em R$, para entrada/saida/subtotal; percentual em %)
   const linhaCalc = {};
   grupos.forEach(g => linhaCalc[g.id] = {});
 
-  COLS.forEach(col => {
+  // Calcula todos os meses (não só os visíveis): a Análise Horizontal precisa do mês anterior
+  [1,2,3,4,5,6,7,8,9,10,11,12,'total'].forEach(col => {
     let acumulado = 0;
     let valorAnterior = 0; // valor da linha imediatamente anterior, usado pelas linhas de percentual
     grupos.forEach(g => {
@@ -12804,7 +12814,7 @@ function renderDre() {
     });
   });
 
-  const mesesHeader = mesesVisiveis.map(m => `<th>${MESES_ABR[m]}</th><th class="dre-pct">%</th>`).join('')
+  const mesesHeader = mesesVisiveis.map(m => `<th>${MESES_ABR[m]}</th><th class="dre-pct" title="Análise horizontal: variação em relação ao mês anterior">AH %</th>`).join('')
     + (mostrarAcum ? '<th class="dfc-col-total">DRE Acumulada</th><th class="dfc-col-total dre-pct">%</th>' : '');
 
   // Linha de uma categoria, exibida dentro do grupo expandido (herda o sinal
@@ -12813,10 +12823,11 @@ function renderDre() {
     const sinal = grupoTipo === 'entrada' ? 1 : -1;
     const cells = mesesVisiveis.map(mes => {
       const v = sinal * valorBrutoCat(catId, mes);
+      const ah = mes > 1 ? pctAH(v, sinal * valorBrutoCat(catId, mes - 1), true, grupoTipo === 'entrada') : pctAH(v, 0);
       if (Math.abs(v) >= 0.005) {
-        return `<td class="dre-cell-click" onclick="abrirDetalheDreCategoria('${catId}',${mes})" title="Ver lançamentos desta categoria">${fmtDreVal(v)}</td>` + pctCell(v, mes, true);
+        return `<td class="dre-cell-click" onclick="abrirDetalheDreCategoria('${catId}',${mes})" title="Ver lançamentos desta categoria">${fmtDreVal(v)}</td>` + ah;
       }
-      return `<td>${fmtDreVal(v)}</td>` + pctCell(v, mes, true);
+      return `<td>${fmtDreVal(v)}</td>` + ah;
     }).join('');
     const totalVal = sinal * valorBrutoCat(catId, 'total');
     const totalCell = (Math.abs(totalVal) >= 0.005
@@ -12829,10 +12840,11 @@ function renderDre() {
     const absPct = g.tipo !== 'subtotal';
     const cells = mesesVisiveis.map(mes => {
       const v = linhaCalc[g.id][mes];
+      const ah = mes > 1 ? pctAH(v, linhaCalc[g.id][mes - 1], absPct, g.tipo !== 'saida') : pctAH(v, 0);
       if (clicavel && Math.abs(v) >= 0.005) {
-        return `<td class="dre-cell-click" onclick="abrirDetalheDreGrupo('${g.id}',${mes})" title="Ver lançamentos desta conta">${fmtDreVal(v)}</td>` + pctCell(v, mes, absPct);
+        return `<td class="dre-cell-click" onclick="abrirDetalheDreGrupo('${g.id}',${mes})" title="Ver lançamentos desta conta">${fmtDreVal(v)}</td>` + ah;
       }
-      return `<td>${fmtDreVal(v)}</td>` + pctCell(v, mes, absPct);
+      return `<td>${fmtDreVal(v)}</td>` + ah;
     }).join('');
     const totalVal = linhaCalc[g.id]['total'];
     const totalCell = ((clicavel && Math.abs(totalVal) >= 0.005)
@@ -12875,7 +12887,7 @@ function renderDre() {
   const ultimoSubtotalId = subtotais.length ? subtotais[subtotais.length - 1].id : null;
 
   const linhaFinal = (g, cls) => {
-    const cells = mesesVisiveis.map(mes => `<td>${fmtDreVal(linhaCalc[g.id][mes])}</td>` + pctCell(linhaCalc[g.id][mes], mes, false)).join('');
+    const cells = mesesVisiveis.map(mes => `<td>${fmtDreVal(linhaCalc[g.id][mes])}</td>` + (mes > 1 ? pctAH(linhaCalc[g.id][mes], linhaCalc[g.id][mes - 1], false, true) : pctAH(0, 0))).join('');
     const totalVal = linhaCalc[g.id]['total'];
     return `<tr class="${cls}"><td>${g.nome}</td>${cells}${mostrarAcum ? `<td class="dfc-col-total">${fmtDreVal(totalVal)}</td>` + pctCell(totalVal, 'total', false, true) : ''}</tr>`;
   };
@@ -20605,7 +20617,7 @@ function abrirDetalheDfc(grupoId, mes) {
 
     return {
       titulo: `${nomeGrupo} — ${periodo}`,
-      subtitulo: 'Pela previsão de vencimento, como no demonstrativo',
+      subtitulo: 'Regime de caixa: pela data do pagamento/recebimento',
       rec:    todos.filter(i => i.kind === 'rec'),
       des:    todos.filter(i => i.kind === 'des'),
       extras: todos.filter(i => i.kind === 'dfc')
