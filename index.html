@@ -11,7 +11,7 @@
 <title>Sevegnani — Sistema de Gestão Financeira</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <!-- [OTIMIZADO] pdf.js agora carrega sob demanda (ver ensurePdfJs) -->
@@ -484,6 +484,40 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .dre-det-sit.ok { background:#dcfce7; color:#166534; }
 .dre-det-sit.rec { background:#dbeafe; color:#1e40af; }
 .dre-det-sit.pag { background:#fee2e2; color:#991b1b; }
+/* ── Visual profissional da janela de lançamentos ── */
+.dre-det-modal { width:1120px; border-top:4px solid #ea580c; }
+.dre-det-modal.tipo-rec { border-top-color:#15803d; }
+.dre-det-modal.tipo-pag { border-top-color:#dc2626; }
+.dre-det-title { font-size:17px; letter-spacing:-.2px; }
+.dre-det-kpis { background:#fafaf9; }
+.dre-det-kpi { padding:11px 16px; }
+.dre-det-kpi-lbl { font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:#78716c; display:flex; align-items:center; gap:6px; }
+.dre-det-kpi-lbl i { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.dre-det-kpi-val, .dre-det-table .c-val, .dre-det-table .c-data { font-family:'Inter',system-ui,sans-serif; font-variant-numeric:tabular-nums; }
+.dre-det-kpi-val { font-size:17px; font-weight:700; letter-spacing:-.3px; margin-top:4px; }
+.dre-det-tools input { padding:8px 12px; font-size:12.5px; border-radius:8px; background:#fff; }
+.dre-det-tools input:focus { outline:none; border-color:#ea580c; box-shadow:0 0 0 3px #ea580c22; }
+.dre-det-table th { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; padding:9px 12px; }
+.dre-det-table td { padding:9px 12px; font-size:12.5px; }
+.dre-det-table tbody tr:nth-child(even) td { background:#fcfcfb; }
+.dre-det-table tbody tr:hover td { background:#fff7ed; }
+.dre-det-table .c-nome { font-weight:600; }
+.dre-det-table td.c-val { font-weight:600; }
+.dre-det-table td.c-val.v-rec { color:#15803d; }
+.dre-det-table td.c-val.v-pag { color:#dc2626; }
+.dre-det-table tr.is-venc td.c-data { color:#dc2626; font-weight:600; }
+.dre-det-table .c-sit { width:96px; }
+.dre-det-table .c-acao { width:150px; }
+.dre-det-table .c-data { width:112px; }
+.dre-det-table .c-nf { width:64px; }
+.dre-det-table tfoot td { font-size:13px; }
+.dre-det-sit { padding:2px 9px; font-size:10.5px; }
+.dre-det-sit.venc { background:#dc2626; color:#fff; }
+.dre-det-baixa { height:26px; padding:0 12px; margin-right:6px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer; vertical-align:middle; border:1px solid; transition:background .15s, color .15s; }
+.dre-det-baixa.rec { background:#f0fdf4; color:#15803d; border-color:#86efac; }
+.dre-det-baixa.rec:hover { background:#15803d; color:#fff; border-color:#15803d; }
+.dre-det-baixa.pag { background:#fef2f2; color:#dc2626; border-color:#fca5a5; }
+.dre-det-baixa.pag:hover { background:#dc2626; color:#fff; border-color:#dc2626; }
 .dre-det-btn { width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; border:1px solid transparent; background:none; border-radius:6px; color:#a8a29e; cursor:pointer; padding:0; }
 .dre-det-btn svg { width:14px; height:14px; }
 .dre-det-btn:hover { color:#1f2937; background:#f5f4f2; border-color:#e7e5e4; }
@@ -559,6 +593,13 @@ th.ef-th { padding:8px 8px 8px 12px; }
 .fp-row-total td { font-weight:800; background:#faf9f7 !important; border-top:1.5px solid #d6d3d1; border-bottom:1.5px solid #d6d3d1; }
 .fp-row-saldo td { font-weight:800; background:#fff; border-bottom:1.5px solid #d6d3d1; }
 .fp-row-acum, .fp-row-acum td { background:#0f766e !important; color:#fff !important; font-weight:800; font-size:12px; }
+/* Números do Fluxo Projetado: fonte Inter com algarismos tabulares (alinhados) */
+.fp-table td:not(:first-child) { font-family:'Inter',system-ui,sans-serif; font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1,'lnum' 1; font-size:12px; letter-spacing:-.1px; }
+/* Receitas em verde, despesas em vermelho */
+.fp-table tr.fp-ent td:not(:first-child) { color:#15803d; }
+.fp-table tr.fp-sai td:not(:first-child) { color:#dc2626; }
+.fp-table td.fp-pos { color:#15803d !important; }
+.fp-table td.fp-neg { color:#dc2626 !important; }
 .fp-cell { cursor:pointer; }
 .fp-cell:hover { outline:2px solid #fdba74; outline-offset:-2px; }
 .fp-row-emprestimo .fp-cell.fp-manual, .fp-row-emprestimo .fp-cell.fp-zero { color:#1f2937 !important; }
@@ -3015,7 +3056,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
               <button type="button" class="btn btn-secondary btn-sm" onclick="fpNavegar(0)" title="Voltar ao período atual">Hoje</button>
             </div>
           </div>
-          <div class="form-group"><label>Ponto de partida</label>
+          <div class="form-group" style="display:none"><label>Ponto de partida</label>
             <select id="fp-partida" onchange="renderFluxoProjetado()" style="min-width:280px">
               <option value="atual">Saldo atual das contas, no mês atual</option>
               <option value="inicio">Saldo das contas no início do período</option>
@@ -5706,6 +5747,7 @@ async function trackUserActivity() {
 }
 
 async function doLogout() {
+  try { _filtrosSnapshotAtiva(); } catch(e) {}
   // Remove o token local já antes de qualquer coisa (não depende da rede)
   const _sess = lerSessaoAuth();
   limparSessaoAuth();
@@ -5742,6 +5784,69 @@ function paginaVisivel(p) {
 
 let _paginaAtual = 'dashboard';
 
+// ── Filtros do usuário: lembra o último filtro/pesquisa de cada tela ────────
+// Guarda (por usuário, no navegador) o valor de todo campo de filtro das telas
+// — selects, datas, buscas e caixas de marcar que atualizam a listagem — e
+// devolve esses valores quando o usuário volta à tela ou reabre o sistema.
+// Campos de cadastro (formulários e janelas) não entram.
+const _FILTRO_HANDLER_RE = /render|filtr|salvarPrefs|fpMudarPeriodo/i;
+function _filtrosKey() {
+  const u = currentUser && (currentUser.user || currentUser.id);
+  return 'sevegnani_filtros_' + (u || 'anon');
+}
+function _filtrosLer() {
+  try { return JSON.parse(localStorage.getItem(_filtrosKey()) || '{}') || {}; } catch(e) { return {}; }
+}
+function _filtrosGravar(obj) {
+  try { localStorage.setItem(_filtrosKey(), JSON.stringify(obj)); } catch(e) {}
+}
+function _ehCampoFiltro(el) {
+  if (!el || !el.id || (el.tagName !== 'INPUT' && el.tagName !== 'SELECT')) return false;
+  if (['password','file','button','submit','hidden'].includes(el.type)) return false;
+  if (!el.closest('.page') || el.closest('.modal-overlay, .modal')) return false;
+  const h = (el.getAttribute('onchange') || '') + ' ' + (el.getAttribute('oninput') || '');
+  return _FILTRO_HANDLER_RE.test(h);
+}
+function _filtroValor(el) { return (el.type === 'checkbox' || el.type === 'radio') ? !!el.checked : el.value; }
+function _filtrosSalvarCampo(el) {
+  if (!_ehCampoFiltro(el)) return;
+  const o = _filtrosLer(); o[el.id] = _filtroValor(el); _filtrosGravar(o);
+}
+// Fotografa todos os filtros de uma tela (cobre "Limpar filtros" e mudanças feitas por código)
+function _filtrosSnapshot(pg) {
+  if (!pg || !currentUser) return;
+  const o = _filtrosLer(); let mudou = false;
+  pg.querySelectorAll('input[id], select[id]').forEach(el => {
+    if (_ehCampoFiltro(el)) { o[el.id] = _filtroValor(el); mudou = true; }
+  });
+  if (mudou) _filtrosGravar(o);
+}
+function _filtrosSnapshotAtiva() { _filtrosSnapshot(document.querySelector('.page.active')); }
+function _filtrosRestaurar(pg) {
+  if (!pg || !currentUser) return;
+  const o = _filtrosLer();
+  pg.querySelectorAll('input[id], select[id]').forEach(el => {
+    if (!_ehCampoFiltro(el) || !(el.id in o)) return;
+    const v = o[el.id];
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      if (el.checked === !!v) return;
+      el.checked = !!v;
+    } else {
+      if (el.value === v) return;
+      if (el.tagName === 'SELECT' && !Array.from(el.options).some(op => op.value === v)) return;
+      el.value = v;
+    }
+    // Campos que montam outro filtro (ex.: Grupo → Categoria) precisam rodar o próprio onchange
+    if (/popular/i.test(el.getAttribute('onchange') || '') && typeof el.onchange === 'function') {
+      try { el.onchange.call(el, new Event('change')); } catch(e) {}
+    }
+  });
+}
+document.addEventListener('change', e => _filtrosSalvarCampo(e.target), true);
+document.addEventListener('input',  e => _filtrosSalvarCampo(e.target), true);
+window.addEventListener('pagehide', _filtrosSnapshotAtiva);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') _filtrosSnapshotAtiva(); });
+
 function showPage(p) {
   setTimeout(() => { const _nv = document.getElementById('nav-' + p); if (_nv && document.getElementById('page-' + p) && document.getElementById('page-' + p).classList.contains('active')) { document.querySelectorAll('.nav-item.active, .nav-sub-item.active').forEach(x => { if (x !== _nv) x.classList.remove('active'); }); _nv.classList.add('active'); } }, 0);
   // Telas ocultas não abrem nem por chamada direta
@@ -5755,12 +5860,14 @@ function showPage(p) {
     const allowed = currentUser.pages || [];
     if (!allowed.includes(p)) { alert('Acesso não permitido para seu perfil.'); return; }
   }
+  _filtrosSnapshotAtiva();
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item, .nav-sub-item').forEach(el => el.classList.remove('active'));
   const pg = document.getElementById('page-' + p);
   if(pg) pg.classList.add('active');
   if (typeof event !== 'undefined' && event && event.currentTarget) event.currentTarget.classList.add('active');
   _paginaAtual = p;
+  _filtrosRestaurar(pg);
   if (p === 'dashboard')    { renderFraseDoDia(); carregarDreMetas().then(carregarVarEstoque).then(carregarDreGrupoClasses).then(renderDashboard); setTimeout(loadMetaInputs, 100); }
   if (p === 'lancamentos')    renderLancamentos();
   if (p === 'apagar')         renderApagar();
@@ -5804,6 +5911,7 @@ function renderPaginaAtual() {
   const pg = document.getElementById('page-' + p);
   if (pg) pg.classList.add('active');
   if (nav) nav.classList.add('active');
+  _filtrosRestaurar(pg);
   if (p === 'dashboard')    { renderFraseDoDia(); carregarDreMetas().then(carregarVarEstoque).then(carregarDreGrupoClasses).then(renderDashboard); setTimeout(loadMetaInputs, 100); }
   if (p === 'lancamentos')    renderLancamentos();
   if (p === 'apagar')         renderApagar();
@@ -13546,7 +13654,9 @@ function renderFluxoProjetado() {
   const futuro = MS[0] > keyAtual;
   const partidaEl = document.getElementById('fp-partida');
   if (partidaEl) partidaEl.disabled = !contemAtual;
-  const partida = (contemAtual && partidaEl) ? partidaEl.value : 'inicio';
+  // Sempre parte do saldo atual das contas: o que já foi pago/recebido já está
+  // no saldo, então só entra o que ainda está em aberto.
+  const partida = contemAtual ? 'atual' : 'inicio';
   const mostrarVazias = !!((document.getElementById('fp-vazias') || {}).checked);
   if (_fpAbertos === null) _fpAbertos = _fpAbertosGet();
   const lblPer = document.getElementById('fp-periodo-lbl');
@@ -13597,13 +13707,7 @@ function renderFluxoProjetado() {
     lancar(catId, semCat, dt, valorSinal, item);
   };
 
-  getParcelasReceber(true).forEach(p => {
-    const dt = p.dtrecebido || p.venc;
-    realizado(dt, p.catId, SEM_REC, p.valParc || 0, {
-      tipo:'receber', id:p.lancId, nf:p.nf||'', data:dt, nome:getClienteNome(p.cliente),
-      prod:(p.prod ? getProdVendaNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
-      valor:p.valParc||0, status:'Recebido' });
-  });
+  // Recebimentos já recebidos não entram: o valor já está no saldo das contas (linha Caixa)
   getParcelasReceber(false).forEach(p => {
     const baixas = (typeof cobTotalBaixas === 'function') ? cobTotalBaixas(p.lancId, p.parcIdx) : 0;
     const v = Math.max(0, (p.valParc || 0) - baixas);
@@ -13611,7 +13715,7 @@ function renderFluxoProjetado() {
     aberto(p.venc, p.catId, SEM_REC, v, {
       tipo:'receber', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getClienteNome(p.cliente),
       prod:(p.prod ? getProdVendaNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
-      valor:v, status:'A Receber' });
+      valor:v, status:'A Receber', parc:p.parcIdx, venc:p.venc });
   });
   const mesesReaisLanc = {};          // lançamento → meses que já têm parcela real
   getParcelas(true).forEach(p => {
@@ -13625,7 +13729,7 @@ function renderFluxoProjetado() {
     aberto(p.venc, p.catId, SEM_PAG, -(p.valParc || 0), {
       tipo:'pagar', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getFornNome(p.forn),
       prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
-      valor:p.valParc||0, status:'A Pagar' });
+      valor:p.valParc||0, status:'A Pagar', parc:p.parcIdx, venc:p.venc, cartao:!!p.cartaoFatura });
   });
   // Custos fixos: repete o valor do lançamento em cada mês da vigência
   // (do mês atual em diante) que ainda não tem parcela lançada.
@@ -13771,10 +13875,11 @@ function renderFluxoProjetado() {
     const total = opts.totalAno !== undefined ? opts.totalAno : somaJan(ef);
     return `<tr class="${cls}"><td>${opts.toggle || ''}${label}</td>${tds}<td class="fp-col-ano">${_fpFmt(total)}</td></tr>`;
   };
-  const linhaFixa = (cls, rotulo, vals, totalAno) =>
-    `<tr class="${cls}"><td>${rotulo}</td>${MS.map(k => `<td>${vals[k] === null ? '' : _fpFmt(vals[k])}</td>`).join('')}<td class="fp-col-ano">${totalAno === null ? '' : _fpFmt(totalAno)}</td></tr>`;
+  const _fpCorSinal = v => v === null || Math.abs(v || 0) < 0.005 ? '' : (v > 0 ? 'fp-pos' : 'fp-neg');
+  const linhaFixa = (cls, rotulo, vals, totalAno, porSinal) =>
+    `<tr class="${cls}"><td>${rotulo}</td>${MS.map(k => `<td class="${porSinal ? _fpCorSinal(vals[k]) : ''}">${vals[k] === null ? '' : _fpFmt(vals[k])}</td>`).join('')}<td class="fp-col-ano ${porSinal ? _fpCorSinal(totalAno) : ''}">${totalAno === null ? '' : _fpFmt(totalAno)}</td></tr>`;
 
-  const blocoGrupos = (lista) => lista.map(g => {
+  const blocoGrupos = (lista, clsTipo) => lista.map(g => {
     const n = normText(g.nome || '');
     const ehEmprestimo = n.includes('emprestimo') && !n.includes('captacao');
     const ehOrcado = isGrupoOrcado(g);
@@ -13787,30 +13892,30 @@ function renderFluxoProjetado() {
     const toggle = cats.length
       ? `<button type="button" class="dre-toggle-cat" onclick="fpToggleGrupo('${ehEmprestimo ? '!' : ''}${g.id}')" title="${aberto_ ? 'Recolher' : 'Ver'} categorias">${aberto_ ? '▾' : '▸'}</button>`
       : '<span class="fp-toggle-vazio"></span>';
-    let h = linhaHtml('fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : '') + (ehOrcado ? ' fp-row-orcado' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
-    if (aberto_) cats.forEach(c => { h += linhaHtml('fp-row-cat' + (ehOrcado ? ' fp-row-orcado' : '') + (ehEmprestimo ? ' fp-row-cat-emp' : ''), c.nome, c.chave, c.ef, c.est); });
+    let h = linhaHtml(clsTipo + ' fp-row-grupo' + (ehEmprestimo ? ' fp-row-emprestimo' : '') + (ehOrcado ? ' fp-row-orcado' : ''), g.nome, g.chave, g.ef, g.est, { toggle });
+    if (aberto_) cats.forEach(c => { h += linhaHtml(clsTipo + ' fp-row-cat' + (ehOrcado ? ' fp-row-orcado' : '') + (ehEmprestimo ? ' fp-row-cat-emp' : ''), c.nome, c.chave, c.ef, c.est); });
     return h;
   }).join('');
 
   const nCol = MS.length + 2;
   let html = '';
   html += `<tr class="fp-row-secao"><td colspan="${nCol}">Entradas</td></tr>`;
-  html += blocoGrupos(gEnt);
-  html += linhaHtml('fp-row-grupo', 'Cheque especial', 'cheque', cheque.ef, cheque.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
-  html += linhaHtml('fp-row-grupo fp-row-caixa', 'Caixa (saldo das contas)', 'caixa', caixa.ef, caixa.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
-  html += linhaFixa('fp-row-total', 'Total de entradas', totEnt, somaJan(totEnt));
+  html += blocoGrupos(gEnt, 'fp-ent');
+  html += linhaHtml('fp-ent fp-row-grupo', 'Cheque especial', 'cheque', cheque.ef, cheque.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
+  html += linhaHtml('fp-ent fp-row-grupo fp-row-caixa', 'Caixa (saldo das contas)', 'caixa', caixa.ef, caixa.est, { toggle:'<span class="fp-toggle-vazio"></span>' });
+  html += linhaFixa('fp-ent fp-row-total', 'Total de entradas', totEnt, somaJan(totEnt));
   html += `<tr class="fp-row-secao"><td colspan="${nCol}">Saídas</td></tr>`;
-  html += blocoGrupos(gSai);
-  html += linhaFixa('fp-row-total', 'Total de saídas do mês', totSai, somaJan(totSai));
-  html += linhaFixa('fp-row-saldo', 'Saldo do mês (entradas − saídas)', saldoMes, somaJan(saldoMes));
+  html += blocoGrupos(gSai, 'fp-sai');
+  html += linhaFixa('fp-sai fp-row-total', 'Total de saídas do mês', totSai, somaJan(totSai));
+  html += linhaFixa('fp-row-saldo', 'Saldo do mês (entradas − saídas)', saldoMes, somaJan(saldoMes), true);
   html += linhaFixa('fp-row-acum', 'Saldo acumulado · necessidade de capital de giro', acum, acum[fimKey]);
 
   const partidaTxt = (contemAtual && partida === 'atual')
-    ? `Começa no saldo atual das contas (<b>${fmtBRL(saldoAtual)}</b>) em ${_fpRotuloMes(keyAtual)}. Os meses anteriores mostram o que já foi pago e recebido, só como referência.`
+    ? `Começa no saldo atual das contas (<b>${fmtBRL(saldoAtual)}</b>) em ${_fpRotuloMes(keyAtual)}. O que já foi pago ou recebido já está nesse saldo e não aparece de novo.`
     : (futuro
         ? `Começa em ${_fpRotuloMes(MS[0])} com o saldo atual das contas mais o que ainda está em aberto antes desse mês.`
         : `Começa no saldo das contas em ${fmtDate(iniJan)}.`);
-  document.getElementById('fp-info').innerHTML = `${partidaTxt} A coluna <b>Acumulado</b> soma só os meses visíveis. Despesas já pagas não entram; recebido entra pela data do recebimento; em aberto, pelo vencimento (vencidos entram no mês atual). Custos fixos se repetem em cada mês da vigência.`;
+  document.getElementById('fp-info').innerHTML = `${partidaTxt} A coluna <b>Acumulado</b> soma só os meses visíveis. Só entra o que está em aberto, pelo vencimento (vencidos entram no mês atual); pago e recebido já estão no saldo. Custos fixos se repetem em cada mês da vigência.`;
   document.getElementById('fp-qtd-ajustes').textContent = qtdAjustes
     ? `${qtdAjustes} ${qtdAjustes === 1 ? 'célula ajustada' : 'células ajustadas'} no período` : 'Nenhum ajuste manual no período';
   const btnRest = document.getElementById('fp-btn-restaurar');
@@ -14093,17 +14198,35 @@ function _dreDetalheRender(nome, periodoTxt, itens, ctx) {
 
   const total = itens.reduce((s, it) => s + it.valor, 0);
   const conf  = itens.filter(it => it.status === 'Recebido' || it.status === 'Pago').reduce((s, it) => s + it.valor, 0);
-  const kpi = (lbl, val, cor) => `<div class="dre-det-kpi"><div class="dre-det-kpi-lbl">${lbl}</div><div class="dre-det-kpi-val"${cor ? ` style="color:${cor}"` : ''} title="${val}">${val}</div></div>`;
+  const kpi = (lbl, val, cor, ico) => `<div class="dre-det-kpi"><div class="dre-det-kpi-lbl">${ico ? `<i style="background:${cor}"></i>` : ''}${lbl}</div><div class="dre-det-kpi-val"${cor ? ` style="color:${cor}"` : ''} title="${val}">${val}</div></div>`;
   const kpisEl = document.getElementById('dre-detalhe-kpis');
-  if (kpisEl) kpisEl.innerHTML =
-      kpi('Lançamentos', itens.length)
-    + kpi('Total do período', fmtBRL(total))
-    + kpi('Já confirmado', fmtBRL(conf), '#166534')
-    + kpi('Ainda pendente', fmtBRL(total - conf), '#b45309');
+  const modalEl = document.querySelector('#modal-dre-detalhe .dre-det-modal');
+  const ehFp = ctx && ctx.origem === 'fp';
+  const ehRec = itens.length ? itens.every(it => it.tipo === 'receber') : false;
+  const ehPag = itens.length ? itens.every(it => it.tipo === 'pagar') : false;
+  if (modalEl) { modalEl.classList.toggle('tipo-rec', ehRec); modalEl.classList.toggle('tipo-pag', ehPag); }
+  if (kpisEl) {
+    if (ehFp) {
+      // Fluxo projetado: só itens em aberto → mostra o que está vencido e o que vai vencer
+      const venc = itens.filter(it => /^Vencido/.test(it.status || '')).reduce((s, it) => s + it.valor, 0);
+      const corTot = ehRec ? '#15803d' : (ehPag ? '#dc2626' : '#1f2937');
+      kpisEl.innerHTML =
+          kpi('Lançamentos', itens.length)
+        + kpi(ehRec ? 'Total a receber' : (ehPag ? 'Total a pagar' : 'Total do período'), fmtBRL(total), corTot)
+        + kpi('Vencido', fmtBRL(venc), '#dc2626', true)
+        + kpi('A vencer', fmtBRL(total - venc), '#1d4ed8', true);
+    } else {
+      kpisEl.innerHTML =
+          kpi('Lançamentos', itens.length)
+        + kpi('Total do período', fmtBRL(total))
+        + kpi('Já confirmado', fmtBRL(conf), '#166534')
+        + kpi('Ainda pendente', fmtBRL(total - conf), '#b45309');
+    }
+  }
 
   const nota = document.getElementById('dre-detalhe-nota');
   if (nota) nota.textContent = itens.some(it => /\(parc\./.test(it.prod || ''))
-    ? 'Alguns itens são parcelas. Editar ou excluir age sobre o lançamento inteiro, com todas as parcelas.'
+    ? 'Alguns itens são parcelas. Receber/Pagar baixa só a parcela da linha; editar ou excluir age sobre o lançamento inteiro, com todas as parcelas.'
     : '';
 
   const busca = document.getElementById('dre-detalhe-busca');
@@ -14130,19 +14253,31 @@ function _dreDetFiltrar() {
   }
   tbody.innerHTML = lista.map(it => {
     const ok = it.status === 'Recebido' || it.status === 'Pago';
-    const sitCls = ok ? 'ok' : (it.status === 'A Receber' ? 'rec' : 'pag');
+    const vencido = /^Vencido/.test(it.status || '');
+    const sitBase = (it.status || '').replace(/^Vencido · /, '');
+    const sitCls = ok ? 'ok' : (vencido ? 'venc' : (sitBase === 'A Receber' ? 'rec' : 'pag'));
+    const sitTxt = vencido ? 'Vencido' : (it.status || '—');
     const nomeTxt = esc(it.nome || '—');
     const prodTxt = esc(it.prod || '—');
     const pode = !!it.id;
-    const acoes = `<button type="button" class="dre-det-btn" ${pode ? `onclick="editarDoDetalheDre('${it.tipo}','${it.id}')"` : 'disabled'} title="Editar lançamento" aria-label="Editar lançamento de ${nomeTxt}">${_DRE_ICO_EDIT}</button>`
+    const diasAtraso = vencido && it.venc ? Math.max(0, Math.round((new Date(today() + 'T00:00') - new Date(it.venc + 'T00:00')) / 86400000)) : 0;
+    const dataTit = vencido && it.venc ? `Venceu em ${fmtDate(it.venc)} · ${diasAtraso} dia${diasAtraso === 1 ? '' : 's'} de atraso` : '';
+    // Baixa direto daqui: Receber (contas a receber) / Pagar (contas a pagar) — só parcelas reais em aberto
+    let baixa = '';
+    if (pode && it.parc && !ok && it.tipo === 'receber')
+      baixa = `<button type="button" class="dre-det-baixa rec" onclick="baixarDoDetalheDre('receber','${it.id}',${it.parc})" title="Registrar o recebimento desta parcela">Receber</button>`;
+    else if (pode && it.parc && !ok && it.tipo === 'pagar')
+      baixa = `<button type="button" class="dre-det-baixa pag" onclick="baixarDoDetalheDre('pagar','${it.id}',${it.parc})" title="${it.cartao ? 'Fatura de cartão: abre a tela do cartão' : 'Registrar o pagamento desta parcela'}">Pagar</button>`;
+    const acoes = baixa + `<button type="button" class="dre-det-btn" ${pode ? `onclick="editarDoDetalheDre('${it.tipo}','${it.id}')"` : 'disabled'} title="Editar lançamento" aria-label="Editar lançamento de ${nomeTxt}">${_DRE_ICO_EDIT}</button>`
                 + `<button type="button" class="dre-det-btn del" ${pode ? `onclick="excluirDoDetalheDre('${it.tipo}','${it.id}')"` : 'disabled'} title="Excluir lançamento" aria-label="Excluir lançamento de ${nomeTxt}">${_DRE_ICO_DEL}</button>`;
-    return `<tr>
-      <td class="c-data">${fmtDate(it.data)}</td>
+    const valCls = it.tipo === 'receber' ? ' v-rec' : (it.tipo === 'pagar' ? ' v-pag' : '');
+    return `<tr class="${vencido ? 'is-venc' : ''}">
+      <td class="c-data"${dataTit ? ` title="${dataTit}"` : ''}>${fmtDate(vencido && it.venc ? it.venc : it.data)}</td>
       <td class="c-nome" title="${nomeTxt}">${nomeTxt}</td>
       <td class="c-prod" title="${prodTxt}">${prodTxt}</td>
       <td class="c-nf">${esc(it.nf || '—')}</td>
-      <td class="c-sit"><span class="dre-det-sit ${sitCls}">${it.status}</span></td>
-      <td class="c-val">${fmtBRL(it.valor)}</td>
+      <td class="c-sit"><span class="dre-det-sit ${sitCls}"${dataTit ? ` title="${dataTit}"` : ''}>${sitTxt}</span></td>
+      <td class="c-val${valCls}">${fmtBRL(it.valor)}</td>
       <td class="c-acao">${acoes}</td>
     </tr>`;
   }).join('');
@@ -14180,8 +14315,26 @@ function editarDoDetalheDre(tipo, id) {
   if (tipo === 'receber') editLancReceber(id); else editLancamento(id);
 }
 
+// Baixa (Receber / Pagar) direto da janela de lançamentos: abre a confirmação
+// de recebimento/pagamento da parcela e, ao fechar, volta para a janela atualizada.
+let _dreDetVoltarAposBaixa = false;
+function baixarDoDetalheDre(tipo, id, parc) {
+  const existe = tipo === 'receber' ? db.lancreceber.some(x => x.id === id) : db.lancamentos.some(x => x.id === id);
+  if (!existe) { alert('Lançamento não encontrado. Ele pode ter sido excluído.'); return; }
+  closeModal('modal-dre-detalhe');
+  _dreDetVoltarAposBaixa = true;
+  if (tipo === 'receber') marcarRecebido(id, parc); else marcarPago(id, parc);
+  // Fatura de cartão não abre a confirmação (vai para a tela do cartão)
+  if (!document.querySelector('#modal-pago.open, #modal-recebido.open')) _dreDetVoltarAposBaixa = false;
+}
+
 // Chamado ao fechar o modal de edição (salvando ou cancelando): volta ao detalhe.
 function _dreDetAposEditar(modalId) {
+  if (_dreDetVoltarAposBaixa && (modalId === 'modal-pago' || modalId === 'modal-recebido')) {
+    _dreDetVoltarAposBaixa = false;
+    setTimeout(() => { if (!document.querySelector('.modal-overlay.open')) _dreDetReabrir(); }, 0);
+    return;
+  }
   if (!_dreDetVoltarAposEditar) return;
   if (modalId !== 'modal-lanc' && modalId !== 'modal-lancreceber') return;
   _dreDetVoltarAposEditar = false;
