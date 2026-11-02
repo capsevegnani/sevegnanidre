@@ -1315,6 +1315,20 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .cc-imp-tag.cr { background:#dcfce7; color:#166534; }
 
 
+/* ══ BACKUP ══ */
+.bk-aviso { background:#fef3c7; color:#92400e; border:1px solid #fde68a; border-radius:10px; padding:10px 14px; font-size:13px; margin-bottom:16px; }
+.bk-pasta { display:flex; align-items:center; gap:12px; background:#faf9f7; border:1px solid #eeece9; border-radius:10px; padding:12px 14px; margin-bottom:12px; }
+.bk-pasta-ico { font-size:26px; }
+.bk-pasta-nome { font-weight:700; color:#1f2937; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bk-pasta-sub { font-size:12px; color:#78716c; margin-top:2px; }
+.bk-dica { font-size:12px; color:#78716c; line-height:1.5; margin-top:12px; }
+.bk-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#a8a29e; margin-bottom:4px; }
+.bk-val { font-size:14px; font-weight:600; color:#1f2937; }
+.bk-ok { color:#16a34a; } .bk-erro { color:#dc2626; }
+.bk-toast { position:fixed; left:50%; transform:translateX(-50%); bottom:20px; z-index:1200; background:#1f2937; color:#fff; border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; box-shadow:0 12px 32px rgba(0,0,0,.3); font-size:13px; max-width:calc(100% - 24px); flex-wrap:wrap; }
+.bk-toast-x { background:none; border:none; color:#d6d3d1; font-size:16px; cursor:pointer; }
+@media print { .bk-toast { display:none !important; } }
+
 /* ══ MOBILE (celular / tablet) ══ */
 .menu-backdrop { display:none; }
 @media (max-width:900px) {
@@ -1406,6 +1420,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   <!-- SIDEBAR -->
   <div class="menu-hotzone" onmouseenter="document.body.classList.add('menu-espiando')"></div>
   <div class="menu-backdrop" onclick="fecharMenuMobile()"></div>
+  <div id="bk-toast" class="bk-toast" style="display:none"><span>💾 Backup agendado pendente: o navegador precisa da sua autorização para gravar na pasta.</span><button class="btn btn-primary btn-sm" onclick="bkAutorizarEExecutar()">Autorizar e fazer backup</button><button class="bk-toast-x" onclick="document.getElementById('bk-toast').style.display='none'" title="Fechar">✕</button></div>
   <button class="menu-abrir" onclick="alternarMenu()" title="Mostrar menu">☰</button>
   <div class="sidebar" onmouseleave="document.body.classList.remove('menu-espiando')">
     <div class="sidebar-logo" style="position:relative;">
@@ -1592,6 +1607,10 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       <div class="nav-item" id="nav-item-auditoria" onclick="showPage('auditoria')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Auditoria
+      </div>
+      <div class="nav-item" id="nav-item-backup" onclick="showPage('backup')" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+        Backup
       </div>
       <div class="nav-item" id="nav-item-usuarios" onclick="showPage('usuarios')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -2326,6 +2345,70 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     </div>
 
     <!-- ══ AUDITORIA ══ -->
+    <div class="page" id="page-backup">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Backup Completo <span class="admin-only-badge">🔒 Admin</span></div>
+          <div class="page-sub" style="margin-bottom:0">Cópia de todas as tabelas do sistema salva numa pasta da rede, no horário configurado</div>
+        </div>
+        <button class="btn btn-primary" id="bk-btn-agora" onclick="bkFazerAgora()">💾 Fazer backup agora</button>
+      </div>
+      <div id="bk-aviso-nav" class="bk-aviso" style="display:none">⚠️ Este navegador não permite gravar direto em pasta. Use o <b>Google Chrome</b> ou o <b>Microsoft Edge</b> no computador. Sem isso, o backup é baixado na pasta Downloads.</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">1 · Pasta de destino (neste computador)</div>
+          <div class="bk-pasta">
+            <div class="bk-pasta-ico">📁</div>
+            <div style="flex:1;min-width:0">
+              <div class="bk-pasta-nome" id="bk-pasta-nome">Nenhuma pasta escolhida</div>
+              <div class="bk-pasta-sub" id="bk-pasta-status">Escolha a pasta da rede (ex.: unidade Z: ou \\servidor\backup)</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="bkEscolherPasta()">Escolher pasta</button>
+            <button class="btn btn-secondary" id="bk-btn-autorizar" style="display:none" onclick="bkAutorizarPasta()">Autorizar acesso</button>
+            <button class="btn btn-danger" id="bk-btn-remover" style="display:none" onclick="bkRemoverPasta()">Remover</button>
+          </div>
+          <div class="bk-dica">A pasta fica gravada <b>neste computador</b> e é ele que faz o backup automático, enquanto o sistema estiver aberto nele. Para a pasta da rede aparecer, ela precisa estar mapeada no Windows (ex.: <b>Z:\Backup</b>) ou acessível em "Rede".</div>
+        </div>
+        <div class="card">
+          <div class="card-title">2 · Quando fazer o backup</div>
+          <div class="form-group"><label class="lanc-check" style="margin:0 0 6px!important"><input type="checkbox" id="bk-ativo"> Backup automático ligado</label></div>
+          <div class="grid2">
+            <div class="form-group"><label>Frequência</label>
+              <select id="bk-freq" onchange="bkMostrarCampos()">
+                <option value="diario">Todo dia</option>
+                <option value="horas">A cada X horas</option>
+                <option value="semanal">Uma vez por semana</option>
+                <option value="mensal">Uma vez por mês</option>
+              </select>
+            </div>
+            <div class="form-group" id="bk-g-hora"><label>Horário</label><input type="time" id="bk-hora" value="18:00"></div>
+            <div class="form-group" id="bk-g-horas" style="display:none"><label>Intervalo (horas)</label>
+              <select id="bk-horas"><option value="1">1 hora</option><option value="2">2 horas</option><option value="3">3 horas</option><option value="4">4 horas</option><option value="6">6 horas</option><option value="8">8 horas</option><option value="12">12 horas</option></select>
+            </div>
+            <div class="form-group" id="bk-g-semana" style="display:none"><label>Dia da semana</label>
+              <select id="bk-semana"><option value="1">Segunda</option><option value="2">Terça</option><option value="3">Quarta</option><option value="4">Quinta</option><option value="5">Sexta</option><option value="6">Sábado</option><option value="0">Domingo</option></select>
+            </div>
+            <div class="form-group" id="bk-g-mes" style="display:none"><label>Dia do mês</label><input type="number" id="bk-dia-mes" min="1" max="31" value="1"></div>
+            <div class="form-group"><label>Manter na pasta</label>
+              <select id="bk-manter"><option value="0">Todos os arquivos</option><option value="7">Últimos 7</option><option value="15">Últimos 15</option><option value="30">Últimos 30</option><option value="60">Últimos 60</option><option value="90">Últimos 90</option></select>
+            </div>
+          </div>
+          <div class="btn-row"><button class="btn btn-primary" onclick="bkSalvarConfig()">Salvar configuração</button></div>
+          <div class="bk-dica">Se o computador estiver desligado ou o sistema fechado no horário, o backup é feito assim que o sistema for aberto de novo.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Situação</div>
+        <div class="grid3">
+          <div><div class="bk-lbl">Último backup</div><div class="bk-val" id="bk-ultimo">—</div></div>
+          <div><div class="bk-lbl">Próximo backup</div><div class="bk-val" id="bk-proximo">—</div></div>
+          <div><div class="bk-lbl">Arquivo</div><div class="bk-val" id="bk-arquivo" style="word-break:break-all">—</div></div>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="page-auditoria">
       <div class="page-header">
         <div>
@@ -5916,6 +5999,9 @@ function showPage(p) {
   if (paginaOculta(p)) return;
   // Verificar permissão (exceto admin e páginas de administração)
   // A auditoria é exclusiva do administrador
+  if (p === 'backup' && (!currentUser || currentUser.role !== 'admin')) {
+    alert('A tela de Backup é exclusiva do administrador.'); return;
+  }
   if (p === 'auditoria' && (!currentUser || currentUser.role !== 'admin')) {
     alert('A tela de Auditoria é exclusiva do administrador.'); return;
   }
@@ -5933,6 +6019,7 @@ function showPage(p) {
   _filtrosRestaurar(pg);
   if (p === 'dashboard')    { renderFraseDoDia(); carregarDreMetas().then(carregarVarEstoque).then(carregarDreGrupoClasses).then(renderDashboard); setTimeout(loadMetaInputs, 100); }
   if (p === 'lancamentos')    renderLancamentos();
+  if (p === 'backup')         bkRender();
   if (p === 'apagar')         renderApagar();
   if (p === 'pagas')          renderPagas();
   if (p === 'cartoes')        ccAbrirPagina();
@@ -5977,6 +6064,7 @@ function renderPaginaAtual() {
   _filtrosRestaurar(pg);
   if (p === 'dashboard')    { renderFraseDoDia(); carregarDreMetas().then(carregarVarEstoque).then(carregarDreGrupoClasses).then(renderDashboard); setTimeout(loadMetaInputs, 100); }
   if (p === 'lancamentos')    renderLancamentos();
+  if (p === 'backup')         bkRender();
   if (p === 'apagar')         renderApagar();
   if (p === 'pagas')          renderPagas();
   if (p === 'cartoes')        ccAbrirPagina();
@@ -8355,8 +8443,10 @@ async function backupLancamentos() {
 async function buscarDadosCompletos() {
   const nomes = ['empresas','fornecedores','produtos','lancamentos','faturamento','recebimentos',
     'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_lancamentos',
-    'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes'];
-  const results = await Promise.allSettled(nomes.map(t => fetchAll(t)));
+    'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes',
+    'cartoes','cartao_despesas','perfis','config'];
+  // filtro '' = todas as empresas, mesmo com uma empresa selecionada no topo
+  const results = await Promise.allSettled(nomes.map(t => fetchAll(t, '', '')));
   const dados = {};
   let algumaFalha = false;
   nomes.forEach((nome, i) => {
@@ -8385,9 +8475,9 @@ function baixarBackupLocal(nomeArquivo, jsonString) {
 
 // Gera o backup completo agora (busca dados + baixa local).
 // Pode ser rodada manualmente a qualquer momento pelo console: gerarBackupCompleto()
-async function gerarBackupCompleto() {
+async function gerarBackupCompleto(destino) {
   const agora = new Date();
-  const dataStr = today();
+  const dataStr = bkDataLocal(agora) + '_' + String(agora.getHours()).padStart(2, '0') + 'h' + String(agora.getMinutes()).padStart(2, '0');
   console.log('[BACKUP] Buscando dados completos do banco...');
   const { dados, algumaFalha } = await buscarDadosCompletos();
   if (algumaFalha) console.warn('[BACKUP] Uma ou mais tabelas falharam ao buscar. Backup gerado parcialmente.');
@@ -8396,16 +8486,288 @@ async function gerarBackupCompleto() {
   const jsonString = JSON.stringify(conteudo, null, 2);
   const nomeArquivo = `backup-sevegnani-${dataStr}.json`;
 
-  baixarBackupLocal(nomeArquivo, jsonString);
+  let local = 'Downloads';
+  if (destino) {
+    const fh = await destino.getFileHandle(nomeArquivo, { create: true });
+    const w = await fh.createWritable();
+    await w.write(jsonString);
+    await w.close();
+    local = destino.name;
+    await bkLimparAntigos(destino);
+  } else {
+    baixarBackupLocal(nomeArquivo, jsonString);
+  }
 
-  console.log(`[BACKUP] Concluído. Arquivo baixado: ${nomeArquivo}${algumaFalha ? ' | Atenção: alguma tabela falhou ao buscar' : ''}.`);
+  console.log(`[BACKUP] Concluído em ${local}.`);
+  console.log(`[BACKUP] Arquivo: ${nomeArquivo}${algumaFalha ? ' | Atenção: alguma tabela falhou ao buscar' : ''}.`);
   return { nomeArquivo, algumaFalha };
 }
 
-// Verifica se o backup automático de hoje já foi feito (por qualquer
-// usuário); se não, roda agora, silenciosamente (sem alert). Chamada
-// no carregamento do app (initApp).
-async function verificarBackupAutomatico() {
+// ══════════════════════════════════════════
+// BACKUP AGENDADO EM PASTA DE REDE
+// - A configuração (frequência/horário) fica na tabela config
+//   (key = 'backup_config') e vale para todos os computadores.
+// - A pasta é escolhida em cada computador (File System Access API,
+//   Chrome/Edge) e guardada no IndexedDB do navegador.
+// - Só o computador com pasta escolhida faz o backup agendado; se nenhum
+//   tiver pasta, o admin continua recebendo o arquivo em Downloads.
+// - Confere a cada minuto; se perdeu o horário, faz ao abrir o sistema.
+// ══════════════════════════════════════════
+const BK_PADRAO = { ativo: true, freq: 'diario', hora: '18:00', horas: 4, semana: 5, diaMes: 1, manter: 30 };
+let _bkCfg = null, _bkUltimo = null, _bkRodando = false, _bkTimer = null;
+
+function bkDataLocal(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function bkSuportaPasta() { return typeof window.showDirectoryPicker === 'function'; }
+
+// IndexedDB simples para guardar a pasta escolhida
+function bkIdb(modo, fn) {
+  return new Promise((ok, erro) => {
+    let req;
+    try { req = indexedDB.open('cap-backup', 1); } catch (e) { erro(e); return; }
+    req.onupgradeneeded = () => req.result.createObjectStore('kv');
+    req.onerror = () => erro(req.error);
+    req.onsuccess = () => {
+      const tx = req.result.transaction('kv', modo);
+      const r = fn(tx.objectStore('kv'));
+      tx.oncomplete = () => ok(r && 'result' in r ? r.result : undefined);
+      tx.onerror = () => erro(tx.error);
+    };
+  });
+}
+async function bkPasta() { try { return (await bkIdb('readonly', st => st.get('pasta'))) || null; } catch (e) { return null; } }
+async function bkPermissao(h, pedir) {
+  if (!h) return 'sem';
+  try {
+    let p = await h.queryPermission({ mode: 'readwrite' });
+    if (p !== 'granted' && pedir) p = await h.requestPermission({ mode: 'readwrite' });
+    return p;
+  } catch (e) { return 'erro'; }
+}
+
+async function bkCarregarConfig() {
+  try {
+    const r = await sbFetch('config', 'GET', null, '?key=eq.backup_config&limit=1');
+    _bkCfg = Object.assign({}, BK_PADRAO, (r && r[0]) ? JSON.parse(r[0].value) : {});
+  } catch (e) { _bkCfg = Object.assign({}, BK_PADRAO); }
+  return _bkCfg;
+}
+async function bkCarregarUltimo() {
+  try {
+    const r = await sbFetch('config', 'GET', null, '?key=eq.ultimo_backup_automatico&limit=1');
+    _bkUltimo = (r && r[0]) ? JSON.parse(r[0].value) : null;
+  } catch (e) { _bkUltimo = null; }
+  return _bkUltimo;
+}
+async function bkRegistrarUltimo(resultado, local) {
+  const v = { data: bkDataLocal(new Date()), ts: new Date().toISOString(), arquivo: resultado.nomeArquivo,
+    local, por: currentUser ? (currentUser.nome || currentUser.email || '') : '', parcial: !!resultado.algumaFalha };
+  await sbFetch('config', 'DELETE', null, '?key=eq.ultimo_backup_automatico');
+  await sbFetch('config', 'POST', { id: uid(), key: 'ultimo_backup_automatico', value: JSON.stringify(v) });
+  _bkUltimo = v;
+}
+
+function _bkHM(cfg) { const [h, m] = String(cfg.hora || '18:00').split(':').map(Number); return [h || 0, m || 0]; }
+function _bkNoDia(y, mo, d, cfg) { const [h, m] = _bkHM(cfg); const ult = new Date(y, mo + 1, 0).getDate(); return new Date(y, mo, Math.min(d, ult), h, m, 0, 0); }
+// Último horário agendado que já passou (<= agora)
+function bkSlotAnterior(cfg, agora) {
+  const [h, m] = _bkHM(cfg);
+  if (cfg.freq === 'semanal') {
+    for (let i = 0; i <= 7; i++) {
+      const d = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() - i, h, m);
+      if (d.getDay() === Number(cfg.semana) && d <= agora) return d;
+    }
+  }
+  if (cfg.freq === 'mensal') {
+    let d = _bkNoDia(agora.getFullYear(), agora.getMonth(), Number(cfg.diaMes) || 1, cfg);
+    if (d > agora) d = _bkNoDia(agora.getFullYear(), agora.getMonth() - 1, Number(cfg.diaMes) || 1, cfg);
+    return d;
+  }
+  let d = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), h, m);
+  if (d > agora) d.setDate(d.getDate() - 1);
+  return d;
+}
+// Próximo horário (para mostrar na tela)
+function bkProximo(cfg, ultimo, agora) {
+  agora = agora || new Date();
+  const ultTs = ultimo && ultimo.ts ? new Date(ultimo.ts) : null;
+  if (cfg.freq === 'horas') {
+    if (!ultTs) return agora;
+    const n = new Date(ultTs.getTime() + (Number(cfg.horas) || 4) * 3600000);
+    return n < agora ? agora : n;
+  }
+  const ant = bkSlotAnterior(cfg, agora);
+  if (!ultTs || ultTs < ant) return agora; // pendente
+  const [h, m] = _bkHM(cfg);
+  if (cfg.freq === 'semanal') {
+    for (let i = 1; i <= 7; i++) { const d = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() + i - 1, h, m); if (d > agora && d.getDay() === Number(cfg.semana)) return d; }
+  }
+  if (cfg.freq === 'mensal') {
+    let d = _bkNoDia(agora.getFullYear(), agora.getMonth(), Number(cfg.diaMes) || 1, cfg);
+    if (d <= agora) d = _bkNoDia(agora.getFullYear(), agora.getMonth() + 1, Number(cfg.diaMes) || 1, cfg);
+    return d;
+  }
+  const d = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), h, m);
+  if (d <= agora) d.setDate(d.getDate() + 1);
+  return d;
+}
+function bkDevido(cfg, ultimo) { return bkProximo(cfg, ultimo) <= new Date(); }
+
+// Apaga os backups mais antigos da pasta, mantendo os últimos N
+async function bkLimparAntigos(pasta) {
+  const n = Number((_bkCfg || BK_PADRAO).manter) || 0;
+  if (!n) return;
+  try {
+    const nomes = [];
+    for await (const [nome, h] of pasta.entries()) {
+      if (h.kind === 'file' && /^backup-sevegnani-.*\.json$/.test(nome)) nomes.push(nome);
+    }
+    nomes.sort();
+    for (const nome of nomes.slice(0, Math.max(0, nomes.length - n))) await pasta.removeEntry(nome);
+  } catch (e) { console.warn('[BACKUP] Não consegui limpar arquivos antigos:', e); }
+}
+
+// Executa o backup (agendado ou manual)
+async function bkExecutar(manual) {
+  if (_bkRodando) return false;
+  _bkRodando = true;
+  try {
+    const pasta = await bkPasta();
+    let destino = null;
+    if (pasta) {
+      const perm = await bkPermissao(pasta, manual);
+      if (perm === 'granted') destino = pasta;
+      else if (!manual) { bkMostrarToast(true); return false; }
+      else if (!confirm('Sem acesso à pasta de backup. Baixar o arquivo em Downloads?')) return false;
+    }
+    const resultado = await gerarBackupCompleto(destino);
+    await bkRegistrarUltimo(resultado, destino ? destino.name : 'Downloads');
+    bkMostrarToast(false);
+    if (manual) alert(`✅ Backup gerado${destino ? ' na pasta "' + destino.name + '"' : ' em Downloads'}:\n${resultado.nomeArquivo}${resultado.algumaFalha ? '\n\n⚠️ Alguma tabela falhou ao buscar — backup parcial.' : ''}`);
+    return true;
+  } catch (e) {
+    console.error('[BACKUP] Erro:', e);
+    if (manual) alert('❌ Não foi possível gerar o backup: ' + (e && e.message ? e.message : e));
+    return false;
+  } finally {
+    _bkRodando = false;
+    if (document.getElementById('page-backup') && document.getElementById('page-backup').classList.contains('active')) bkRender();
+  }
+}
+
+// Confere se está na hora (chamado a cada minuto)
+async function bkTick() {
+  if (_bkRodando || !currentUser || !_bkCfg || !_bkCfg.ativo) return;
+  if (!bkDevido(_bkCfg, _bkUltimo)) return;
+  const pasta = await bkPasta();
+  // sem pasta neste computador: só o admin recebe em Downloads (como antes)
+  if (!pasta && currentUser.role !== 'admin') return;
+  // confere no banco se outro computador já fez
+  await bkCarregarUltimo();
+  if (!bkDevido(_bkCfg, _bkUltimo)) return;
+  await bkExecutar(false);
+}
+
+async function iniciarAgendadorBackup() {
+  await bkCarregarConfig();
+  await bkCarregarUltimo();
+  if (_bkTimer) clearInterval(_bkTimer);
+  _bkTimer = setInterval(() => { bkTick().catch(e => console.error('[BACKUP]', e)); }, 60000);
+  bkTick().catch(e => console.error('[BACKUP]', e));
+}
+
+function bkMostrarToast(v) { const t = document.getElementById('bk-toast'); if (t) t.style.display = v ? 'flex' : 'none'; }
+async function bkAutorizarEExecutar() {
+  const pasta = await bkPasta();
+  if ((await bkPermissao(pasta, true)) !== 'granted') { alert('Acesso à pasta não autorizado.'); return; }
+  bkMostrarToast(false);
+  await bkExecutar(false);
+}
+
+// ── Tela ──
+async function bkEscolherPasta() {
+  if (!bkSuportaPasta()) { alert('Este navegador não permite escolher pasta. Use o Google Chrome ou o Microsoft Edge no computador.'); return; }
+  try {
+    const h = await window.showDirectoryPicker({ id: 'cap-backup', mode: 'readwrite' });
+    if ((await bkPermissao(h, true)) !== 'granted') { alert('É preciso permitir a gravação na pasta.'); return; }
+    // teste de gravação
+    const fh = await h.getFileHandle('.teste-backup.tmp', { create: true });
+    const w = await fh.createWritable(); await w.write('ok'); await w.close();
+    await h.removeEntry('.teste-backup.tmp');
+    await bkIdb('readwrite', st => st.put(h, 'pasta'));
+    bkRender();
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;
+    alert('Não foi possível usar esta pasta: ' + (e && e.message ? e.message : e));
+  }
+}
+async function bkAutorizarPasta() { await bkPermissao(await bkPasta(), true); bkRender(); }
+async function bkRemoverPasta() {
+  if (!confirm('Remover a pasta de backup deste computador? Os arquivos já gravados não são apagados.')) return;
+  await bkIdb('readwrite', st => st.delete('pasta'));
+  bkRender();
+}
+function bkMostrarCampos() {
+  const f = document.getElementById('bk-freq').value;
+  document.getElementById('bk-g-hora').style.display = f === 'horas' ? 'none' : '';
+  document.getElementById('bk-g-horas').style.display = f === 'horas' ? '' : 'none';
+  document.getElementById('bk-g-semana').style.display = f === 'semanal' ? '' : 'none';
+  document.getElementById('bk-g-mes').style.display = f === 'mensal' ? '' : 'none';
+}
+async function bkSalvarConfig() {
+  const cfg = {
+    ativo: document.getElementById('bk-ativo').checked,
+    freq: document.getElementById('bk-freq').value,
+    hora: document.getElementById('bk-hora').value || '18:00',
+    horas: Number(document.getElementById('bk-horas').value) || 4,
+    semana: Number(document.getElementById('bk-semana').value),
+    diaMes: Math.min(31, Math.max(1, Number(document.getElementById('bk-dia-mes').value) || 1)),
+    manter: Number(document.getElementById('bk-manter').value) || 0
+  };
+  await sbFetch('config', 'DELETE', null, '?key=eq.backup_config');
+  const ok = await sbFetch('config', 'POST', { id: uid(), key: 'backup_config', value: JSON.stringify(cfg) });
+  if (!ok) { alert('❌ Erro ao salvar a configuração do backup.'); return; }
+  _bkCfg = Object.assign({}, BK_PADRAO, cfg);
+  alert('✅ Configuração do backup salva.');
+  bkRender();
+}
+async function bkFazerAgora() {
+  const b = document.getElementById('bk-btn-agora');
+  b.disabled = true; b.textContent = '⏳ Gerando backup...';
+  await bkExecutar(true);
+  b.disabled = false; b.textContent = '💾 Fazer backup agora';
+}
+function bkFmt(d) { return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+async function bkRender() {
+  if (!_bkCfg) await bkCarregarConfig();
+  await bkCarregarUltimo();
+  const cfg = _bkCfg;
+  document.getElementById('bk-aviso-nav').style.display = bkSuportaPasta() ? 'none' : '';
+  document.getElementById('bk-ativo').checked = !!cfg.ativo;
+  document.getElementById('bk-freq').value = cfg.freq;
+  document.getElementById('bk-hora').value = cfg.hora;
+  document.getElementById('bk-horas').value = String(cfg.horas);
+  document.getElementById('bk-semana').value = String(cfg.semana);
+  document.getElementById('bk-dia-mes').value = cfg.diaMes;
+  document.getElementById('bk-manter').value = String(cfg.manter);
+  bkMostrarCampos();
+  const pasta = await bkPasta();
+  const perm = await bkPermissao(pasta, false);
+  const nome = document.getElementById('bk-pasta-nome'), st = document.getElementById('bk-pasta-status');
+  nome.textContent = pasta ? pasta.name : 'Nenhuma pasta escolhida';
+  st.className = 'bk-pasta-sub ' + (pasta ? (perm === 'granted' ? 'bk-ok' : 'bk-erro') : '');
+  st.textContent = !pasta ? 'Sem pasta: o backup do admin vai para Downloads' : (perm === 'granted' ? '✓ Acesso liberado para gravação' : '⚠ Precisa autorizar o acesso (clique em Autorizar acesso)');
+  document.getElementById('bk-btn-autorizar').style.display = pasta && perm !== 'granted' ? '' : 'none';
+  document.getElementById('bk-btn-remover').style.display = pasta ? '' : 'none';
+  const u = _bkUltimo;
+  document.getElementById('bk-ultimo').innerHTML = u && u.ts ? `${bkFmt(new Date(u.ts))}<div class="bk-pasta-sub">${(u.local || '') + (u.por ? ' · por ' + u.por : '')}${u.parcial ? ' · <span class="bk-erro">parcial</span>' : ''}</div>` : 'Nenhum backup registrado';
+  const prox = bkProximo(cfg, u);
+  document.getElementById('bk-proximo').innerHTML = !cfg.ativo ? '<span class="bk-erro">Automático desligado</span>' : (prox <= new Date() ? '<span class="bk-erro">Pendente — será feito agora</span>' : bkFmt(prox));
+  document.getElementById('bk-arquivo').textContent = u && u.arquivo ? u.arquivo : '—';
+}
+
+// (mantida para compatibilidade: agora o agendador cuida do backup)
+async function verificarBackupAutomatico() { return iniciarAgendadorBackup(); }
+async function _bkVerificacaoAntiga() {
   try {
     const dataHoje = today();
     const res = await sbFetch('config', 'GET', null, '?key=eq.ultimo_backup_automatico&limit=1');
@@ -15441,11 +15803,10 @@ async function initApp() {
   setTimeout(carregarJurosGlobal, 200);
   aplicarFiltrosPadraoMesAno();
   applyNavPermissions();
-  // Backup automático diário: roda em segundo plano, sem travar a tela
-  // nem avisar o usuário; só baixa algo se ainda não tiver rodado hoje.
-  // Restrito ao usuário admin (outros perfis não disparam o backup).
-  if (currentUser && currentUser.role === 'admin') {
-    setTimeout(() => { verificarBackupAutomatico().catch(e => console.error('[BACKUP] Falha inesperada:', e)); }, 3000);
+  // Backup agendado: roda em segundo plano conforme a tela Backup
+  // (pasta de rede + frequência/horário). Ver iniciarAgendadorBackup().
+  if (currentUser) {
+    setTimeout(() => { iniciarAgendadorBackup().catch(e => console.error('[BACKUP] Falha inesperada:', e)); }, 3000);
   }
 }
 
