@@ -1383,6 +1383,83 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   .filter-row > div:not(.form-group) { grid-column:1/-1; justify-content:flex-start; }
 }
 @media print { .menu-backdrop { display:none !important; } }
+/* ── Boas-vindas (contas da semana) ── */
+.bv-modal { width:min(1040px,96vw) !important; max-width:96vw; padding:0 !important; overflow:hidden; }
+.bv-banner { background:linear-gradient(120deg,#ea580c 0%,#f97316 55%,#fb923c 100%); color:#fff; padding:22px 26px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.bv-saudacao { font-size:22px; font-weight:800; letter-spacing:-.3px; }
+.bv-data { font-size:13px; opacity:.92; margin-top:4px; }
+.bv-data::first-letter { text-transform:uppercase; }
+.bv-x { background:rgba(255,255,255,.18); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; flex:0 0 32px; }
+.bv-x:hover { background:rgba(255,255,255,.3); }
+.bv-corpo { padding:18px 26px 6px; }
+.bv-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-bottom:16px; }
+.bv-kpi { border:1px solid #e7e5e4; border-left:4px solid var(--c); border-radius:10px; padding:10px 14px; background:#fff; }
+.bv-kpi span { display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; }
+.bv-kpi b { display:block; font-family:'DM Mono',monospace; font-size:17px; color:var(--c); margin-top:3px; }
+.bv-kpi small { font-size:11px; color:#a8a29e; }
+.bv-abas { display:flex; gap:4px; background:#faf9f7; border-radius:9px; padding:3px; width:max-content; max-width:100%; margin-bottom:12px; flex-wrap:wrap; }
+.bv-abas button { border:none; background:transparent; padding:6px 13px; border-radius:7px; font-size:12.5px; font-weight:600; color:#57534e; cursor:pointer; }
+.bv-abas button small { font-weight:500; opacity:.75; margin-left:3px; }
+.bv-abas button em { font-style:normal; background:#dc2626; color:#fff; border-radius:10px; padding:0 6px; font-size:10.5px; margin-left:4px; }
+.bv-abas button.ativo { background:#ea580c; color:#fff; }
+.bv-colunas { display:grid; gap:14px; }
+@media (max-width:760px) { .bv-colunas { grid-template-columns:1fr !important; } }
+.bv-col { border:1px solid #e7e5e4; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; min-width:0; }
+.bv-col-head { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; font-size:12px; font-weight:800; letter-spacing:.5px; }
+.bv-col-head b { font-family:'DM Mono',monospace; font-size:14px; }
+.bv-col-head.rec { background:#f0fdf4; color:#166534; } .bv-col-head.des { background:#fef2f2; color:#991b1b; }
+.bv-lista { max-height:38vh; overflow-y:auto; }
+.bv-item { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:9px 14px; border-top:1px solid #f5f5f4; }
+.bv-item:hover { background:#fafaf9; }
+.bv-item.atr { background:#fffbfb; }
+.bv-item-info { min-width:0; }
+.bv-item-nome { font-size:13px; font-weight:600; color:#1c1917; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.bv-item-meta { font-size:11px; color:#a8a29e; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bv-item-val { font-family:'DM Mono',monospace; font-weight:700; font-size:13px; white-space:nowrap; }
+.bv-item-val.rec { color:#15803d; } .bv-item-val.des { color:#b91c1c; }
+.bv-tag { font-size:10.5px; font-weight:600; padding:2px 7px; border-radius:20px; background:#f5f5f4; color:#57534e; }
+.bv-hoje { background:#fef3c7; color:#92400e; } .bv-amanha { background:#dbeafe; color:#1e40af; } .bv-atr { background:#fee2e2; color:#b91c1c; }
+.bv-vazio { padding:22px 14px; font-size:12.5px; color:#a8a29e; text-align:center; }
+.bv-rodape { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:14px 26px 20px; border-top:1px solid #f5f5f4; margin-top:12px; }
+/* ── Central de Lançamentos ── */
+.pdl-modal { width:min(1080px,96vw) !important; max-width:96vw; padding:22px 24px !important; }
+.pdl-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px; }
+.pdl-titulo { font-size:18px; font-weight:800; color:#1c1917; }
+.pdl-sub { font-size:12px; color:#78716c; margin-top:2px; }
+.pdl-x { background:none; border:none; cursor:pointer; color:#a8a29e; font-size:22px; line-height:1; padding:4px; }
+.pdl-resumo { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+@media (max-width:700px) { .pdl-resumo { grid-template-columns:1fr 1fr; } }
+.pdl-chip { border:1px solid #e7e5e4; border-top:3px solid var(--c); border-radius:10px; padding:9px 12px; background:#fff; }
+.pdl-chip span { display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; }
+.pdl-chip b { display:block; font-family:'DM Mono',monospace; font-size:15px; color:var(--c); margin-top:3px; }
+.pdl-chip small { font-size:11px; color:#a8a29e; }
+.pdl-barra { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.pdl-barra input { max-width:300px; padding:7px 11px; font-size:13px; }
+.pdl-tabela-wrap { max-height:52vh; overflow:auto; border:1px solid #e7e5e4; border-radius:10px; }
+.pdl-tab { width:100%; border-collapse:collapse; font-size:12.5px; }
+.pdl-tab thead th { position:sticky; top:0; background:#faf9f7; z-index:1; text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:#78716c; padding:9px 12px; border-bottom:1px solid #e7e5e4; }
+.pdl-tab td { padding:9px 12px; border-bottom:1px solid #f5f5f4; vertical-align:middle; }
+.pdl-tab tbody tr:hover { background:#fafaf9; }
+.pdl-row-v td:first-child { color:#b91c1c; font-weight:700; }
+.pdl-row-q { opacity:.72; }
+.pdl-nome { font-weight:600; color:#1c1917; display:flex; align-items:center; gap:7px; }
+.pdl-tipo { width:18px; height:18px; border-radius:5px; font-size:10px; font-weight:800; color:#fff; display:inline-flex; align-items:center; justify-content:center; flex:0 0 18px; }
+.pdl-tipo.r { background:#16a34a; } .pdl-tipo.p { background:#dc2626; }
+.pdl-meta { font-size:11px; color:#a8a29e; margin-top:2px; padding-left:25px; }
+.pdl-val { text-align:right; font-family:'DM Mono',monospace; font-weight:700; white-space:nowrap; }
+.pdl-badge { display:inline-block; font-size:11px; font-weight:600; padding:3px 8px; border-radius:20px; background:#f5f5f4; color:#57534e; white-space:nowrap; }
+.pdl-venc { background:#fee2e2; color:#b91c1c; } .pdl-hoje { background:#fef3c7; color:#92400e; }
+.pdl-av { background:#dbeafe; color:#1e40af; } .pdl-ok { background:#dcfce7; color:#166534; }
+.pdl-acoes { text-align:right; white-space:nowrap; }
+.pdl-btn { font-size:11.5px; font-weight:600; padding:5px 9px; border-radius:7px; border:1px solid #e7e5e4; background:#fff; color:#44403c; cursor:pointer; margin-left:4px; }
+.pdl-btn:hover { background:#f5f5f4; }
+.pdl-btn-rec { background:#16a34a; border-color:#16a34a; color:#fff; } .pdl-btn-rec:hover { background:#15803d; }
+.pdl-btn-pag { background:#ea580c; border-color:#ea580c; color:#fff; } .pdl-btn-pag:hover { background:#c2410c; }
+.pdl-btn-del { color:#b91c1c; border-color:#fecaca; }
+.pdl-rodape { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:12px; font-size:11.5px; color:#78716c; }
+.pd-seg { display:flex; gap:3px; background:#faf9f7; border-radius:8px; padding:3px; }
+.pd-seg button { padding:4px 10px; font-size:11.5px; font-weight:600; border:none; border-radius:6px; cursor:pointer; background:transparent; color:#57534e; }
+.pd-seg button.ativo { background:#ea580c; color:#fff; }
 </style>
 </head>
 <body>
@@ -4107,6 +4184,63 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 </div>
 
 <!-- ══ MODAL: LANÇAMENTOS DO DIA (Fluxo de Caixa Diário) ══ -->
+<!-- ══ MODAL: BOAS-VINDAS (contas da semana) ══ -->
+<div class="modal-overlay" id="modal-boas-vindas" style="z-index:180;">
+  <div class="modal bv-modal">
+    <div class="bv-banner">
+      <div>
+        <div class="bv-saudacao" id="bv-saudacao"></div>
+        <div class="bv-data" id="bv-data"></div>
+      </div>
+      <button class="bv-x" onclick="fecharBoasVindas()" title="Fechar">✕</button>
+    </div>
+    <div class="bv-corpo">
+      <div class="bv-kpis" id="bv-kpis"></div>
+      <div class="bv-abas" id="bv-abas"></div>
+      <div class="bv-colunas" id="bv-colunas"></div>
+    </div>
+    <div class="bv-rodape">
+      <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#78716c;cursor:pointer;margin:0;">
+        <input type="checkbox" id="bv-ocultar-hoje" style="width:auto;margin:0;accent-color:#ea580c;" /> Não mostrar novamente hoje
+      </label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" onclick="bvAbrirCentral()">Ver todas do mês</button>
+        <button class="btn btn-primary" onclick="fecharBoasVindas()">Ir para o sistema →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: CENTRAL DE LANÇAMENTOS (Painel de Decisão) ══ -->
+<div class="modal-overlay" id="modal-pd-lanc" style="z-index:190;">
+  <div class="modal pdl-modal">
+    <div class="pdl-head">
+      <div>
+        <div class="pdl-titulo" id="pdl-titulo">Lançamentos</div>
+        <div class="pdl-sub" id="pdl-sub"></div>
+      </div>
+      <button class="pdl-x" onclick="pdlFechar()" title="Fechar">✕</button>
+    </div>
+    <div class="pdl-resumo" id="pdl-resumo"></div>
+    <div class="pdl-barra">
+      <div class="pd-seg" id="pdl-filtros">
+        <button data-f="aberto" onclick="pdlSetFiltro('aberto')">Em aberto</button>
+        <button data-f="vencido" onclick="pdlSetFiltro('vencido')">Vencidos</button>
+        <button data-f="quitado" onclick="pdlSetFiltro('quitado')">Pagos / Recebidos</button>
+        <button data-f="todos" onclick="pdlSetFiltro('todos')">Todos</button>
+      </div>
+      <input id="pdl-busca" type="text" placeholder="Buscar nome, produto, NF, valor..." oninput="pdlBuscar(this.value)" />
+    </div>
+    <div class="pdl-tabela-wrap">
+      <table class="pdl-tab">
+        <thead><tr><th>Vencimento</th><th>Cliente / Fornecedor</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Situação</th><th style="text-align:right">Ações</th></tr></thead>
+        <tbody id="pdl-tbody"></tbody>
+      </table>
+    </div>
+    <div class="pdl-rodape"><span id="pdl-rodape"></span><button class="btn btn-secondary" onclick="pdlFechar()">Fechar</button></div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-fd-detalhe">
   <div class="modal" style="width:780px;">
     <div class="modal-title" id="fd-det-titulo">Lançamentos do dia</div>
@@ -8122,6 +8256,273 @@ function renderApagar() {
     </tr>`;
   }).join('');
 }
+
+// ══════════════════════════════════════════════════════════
+// CENTRAL DE LANÇAMENTOS (aberta pelos quadros e gráficos do Painel de Decisão)
+// Lista as parcelas que formam o número clicado, com filtros, busca e ações:
+// Pagar / Receber, Estornar, Editar e Excluir. Atualiza sozinha depois de
+// qualquer gravação (pagamento, edição, exclusão).
+// ══════════════════════════════════════════════════════════
+const _pdl = { ctx: null, filtro: 'aberto', busca: '', timer: null };
+
+// ctx = { titulo, subtitulo, rec: p => bool, pag: p => bool, filtro: 'aberto'|'todos'|... }
+function pdAbrirLanc(ctx) {
+  _pdl.ctx = ctx;
+  _pdl.filtro = ctx.filtro || 'aberto';
+  _pdl.busca = '';
+  const b = document.getElementById('pdl-busca'); if (b) b.value = '';
+  pdlRender();
+  openModal('modal-pd-lanc');
+}
+function pdlFechar() { closeModal('modal-pd-lanc'); _pdl.ctx = null; }
+function pdlSetFiltro(f) { _pdl.filtro = f; pdlRender(); }
+function pdlBuscar(v) { _pdl.busca = normText(v || ''); pdlRender(); }
+
+function _pdlItens() {
+  const c = _pdl.ctx; if (!c) return [];
+  const ccOri = (typeof ccOrigensSet === 'function') ? ccOrigensSet() : new Set();
+  const itens = [];
+  if (c.rec) getParcelasReceber(false).concat(getParcelasReceber(true)).forEach(p => {
+    const d = Object.assign({ kind: 'rec', _d: p.venc || p.dtvenda || '', _q: p.isRecebido, _dq: p.dtrecebido }, p);
+    if (c.rec(d)) itens.push(d);
+  });
+  if (c.pag) getParcelas(false).concat(getParcelas(true)).forEach(p => {
+    if (ccOri.has(`${p.lancId}|${p.parcIdx}`)) return;
+    const d = Object.assign({ kind: 'des', _d: p.venc || p.dtcompra || '', _q: p.isPago, _dq: p.dtpago }, p);
+    if (c.pag(d)) itens.push(d);
+  });
+  return itens;
+}
+
+function pdlRender() {
+  if (!_pdl.ctx) return;
+  const hoje = today();
+  const todos = _pdlItens();
+  const nome = p => p.kind === 'rec' ? getClienteNome(p.cliente) : getFornNome(p.forn);
+  const desc = p => p.cartaoFatura ? ccRotuloFatura(p.cartaoFatura)
+    : (p.prod ? (p.kind === 'rec' ? getProdVendaNome(p.prod) : getProdNome(p.prod)) : '');
+  const cat = p => p.catId ? getDfcCatNome(p.catId) : '';
+
+  const soma = arr => arr.reduce((a, p) => a + (p.valParc || 0), 0);
+  const ab = todos.filter(p => !p._q), venc = ab.filter(p => p._d && p._d < hoje), quit = todos.filter(p => p._q);
+  const temRec = todos.some(p => p.kind === 'rec'), temPag = todos.some(p => p.kind === 'des');
+
+  document.getElementById('pdl-titulo').textContent = _pdl.ctx.titulo || 'Lançamentos';
+  document.getElementById('pdl-sub').textContent = _pdl.ctx.subtitulo || '';
+  const chip = (lbl, v, n, cor) => `<div class="pdl-chip" style="--c:${cor}"><span>${lbl}</span><b>${fmtBRL(v)}</b><small>${n} parcela${n === 1 ? '' : 's'}</small></div>`;
+  document.getElementById('pdl-resumo').innerHTML =
+    chip('Total', soma(todos), todos.length, '#57534e') +
+    chip('Em aberto', soma(ab), ab.length, '#2563eb') +
+    chip('Vencido', soma(venc), venc.length, '#dc2626') +
+    chip(temRec && !temPag ? 'Recebido' : (temPag && !temRec ? 'Pago' : 'Quitado'), soma(quit), quit.length, '#16a34a');
+
+  document.querySelectorAll('#pdl-filtros button').forEach(b => b.classList.toggle('ativo', b.dataset.f === _pdl.filtro));
+
+  let lista = todos;
+  if (_pdl.filtro === 'aberto') lista = ab;
+  else if (_pdl.filtro === 'vencido') lista = venc;
+  else if (_pdl.filtro === 'quitado') lista = quit;
+  if (_pdl.busca) lista = lista.filter(p => normText(`${nome(p)} ${desc(p)} ${cat(p)} ${p.nf || ''} ${fmtDate(p._d)} ${fmtBRL(p.valParc)}`).includes(_pdl.busca));
+  lista = lista.slice().sort((a, b) => (a._d || '').localeCompare(b._d || '') || (b.valParc || 0) - (a.valParc || 0));
+
+  const situ = p => {
+    if (p._q) return `<span class="pdl-badge pdl-ok">${p.kind === 'rec' ? 'Recebido' : 'Pago'}${p._dq ? ' ' + fmtDate(p._dq) : ''}</span>`;
+    if (!p._d) return '<span class="pdl-badge">Sem data</span>';
+    const dias = Math.round((new Date(hoje + 'T12:00:00') - new Date(p._d + 'T12:00:00')) / 86400000);
+    if (dias > 0) return `<span class="pdl-badge pdl-venc">Vencido há ${dias} dia${dias === 1 ? '' : 's'}</span>`;
+    if (dias === 0) return '<span class="pdl-badge pdl-hoje">Vence hoje</span>';
+    return `<span class="pdl-badge pdl-av">Em ${-dias} dia${dias === -1 ? '' : 's'}</span>`;
+  };
+  const acoes = p => {
+    const tab = p.kind === 'rec' ? 'receber' : 'pagar';
+    let quit = '';
+    if (!p._q) quit = p.kind === 'rec'
+      ? `<button class="pdl-btn pdl-btn-rec" onclick="pdlQuitar('rec','${p.lancId}',${p.parcIdx})">✓ Receber</button>`
+      : `<button class="pdl-btn pdl-btn-pag" onclick="pdlQuitar('des','${p.lancId}',${p.parcIdx})">✓ Pagar</button>`;
+    else quit = `<button class="pdl-btn" onclick="pdlEstornar('${p.kind}','${p.lancId}',${p.parcIdx})" title="Desfazer ${p.kind === 'rec' ? 'recebimento' : 'pagamento'}">↺ Estornar</button>`;
+    return `${quit}
+      <button class="pdl-btn" onclick="pdlEditar('${tab}','${p.lancId}')" title="Editar lançamento">✎ Editar</button>
+      <button class="pdl-btn pdl-btn-del" onclick="pdlExcluir('${tab}','${p.lancId}')" title="Excluir lançamento (todas as parcelas)">🗑</button>`;
+  };
+
+  const tb = document.getElementById('pdl-tbody');
+  tb.innerHTML = lista.length ? lista.map(p => `<tr class="${p._q ? 'pdl-row-q' : (p._d && p._d < hoje ? 'pdl-row-v' : '')}">
+      <td style="white-space:nowrap">${p._d ? fmtDate(p._d) : '—'}</td>
+      <td><div class="pdl-nome"><span class="pdl-tipo ${p.kind === 'rec' ? 'r' : 'p'}">${p.kind === 'rec' ? 'R' : 'P'}</span>${esc(nome(p))}</div>
+        <div class="pdl-meta">${[desc(p), cat(p), p.nf ? 'NF ' + p.nf : '', p.banco ? getBancoNome(p.banco) : '', p.tipoPag || ''].filter(Boolean).map(esc).join(' · ') || '—'}</div></td>
+      <td style="text-align:center;white-space:nowrap">${p.totalParc > 1 ? `${p.parcIdx}/${p.totalParc}` : 'Única'}</td>
+      <td class="pdl-val" style="color:${p.kind === 'rec' ? '#15803d' : '#b91c1c'}">${fmtBRL(p.valParc)}</td>
+      <td>${situ(p)}</td>
+      <td class="pdl-acoes">${acoes(p)}</td>
+    </tr>`).join('')
+    : `<tr><td colspan="6" class="empty-state" style="padding:28px">Nenhum lançamento ${_pdl.filtro === 'todos' ? '' : 'neste filtro'}.</td></tr>`;
+  document.getElementById('pdl-rodape').textContent =
+    `${lista.length} parcela${lista.length === 1 ? '' : 's'} listada${lista.length === 1 ? '' : 's'} · ${fmtBRL(soma(lista))}` +
+    (lista.some(p => p.totalParc > 1) ? ' · Editar/Excluir age sobre o lançamento inteiro (todas as parcelas).' : '');
+}
+
+function pdlQuitar(kind, id, parcIdx) {
+  if (kind === 'rec') { marcarRecebido(id, parcIdx); return; }
+  const l = db.lancamentos.find(x => x.id === id);
+  if (l && l.cartao_fatura) { pdlFechar(); ccIrParaFatura(l.cartao_fatura); return; }
+  marcarPago(id, parcIdx);
+}
+function pdlEstornar(kind, id, parcIdx) {
+  if (kind === 'rec') estornarRecebido(id, parcIdx); else estornarPago(id, parcIdx);
+}
+function pdlEditar(tabela, id) {
+  if (tabela === 'pagar') {
+    const l = db.lancamentos.find(x => x.id === id);
+    if (l && l.cartao_fatura) { pdlFechar(); ccIrParaFatura(l.cartao_fatura); return; }
+    editLancamento(id);
+  } else editLancReceber(id);
+}
+async function pdlExcluir(tabela, id) { await excluirDoDetalhe(tabela, id); pdlRender(); }
+
+// Depois de qualquer gravação no banco, atualiza a central e o dashboard
+(function () {
+  const _orig = bumpDbVer;
+  bumpDbVer = function () {
+    _orig();
+    clearTimeout(_pdl.timer);
+    _pdl.timer = setTimeout(() => {
+      const m = document.getElementById('modal-pd-lanc');
+      if (m && m.classList.contains('open') && _pdl.ctx) pdlRender();
+      const bv = document.getElementById('modal-boas-vindas');
+      if (bv && bv.classList.contains('open') && typeof renderBoasVindas === 'function') renderBoasVindas();
+    }, 350);
+  };
+})();
+
+
+// ══════════════════════════════════════════════════════════
+// BOAS-VINDAS AO ENTRAR — contas a pagar e a receber da semana
+// Abre logo após o login com saudação (bom dia / boa tarde / boa noite),
+// resumo do mês e as parcelas em aberto que vencem de hoje até +6 dias
+// (data local real do computador), além dos atrasados e do mês inteiro.
+// Cada linha tem o botão Pagar / Receber (mesma confirmação das telas).
+// ══════════════════════════════════════════════════════════
+const _bv = { aba: 'semana' };
+
+function _bvHojeLocal() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function _bvAdd(iso, n) { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function _bvPode(p) { return !!currentUser && (currentUser.role === 'admin' || (currentUser.pages || []).includes(p)); }
+function _bvChaveOcultar() { return `sevegnani_bv_ocultar_${currentUser ? currentUser.user : ''}`; }
+
+function abrirBoasVindas(forcar) {
+  if (!currentUser) return;
+  if (!_bvPode('apagar') && !_bvPode('areceber')) return;
+  if (!forcar) {
+    try { if (localStorage.getItem(_bvChaveOcultar()) === _bvHojeLocal()) return; } catch (e) {}
+  }
+  _bv.aba = 'semana';
+  const chk = document.getElementById('bv-ocultar-hoje'); if (chk) chk.checked = false;
+  renderBoasVindas();
+  openModal('modal-boas-vindas');
+}
+function fecharBoasVindas() {
+  const chk = document.getElementById('bv-ocultar-hoje');
+  try {
+    if (chk && chk.checked) localStorage.setItem(_bvChaveOcultar(), _bvHojeLocal());
+    else localStorage.removeItem(_bvChaveOcultar());
+  } catch (e) {}
+  closeModal('modal-boas-vindas');
+}
+function bvSetAba(a) { _bv.aba = a; renderBoasVindas(); }
+
+function renderBoasVindas() {
+  const m = document.getElementById('modal-boas-vindas');
+  if (!m || !currentUser) return;
+  const hoje = _bvHojeLocal(), fimSem = _bvAdd(hoje, 6), ym = hoje.slice(0, 7);
+  const agora = new Date(), h = agora.getHours();
+  const saud = h < 12 ? 'Bom dia' : (h < 18 ? 'Boa tarde' : 'Boa noite');
+  const ic = h < 12 ? '☀️' : (h < 18 ? '🌤️' : '🌙');
+  const primeiro = String(currentUser.nome || currentUser.user || '').trim().split(/\s+/)[0] || '';
+  const dataExt = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  const vRec = _bvPode('areceber'), vPag = _bvPode('apagar');
+  const ccOri = (typeof ccOrigensSet === 'function') ? ccOrigensSet() : new Set();
+  const rec = vRec ? getParcelasReceber(false).map(p => Object.assign({ kind: 'rec', _d: p.venc || p.dtvenda || '' }, p)) : [];
+  const pag = vPag ? getParcelas(false).filter(p => !ccOri.has(`${p.lancId}|${p.parcIdx}`)).map(p => Object.assign({ kind: 'des', _d: p.venc || p.dtcompra || '' }, p)) : [];
+  const soma = a => a.reduce((s, p) => s + (p.valParc || 0), 0);
+
+  const semana = p => p._d >= hoje && p._d <= fimSem;
+  const atras  = p => p._d && p._d < hoje;
+  const doMes  = p => (p._d || '').startsWith(ym);
+  const filtro = _bv.aba === 'atrasados' ? atras : (_bv.aba === 'mes' ? doMes : semana);
+
+  // Cabeçalho
+  document.getElementById('bv-saudacao').innerHTML = `${ic} Olá, Eduardo! ${saud}, tudo bem?`;
+  document.getElementById('bv-data').textContent = `Hoje é ${dataExt}. Veja o que vence nesta semana.`;
+
+  // Resumo do mês
+  const recMes = rec.filter(doMes), pagMes = pag.filter(doMes);
+  const recAtr = rec.filter(atras), pagAtr = pag.filter(atras);
+  const recSem = rec.filter(semana), pagSem = pag.filter(semana);
+  const kp = (lbl, v, det, cor) => `<div class="bv-kpi" style="--c:${cor}"><span>${lbl}</span><b>${fmtBRL(v)}</b><small>${det}</small></div>`;
+  const kpis = [];
+  if (vRec) kpis.push(kp('A receber nesta semana', soma(recSem), `${recSem.length} parcela${recSem.length === 1 ? '' : 's'}`, '#16a34a'));
+  if (vPag) kpis.push(kp('A pagar nesta semana', soma(pagSem), `${pagSem.length} parcela${pagSem.length === 1 ? '' : 's'}`, '#dc2626'));
+  if (vRec) kpis.push(kp(`A receber em ${meses[parseInt(ym.slice(5))]}`, soma(recMes), `${recAtr.length ? 'Atrasado: ' + fmtBRL(soma(recAtr)) : 'Nada atrasado'}`, '#2563eb'));
+  if (vPag) kpis.push(kp(`A pagar em ${meses[parseInt(ym.slice(5))]}`, soma(pagMes), `${pagAtr.length ? 'Atrasado: ' + fmtBRL(soma(pagAtr)) : 'Nada atrasado'}`, '#ea580c'));
+  document.getElementById('bv-kpis').innerHTML = kpis.join('');
+
+  // Abas
+  const nAtr = recAtr.length + pagAtr.length;
+  document.getElementById('bv-abas').innerHTML = `
+    <button class="${_bv.aba === 'semana' ? 'ativo' : ''}" onclick="bvSetAba('semana')">Esta semana <small>${fmtDate(hoje).slice(0, 5)} a ${fmtDate(fimSem).slice(0, 5)}</small></button>
+    <button class="${_bv.aba === 'atrasados' ? 'ativo' : ''}" onclick="bvSetAba('atrasados')">Atrasados ${nAtr ? `<em>${nAtr}</em>` : ''}</button>
+    <button class="${_bv.aba === 'mes' ? 'ativo' : ''}" onclick="bvSetAba('mes')">Mês inteiro</button>`;
+
+  const quando = d => {
+    const dias = Math.round((new Date(d + 'T12:00:00') - new Date(hoje + 'T12:00:00')) / 86400000);
+    if (dias === 0) return '<span class="bv-tag bv-hoje">Hoje</span>';
+    if (dias === 1) return '<span class="bv-tag bv-amanha">Amanhã</span>';
+    if (dias < 0) return `<span class="bv-tag bv-atr">Atrasado há ${-dias} dia${dias === -1 ? '' : 's'}</span>`;
+    const sem = new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
+    return `<span class="bv-tag">${sem} · em ${dias} dias</span>`;
+  };
+  const coluna = (lista, kind) => {
+    const itens = lista.filter(filtro).sort((a, b) => (a._d || '').localeCompare(b._d || '') || (b.valParc || 0) - (a.valParc || 0));
+    const tot = soma(itens);
+    const cab = `<div class="bv-col-head ${kind}"><span>${kind === 'rec' ? '📥 A RECEBER' : '📤 A PAGAR'}</span><b>${fmtBRL(tot)}</b></div>`;
+    if (!itens.length) return cab + `<div class="bv-vazio">${_bv.aba === 'atrasados' ? 'Nada atrasado 👏' : 'Nada para ' + (kind === 'rec' ? 'receber' : 'pagar') + ' neste período.'}</div>`;
+    return cab + '<div class="bv-lista">' + itens.map(p => {
+      const nome = kind === 'rec' ? getClienteNome(p.cliente) : getFornNome(p.forn);
+      const desc = p.cartaoFatura ? ccRotuloFatura(p.cartaoFatura) : (p.prod ? (kind === 'rec' ? getProdVendaNome(p.prod) : getProdNome(p.prod)) : '');
+      const meta = [fmtDate(p._d), p.totalParc > 1 ? `parc. ${p.parcIdx}/${p.totalParc}` : '', desc, p.nf ? 'NF ' + p.nf : ''].filter(Boolean).map(esc).join(' · ');
+      const btn = kind === 'rec'
+        ? `<button class="pdl-btn pdl-btn-rec" onclick="pdlQuitar('rec','${p.lancId}',${p.parcIdx})">✓ Receber</button>`
+        : `<button class="pdl-btn pdl-btn-pag" onclick="bvPagar('${p.lancId}',${p.parcIdx})">✓ Pagar</button>`;
+      return `<div class="bv-item${p._d < hoje ? ' atr' : ''}">
+        <div class="bv-item-info"><div class="bv-item-nome">${esc(nome)} ${quando(p._d)}</div><div class="bv-item-meta">${meta}</div></div>
+        <div class="bv-item-val ${kind}">${fmtBRL(p.valParc)}</div>
+        <div>${btn}</div></div>`;
+    }).join('') + '</div>';
+  };
+  const cols = [];
+  if (vRec) cols.push(`<div class="bv-col">${coluna(rec, 'rec')}</div>`);
+  if (vPag) cols.push(`<div class="bv-col">${coluna(pag, 'des')}</div>`);
+  const wrap = document.getElementById('bv-colunas');
+  wrap.style.gridTemplateColumns = cols.length > 1 ? '1fr 1fr' : '1fr';
+  wrap.innerHTML = cols.join('');
+}
+function bvPagar(id, parcIdx) {
+  const l = db.lancamentos.find(x => x.id === id);
+  if (l && l.cartao_fatura) { closeModal('modal-boas-vindas'); ccIrParaFatura(l.cartao_fatura); return; }
+  marcarPago(id, parcIdx);
+}
+function bvAbrirCentral() {
+  const ym = _bvHojeLocal().slice(0, 7);
+  closeModal('modal-boas-vindas');
+  const f = p => (p._d || '').startsWith(ym) || (!p._q && p._d && p._d < _bvHojeLocal());
+  pdAbrirLanc({ titulo: `Contas de ${meses[parseInt(ym.slice(5))]}`, subtitulo: 'Vencimentos do mês + atrasados em aberto',
+    rec: _bvPode('areceber') ? f : null, pag: _bvPode('apagar') ? f : null, filtro: 'aberto' });
+}
+
 
 function marcarPago(id, parcIdx) {
   const l = db.lancamentos.find(x=>x.id===id);
@@ -15808,6 +16209,8 @@ async function initApp() {
   if (currentUser) {
     setTimeout(() => { iniciarAgendadorBackup().catch(e => console.error('[BACKUP] Falha inesperada:', e)); }, 3000);
   }
+  // Tela de boas-vindas com as contas a pagar/receber da semana
+  setTimeout(() => { try { abrirBoasVindas(); } catch (e) { console.error('[Boas-vindas]', e); } }, 400);
 }
 
 
