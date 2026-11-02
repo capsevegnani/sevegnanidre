@@ -9,6 +9,14 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
 <title>Sevegnani — Sistema de Gestão Financeira</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F57319">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sistema Financeiro">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1307,6 +1315,60 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .cc-imp-tag.cr { background:#dcfce7; color:#166534; }
 
 
+/* ══ MOBILE (celular / tablet) ══ */
+.menu-backdrop { display:none; }
+@media (max-width:900px) {
+  html, body { overflow-x:hidden; -webkit-text-size-adjust:100%; }
+  /* Menu lateral vira gaveta */
+  .sidebar, body.menu-oculto .sidebar { width:84vw; max-width:300px; transform:translateX(-105%); box-shadow:none; z-index:1000; }
+  body.menu-mobile-aberto .sidebar { transform:translateX(0) !important; box-shadow:6px 0 28px rgba(15,30,58,0.3); }
+  .menu-backdrop { position:fixed; inset:0; background:rgba(15,30,58,0.45); z-index:999; }
+  body.menu-mobile-aberto .menu-backdrop { display:block; }
+  .menu-hotzone, body.menu-oculto .menu-hotzone { display:none !important; }
+  .menu-abrir { display:block !important; left:12px; top:12px; width:42px; height:42px; font-size:19px; z-index:950; }
+  body.menu-mobile-aberto .menu-abrir { display:none !important; }
+  .menu-toggle { width:32px; height:32px; font-size:16px; }
+  .nav-item, .nav-sub-item { padding-top:12px; padding-bottom:12px; font-size:14px; }
+  /* Conteúdo ocupa a largura toda */
+  .main, body.menu-oculto .main { margin-left:0 !important; padding:66px 12px 90px !important; }
+  .page-header { flex-wrap:wrap; gap:10px; }
+  .page-title { font-size:18px; }
+  .page-sub { margin-bottom:16px; }
+  .card { padding:14px; border-radius:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  /* Grades em uma ou duas colunas */
+  .grid2, .grid3, .ex-grid2, .fd-grid { grid-template-columns:minmax(0,1fr) !important; gap:12px; }
+  .grid4, .ex-kpis, .kpi-cards-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:10px; }
+  .kpi-val { font-size:19px; word-break:break-word; }
+  /* Tabelas com rolagem horizontal */
+  .table-scroll { overflow-x:auto; max-height:65vh; -webkit-overflow-scrolling:touch; }
+  th { white-space:nowrap; padding:9px 10px; }
+  td { padding:9px 10px; }
+  /* Abas roláveis */
+  .tab-row { width:100%; overflow-x:auto; flex-wrap:nowrap; }
+  .tab-btn { white-space:nowrap; flex:none; }
+  /* Botões e linhas de ação quebram linha */
+  .btn-row, .actions, .modal-footer, .lanc-foot { flex-wrap:wrap; }
+  .btn { min-height:38px; }
+  /* Campos com 16px evitam zoom automático no iPhone */
+  input:not([type=checkbox]):not([type=radio]), select, textarea, .ef-combo-trigger { font-size:16px !important; }
+  /* Modais em tela cheia */
+  .modal-overlay.open { align-items:stretch; }
+  .modal, .lanc-modal { width:100% !important; max-width:100% !important; max-height:100% !important; height:100%; border-radius:0; padding:18px 14px; }
+  .lanc-modal { padding:0; }
+  .lanc-head, .lanc-body, .lanc-foot { padding-left:14px; padding-right:14px; }
+  .lanc-foot-dica { display:none; }
+  /* Filtros do Fluxo Projetado */
+  #page-fluxo-projetado .fp-filtros > .form-group, #page-fluxo-projetado .fp-filtros #fp-periodo,
+  #page-fluxo-projetado .fp-filtros #fp-ano, #page-fluxo-projetado .fp-filtros #fp-partida { width:100% !important; flex:1 1 100% !important; }
+  /* Login */
+  .login-box { width:calc(100% - 28px); padding:36px 22px; }
+  .chart-wrap { height:210px; }
+}
+@media (max-width:600px) {
+  [style*="grid-template-columns"]:not([style*="auto-fi"]) { grid-template-columns:minmax(0,1fr) !important; }
+  .filter-row > div:not(.form-group) { grid-column:1/-1; justify-content:flex-start; }
+}
+@media print { .menu-backdrop { display:none !important; } }
 </style>
 </head>
 <body>
@@ -1343,6 +1405,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 <div id="app">
   <!-- SIDEBAR -->
   <div class="menu-hotzone" onmouseenter="document.body.classList.add('menu-espiando')"></div>
+  <div class="menu-backdrop" onclick="fecharMenuMobile()"></div>
   <button class="menu-abrir" onclick="alternarMenu()" title="Mostrar menu">☰</button>
   <div class="sidebar" onmouseleave="document.body.classList.remove('menu-espiando')">
     <div class="sidebar-logo" style="position:relative;">
@@ -6006,7 +6069,17 @@ function carregarBotoesSuspensos() {
   aplicarBotoesSuspensos(ocultos);
 }
 
+function _ehMobile() { return window.matchMedia('(max-width:900px)').matches; }
+function fecharMenuMobile() { document.body.classList.remove('menu-mobile-aberto'); }
+// No celular, ao tocar numa tela do menu, a gaveta fecha sozinha
+document.addEventListener('click', function (e) {
+  if (!_ehMobile() || !document.body.classList.contains('menu-mobile-aberto')) return;
+  if (e.target.closest && e.target.closest('.sidebar .nav-item, .sidebar .nav-sub-item')) setTimeout(fecharMenuMobile, 60);
+});
+window.addEventListener('resize', function () { if (!_ehMobile()) fecharMenuMobile(); });
+
 function alternarMenu() {
+  if (_ehMobile()) { document.body.classList.toggle('menu-mobile-aberto'); return; }
   const oculto = !document.body.classList.contains('menu-oculto');
   aplicarModoMenu(oculto);
   try { localStorage.setItem(MENU_KEY, oculto ? '1' : '0'); } catch(e) {}
