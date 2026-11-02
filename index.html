@@ -4860,7 +4860,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   <div class="modal el-modal" style="width:900px !important">
     <div class="el-head">
       <div class="el-head-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
-      <div><div class="modal-title">Importar Fatura do Cartão</div><div class="el-head-sub">Arquivo exportado pelo banco: OFX, CSV ou Excel</div></div>
+      <div><div class="modal-title">Importar Fatura do Cartão</div><div class="el-head-sub">Arquivo exportado pelo banco: PDF (Sicoob/Unicred), OFX, CSV ou Excel</div></div>
       <button type="button" class="el-x" onclick="closeModal('modal-cc-importar')" title="Fechar">✕</button>
     </div>
     <div class="el-body">
@@ -4868,7 +4868,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         <div class="el-grid">
           <div class="form-group"><label>Cartão *</label><select id="cc-imp-cartao" onchange="ccImpMontarFaturas()"></select></div>
           <div class="form-group"><label>Importar na fatura *</label><select id="cc-imp-fatura" onchange="ccImpMarcarDuplicadas();ccImpRender()"></select></div>
-          <div class="form-group"><label>Arquivo da fatura *</label><input id="cc-imp-arquivo" type="file" accept=".ofx,.csv,.txt,.xlsx,.xls" onchange="ccImpLerArquivo(this)" /></div>
+          <div class="form-group"><label>Arquivo da fatura *</label><input id="cc-imp-arquivo" type="file" accept=".pdf,.ofx,.csv,.txt,.xlsx,.xls" onchange="ccImpLerArquivo(this)" /></div>
         </div>
         <div id="cc-imp-opcoes" style="display:none;margin:-4px 0 12px;font-size:12.5px;color:#57534e">
           <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="cc-imp-inverter" onchange="ccImpInverter()"> Inverter sinais (use se as compras aparecerem em verde)</label>
@@ -18918,7 +18918,20 @@ async function ccImpLerArquivo(input) {
   const nome = f.name.toLowerCase();
   try {
     let brutas;
-    if (nome.endsWith('.xlsx') || nome.endsWith('.xls')) {
+    if (nome.endsWith('.pdf') || f.type === 'application/pdf') {
+      if (!(await ensurePdfJs())) throw new Error('não consegui carregar o leitor de PDF (verifique a internet)');
+      const r = ccImpDePDF(await ccImpTextoPdf(await f.arrayBuffer()));
+      brutas = r.lanc;
+      _ccImp.formato = 'PDF ' + r.banco;
+      // Seleciona sozinho a fatura com o mesmo vencimento do PDF
+      if (r.venc) {
+        const c = ccCartao(document.getElementById('cc-imp-cartao').value);
+        const sel = document.getElementById('cc-imp-fatura');
+        const alvo = `${r.venc.y}-${String(r.venc.m).padStart(2, '0')}`;
+        const op = c && Array.from(sel.options).find(o => String(ccDataVencimento(c, o.value) || '').slice(0, 7) === alvo);
+        if (op) sel.value = op.value;
+      }
+    } else if (nome.endsWith('.xlsx') || nome.endsWith('.xls')) {
       await ccImpCarregarXLSX();
       const wb = XLSX.read(await f.arrayBuffer(), { type: 'array', cellDates: true });
       const ws = wb.Sheets[wb.SheetNames[0]];
@@ -18932,11 +18945,11 @@ async function ccImpLerArquivo(input) {
       else { brutas = ccImpDeTabela(ccImpCSV(txt)); _ccImp.formato = 'CSV'; }
     }
     brutas = brutas.filter(r => r.data && r.valor && !isNaN(r.valor));
-    if (!brutas.length) { alert('Não encontrei lançamentos neste arquivo.\n\nUse o arquivo da fatura exportado pelo banco em OFX, CSV ou Excel (com colunas de data, descrição e valor).'); return; }
+    if (!brutas.length) { alert('Não encontrei lançamentos neste arquivo.\n\nUse o PDF da fatura da Sicoob ou Unicred, ou o arquivo exportado pelo banco em OFX, CSV ou Excel (com colunas de data, descrição e valor).'); return; }
     // Convenção de sinal: o sinal mais comum é o das compras
     const neg = brutas.filter(r => r.valor < 0).length;
     // (no OFX a compra é sempre negativa; em CSV/Excel vale o sinal mais comum)
-    const sinalCompra = _ccImp.formato === 'OFX' ? -1 : (neg > brutas.length - neg ? -1 : 1);
+    const sinalCompra = _ccImp.formato === 'OFX' ? -1 : /^PDF/.test(_ccImp.formato) ? 1 : (neg > brutas.length - neg ? -1 : 1);
     const mapaCat = ccImpMapaCategorias();
     _ccImp.linhas = brutas.map((r, i) => {
       const p = ccImpParcela(r.desc);
@@ -18973,6 +18986,92 @@ function ccImpDeOFX(txt) {
     out.push({ data, desc, valor });
   });
   return out;
+}
+// ── PDF da fatura (Sicoob / Unicred) ──
+// Monta as linhas do PDF pela posição do texto: itens próximos viram uma palavra,
+// espaço pequeno = " ", espaço grande (troca de coluna) = "  ".
+function ccImpDesespacar(str) {
+  const t = String(str).trim(), tk = t.split(' ');
+  if (tk.length < 3 || tk.filter(x => x.length === 1).length < tk.length * 0.7) return str;
+  return t.replace(/ /g, '')
+    .replace(/([A-ZÀ-Ú])([A-ZÀ-Ú][a-zà-ú])/g, '$1 $2')    // FORTFERParc. -> FORTFER Parc.
+    .replace(/(PARC(?:ELA)?\.?)(\d)/gi, '$1 $2')             // PARC5 -> PARC 5
+    .replace(/(\d)DE(\d)/gi, '$1 DE $2');                    // 6DE12 -> 6 DE 12
+}
+async function ccImpTextoPdf(buffer) {
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  const linhas = [];
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const page = await pdf.getPage(p);
+    const ct = await page.getTextContent();
+    const itens = ct.items.filter(it => it.str && it.str.trim()).map(it => ({
+      // Unicred: o texto vem com letras espaçadas ("T O T A L") — junta as letras
+      s: ccImpDesespacar(it.str), x: it.transform[4], y: it.transform[5], w: it.width || 0,
+      h: Math.abs(it.transform[3]) || Math.abs(it.transform[0]) || 8
+    }));
+    itens.sort((a, b) => (b.y - a.y) || (a.x - b.x));
+    const grupos = [];
+    itens.forEach(it => {
+      const g = grupos.find(g => Math.abs(g.y - it.y) <= Math.max(2, it.h * 0.35));
+      if (g) g.itens.push(it); else grupos.push({ y: it.y, itens: [it] });
+    });
+    grupos.sort((a, b) => b.y - a.y).forEach(g => {
+      g.itens.sort((a, b) => a.x - b.x);
+      let txt = '', fim = null;
+      g.itens.forEach(it => {
+        if (fim !== null) {
+          const gap = it.x - fim;
+          if (gap > it.h * 1.6) txt += '  ';
+          else if (gap > it.h * 0.22) txt += ' ';
+        }
+        txt += it.s;
+        fim = it.x + it.w;
+      });
+      linhas.push(txt.replace(/[ ]{3,}/g, '  ').trim());
+    });
+  }
+  return linhas;
+}
+const CC_IMP_MESES = { JAN: 1, FEV: 2, MAR: 3, ABR: 4, MAI: 5, JUN: 6, JUL: 7, AGO: 8, SET: 9, OUT: 10, NOV: 11, DEZ: 12 };
+// Lê as linhas de lançamento das faturas em PDF da Sicoob e da Unicred
+function ccImpDePDF(linhas) {
+  const tudo = linhas.join('\n');
+  const semEsp = ccImpNorm(tudo).replace(/\s+/g, '');
+  const banco = /SICOOB/.test(semEsp) ? 'Sicoob' : (/UNICRED/.test(semEsp) ? 'Unicred' : 'PDF');
+  // Vencimento ("22 OUT 2026" / "13 OUT 2026"), para saber o ano das compras
+  let venc = null;
+  const mv = semEsp.match(/VENCIMENTO:?(\d{1,2})(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(\d{4})/);
+  if (mv) venc = { d: +mv[1], m: CC_IMP_MESES[mv[2]], y: +mv[3] };
+  const out = [];
+  let dentro = false;
+  linhas.forEach(l => {
+    const n = ccImpNorm(l);
+    const ns = n.replace(/\s+/g, '');
+    if (/^LANCAMENTOS/.test(ns)) { dentro = true; return; }
+    if (!dentro) return;
+    if (/^(TOTAL|VEJACOMO|APPSICOOB|APPCART|FALECONOSCO|RESUMO)/.test(ns)) { if (/^(VEJACOMO|APP|FALECONOSCO)/.test(ns)) dentro = false; return; }
+    // Data no início: "25 SET", "26/ago", "2 6 /ag o"
+    const md = l.match(/^\s*(\d\s?\d?)\s*[\/ ]\s*([A-Za-zÇç](?:\s?[A-Za-zÇç]){2})\b\s*(.*)$/);
+    if (!md) return;
+    const dia = +md[1].replace(/\s/g, '');
+    const mes = CC_IMP_MESES[ccImpNorm(md[2]).replace(/\s/g, '')];
+    if (!mes || dia < 1 || dia > 31) return;
+    let resto = md[3];
+    // Valor no fim: "R$ 462,50", "-R$ 2.791,13", "R$ 3.482, 41", "R$ 100,00 -"
+    const mval = resto.match(/(-?)\s*R\s?\$\s*(-?)\s*([\d.\s]*\d\s*,\s*\d\s?\d)\s*(-|CR|C)?\s*$/i);
+    if (!mval) return;
+    const num = parseFloat(mval[3].replace(/\s/g, '').replace(/\./g, '').replace(',', '.'));
+    if (isNaN(num)) return;
+    const neg = !!(mval[1] || mval[2] || mval[4]);
+    let desc = resto.slice(0, mval.index).trim();
+    // Sicoob: a cidade vem em coluna separada no fim da descrição
+    if (banco === 'Sicoob') { const cols = desc.split(/\s{2,}/); if (cols.length > 1) cols.pop(); desc = cols.join(' '); }
+    desc = desc.replace(/\s{2,}/g, ' ').trim();
+    let ano = venc ? venc.y : new Date().getFullYear();
+    if (venc && mes > venc.m) ano--;
+    out.push({ data: `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`, desc, valor: neg ? -num : num });
+  });
+  return { banco, venc, lanc: out };
 }
 function ccImpCSV(txt) {
   const linhas = txt.replace(/\r/g, '').split('\n').filter(l => l.trim());
@@ -19097,7 +19196,7 @@ function ccImpRender() {
   const ls = _ccImp.linhas;
   document.getElementById('cc-imp-opcoes').style.display = ls.length ? '' : 'none';
   if (!ls.length) {
-    box.innerHTML = '<div class="cc-imp-vazio">Escolha o arquivo da fatura exportado pelo banco.<br><span>Formatos aceitos: <b>OFX</b>, <b>CSV</b> ou <b>Excel</b> (.xlsx)</span></div>';
+    box.innerHTML = '<div class="cc-imp-vazio">Escolha o arquivo da fatura exportado pelo banco.<br><span>Formatos aceitos: <b>PDF</b> da fatura (Sicoob e Unicred), <b>OFX</b>, <b>CSV</b> ou <b>Excel</b> (.xlsx)</span></div>';
     res.textContent = ''; btn.disabled = true; return;
   }
   const optsCat = '<option value="">Sem categoria</option>' + (db.dfc_cats || []).slice()
