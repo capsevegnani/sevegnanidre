@@ -1199,7 +1199,7 @@ tr.cob-dia-vazio > td {
 @media (max-width:700px) { .el-grid { grid-template-columns:1fr; } .el-grid .span2 { grid-column:auto; } .el-head, .el-body, .el-foot { padding-left:18px; padding-right:18px; } }
 
 /* ── CARTÕES DE CRÉDITO ── */
-.cc-wrap { max-width:820px; }
+.cc-wrap { max-width:1280px; }
 .cc-lista { background:#fff; border:1px solid var(--border); border-radius:16px; padding:6px 24px; box-shadow:0 1px 4px rgba(26,62,122,0.06); }
 .cc-item { display:flex; align-items:center; gap:18px; padding:18px 0; border-bottom:1px solid #f0eeec; cursor:pointer; }
 .cc-item:hover .cc-nome { color:var(--accent); }
@@ -1247,6 +1247,146 @@ tr.cob-dia-vazio > td {
 .cc-pagar-cartao:hover { background:#111827; }
 .badge-cc { background:#fff1e6; color:#c2410c; border:1px solid #fed7aa; }
 @media (max-width:640px) { .cc-det-info { grid-template-columns:1fr; } }
+
+/* ══ CARTÕES DE CRÉDITO — layout profissional ══ */
+.cc-wrap { max-width:1280px !important; }
+.ccx-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.ccx-kpi { background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; box-shadow:0 1px 3px rgba(28,25,23,.04); position:relative; overflow:hidden; }
+.ccx-kpi::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--k,#ea580c); }
+.ccx-kpi-l { font-size:11px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:#a8a29e; }
+.ccx-kpi-v { font-family:'DM Mono',monospace; font-size:21px; font-weight:700; color:#1c1917; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ccx-kpi-s { font-size:11.5px; color:#78716c; margin-top:3px; }
+.ccx-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+.ccx-tile { background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; cursor:pointer; transition:box-shadow .15s, transform .15s; display:flex; flex-direction:column; }
+.ccx-tile:hover { box-shadow:0 10px 28px rgba(28,25,23,.10); transform:translateY(-2px); }
+.ccx-plastic { position:relative; margin:14px 14px 0; border-radius:14px; padding:16px 18px 14px; color:#fff; min-height:150px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 8px 18px rgba(0,0,0,.18); overflow:hidden; }
+.ccx-plastic::after { content:''; position:absolute; right:-40px; top:-60px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.08); }
+.ccx-plastic::before { content:''; position:absolute; right:30px; bottom:-90px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,.05); }
+.ccx-pl-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; position:relative; z-index:1; }
+.ccx-pl-nome { font-size:15px; font-weight:800; letter-spacing:.2px; line-height:1.25; }
+.ccx-pl-band { font-size:10px; font-weight:800; letter-spacing:1px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25); padding:3px 8px; border-radius:6px; white-space:nowrap; }
+.ccx-pl-chip { width:34px; height:25px; border-radius:5px; background:linear-gradient(135deg,#fde68a,#d97706); position:relative; z-index:1; margin:10px 0 6px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.15); }
+.ccx-pl-bot { display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:1; }
+.ccx-pl-lbl { font-size:10px; text-transform:uppercase; letter-spacing:.9px; opacity:.75; }
+.ccx-pl-val { font-family:'DM Mono',monospace; font-size:21px; font-weight:700; margin-top:2px; }
+.ccx-pill { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.ccx-pill::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+.ccx-pill.aberta { background:#dbeafe; color:#1d4ed8; }
+.ccx-pill.fechada { background:#fef3c7; color:#b45309; }
+.ccx-pill.vencida { background:#fee2e2; color:#b91c1c; }
+.ccx-pill.paga { background:#dcfce7; color:#15803d; }
+.ccx-pill.neutra { background:#f5f5f4; color:#78716c; }
+.ccx-plastic .ccx-pill { background:rgba(255,255,255,.92); }
+.ccx-tile-body { padding:14px 18px 6px; flex:1; }
+.ccx-row { display:flex; justify-content:space-between; font-size:12.5px; color:#57534e; padding:4px 0; }
+.ccx-row b { color:#1c1917; font-weight:700; }
+.ccx-lim { margin:8px 0 4px; }
+.ccx-lim-bar { height:7px; background:#f5f5f4; border-radius:999px; overflow:hidden; }
+.ccx-lim-bar i { display:block; height:100%; border-radius:999px; background:#16a34a; }
+.ccx-lim-bar i.warn { background:#d97706; } .ccx-lim-bar i.crit { background:#dc2626; }
+.ccx-lim-t { display:flex; justify-content:space-between; font-size:11.5px; color:#78716c; margin-top:5px; }
+.ccx-alert { margin-top:8px; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:9px; padding:7px 10px; font-size:12px; }
+.ccx-alert.amber { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.ccx-tile-foot { display:flex; gap:6px; padding:10px 14px 14px; border-top:1px solid #f5f4f2; margin-top:8px; }
+.ccx-btn { border:1px solid var(--border); background:#fff; color:#44403c; border-radius:9px; padding:7px 11px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+.ccx-btn:hover { border-color:#a8a29e; color:#1c1917; }
+.ccx-btn.pri { background:var(--accent); border-color:var(--accent); color:#fff; }
+.ccx-btn.pri:hover { background:#c2410c; border-color:#c2410c; }
+.ccx-btn.ok { background:#16a34a; border-color:#16a34a; color:#fff; }
+.ccx-btn.ok:hover { background:#15803d; }
+.ccx-btn.del:hover { color:#dc2626; border-color:#fca5a5; background:#fef2f2; }
+.ccx-btn:disabled { opacity:.45; cursor:not-allowed; }
+.ccx-btn.ico { padding:7px 9px; }
+.ccx-tile-foot .sp { flex:1; }
+.ccx-new { border:2px dashed #e7e5e4; background:#fafaf9; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; color:#78716c; font-weight:700; font-size:13.5px; min-height:280px; }
+.ccx-new:hover { border-color:var(--accent); color:var(--accent); background:#fff7ed; }
+.ccx-new span { font-size:30px; line-height:1; }
+
+/* detalhe */
+.ccx-top { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.ccx-top .sp { flex:1; }
+.ccx-hero { display:grid; grid-template-columns:330px 1fr; gap:16px; margin-bottom:16px; }
+.ccx-hero .ccx-plastic { margin:0; min-height:190px; }
+.ccx-hero-info { background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px 20px; display:flex; flex-direction:column; }
+.ccx-hero-h { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.ccx-hero-h h3 { font-size:17px; font-weight:800; color:#1c1917; margin:0; }
+.ccx-hero-g { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 18px; }
+.ccx-hero-g .l { font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:#a8a29e; }
+.ccx-hero-g .v { font-size:15px; font-weight:700; color:#1c1917; margin-top:3px; }
+.ccx-hero-g .v.mono { font-family:'DM Mono',monospace; }
+.ccx-hero-act { display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:16px; }
+.ccx-strip { display:flex; align-items:stretch; gap:8px; background:#fff; border:1px solid var(--border); border-radius:14px; padding:8px; margin-bottom:16px; }
+.ccx-strip-nav { border:none; background:#f5f5f4; border-radius:10px; width:34px; font-size:20px; color:#57534e; cursor:pointer; flex:0 0 34px; }
+.ccx-strip-nav:hover { background:#e7e5e4; }
+.ccx-strip-in { display:flex; gap:8px; flex:1; overflow-x:auto; }
+.ccx-fat { flex:1 0 108px; border:1.5px solid transparent; border-radius:10px; padding:8px 10px; cursor:pointer; background:#fafaf9; text-align:left; font-family:inherit; }
+.ccx-fat:hover { background:#f5f5f4; }
+.ccx-fat.sel { border-color:var(--accent); background:#fff7ed; }
+.ccx-fat .m { font-size:11.5px; font-weight:800; color:#44403c; text-transform:capitalize; display:flex; align-items:center; gap:6px; }
+.ccx-fat .m i { width:7px; height:7px; border-radius:50%; display:inline-block; }
+.ccx-fat .v { font-family:'DM Mono',monospace; font-size:13.5px; font-weight:700; color:#1c1917; margin-top:3px; }
+.ccx-fat .v.zero { color:#d6d3d1; }
+.ccx-cols { display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:16px; align-items:start; }
+.ccx-panel { background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.ccx-panel-h { display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #f0eeec; flex-wrap:wrap; }
+.ccx-panel-h h4 { margin:0; font-size:14px; font-weight:800; color:#1c1917; }
+.ccx-panel-h .sp { flex:1; }
+.ccx-filtros { display:flex; gap:8px; flex-wrap:wrap; padding:12px 18px; background:#fafaf9; border-bottom:1px solid #f0eeec; }
+.ccx-filtros input, .ccx-filtros select { padding:8px 11px !important; font-size:12.5px !important; border-radius:9px !important; min-width:0; }
+.ccx-filtros input { flex:1 1 200px; }
+.ccx-filtros select { flex:0 1 190px; }
+.ccx-tab { width:100%; border-collapse:collapse; font-size:13px; }
+.ccx-tab th { text-align:left; font-size:10.5px; letter-spacing:.7px; text-transform:uppercase; color:#a8a29e; font-weight:700; padding:10px 12px; border-bottom:1px solid #f0eeec; background:#fff; position:sticky; top:0; z-index:1; white-space:nowrap; cursor:pointer; user-select:none; }
+.ccx-tab th:hover { color:#57534e; }
+.ccx-tab td { padding:10px 12px; border-bottom:1px solid #f5f4f2; vertical-align:middle; }
+.ccx-tab tr:hover td { background:#fffbf7; }
+.ccx-tab .r { text-align:right; }
+.ccx-tab .num { font-family:'DM Mono',monospace; font-weight:700; white-space:nowrap; }
+.ccx-tab .neg { color:#16a34a; }
+.ccx-tab tfoot td { font-weight:800; background:#fafaf9; border-bottom:none; }
+.ccx-desc b { color:#1c1917; font-weight:700; }
+.ccx-desc small { display:block; color:#a8a29e; font-size:11.5px; margin-top:2px; }
+.ccx-tag { display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; background:#f5f5f4; color:#57534e; white-space:nowrap; max-width:170px; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
+.ccx-tag.g { background:#eef2ff; color:#3730a3; }
+.ccx-tag.c { background:#fff1e6; color:#c2410c; }
+.ccx-tag.sem { background:#fef3c7; color:#92400e; cursor:pointer; }
+.ccx-tag.par { background:#f0fdf4; color:#166534; }
+.ccx-tag.org { background:#fce7f3; color:#9d174d; }
+.ccx-acts { display:flex; gap:4px; justify-content:flex-end; }
+.ccx-ib { width:30px; height:30px; border-radius:8px; border:1px solid transparent; background:none; color:#a8a29e; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; justify-content:center; }
+.ccx-ib:hover { background:#f5f5f4; color:#1c1917; border-color:#e7e5e4; }
+.ccx-ib.del:hover { background:#fef2f2; color:#dc2626; border-color:#fecaca; }
+.ccx-empty { padding:40px 20px; text-align:center; color:#a8a29e; font-size:13px; }
+.ccx-scroll { max-height:62vh; overflow:auto; }
+.ccx-res { padding:8px 18px 16px; }
+.ccx-res-g { margin-top:12px; }
+.ccx-res-gh { display:flex; justify-content:space-between; font-size:12px; font-weight:800; color:#3730a3; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.ccx-res-it { margin:7px 0; cursor:pointer; border-radius:8px; padding:3px 6px; margin-left:-6px; margin-right:-6px; }
+.ccx-res-it:hover { background:#fafaf9; }
+.ccx-res-it.on { background:#fff7ed; }
+.ccx-res-t { display:flex; justify-content:space-between; gap:8px; font-size:12.5px; color:#44403c; }
+.ccx-res-t span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ccx-res-t b { font-family:'DM Mono',monospace; font-size:12px; color:#1c1917; white-space:nowrap; }
+.ccx-res-bar { height:5px; background:#f5f5f4; border-radius:999px; margin-top:4px; overflow:hidden; }
+.ccx-res-bar i { display:block; height:100%; background:var(--accent); border-radius:999px; }
+.ccx-res-bar i.sem { background:#f59e0b; }
+.ccx-note { font-size:11.5px; color:#78716c; padding:10px 18px 14px; border-top:1px solid #f5f4f2; line-height:1.5; }
+
+/* modal de despesa */
+.ccx-modal { width:720px !important; }
+.ccx-modal .el-grid.g2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.ccx-classif { display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:9px 12px; font-size:12.5px; color:#475569; margin:-4px 0 14px; }
+.ccx-classif b { color:#1e293b; }
+.ccx-classif .sep { color:#cbd5e1; }
+.ccx-classif.vazio { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.ccx-parc-l { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.ccx-parc-l span { font-size:11.5px; background:#fff; border:1px solid #e7e5e4; border-radius:7px; padding:4px 8px; color:#44403c; white-space:nowrap; }
+.ccx-parc-l span b { font-family:'DM Mono',monospace; }
+.ccx-parc-l span.pg { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+
+@media (max-width:1100px) { .ccx-cols { grid-template-columns:1fr; } .ccx-hero { grid-template-columns:1fr; } }
+@media (max-width:820px) { .ccx-new { min-height:110px; } .ccx-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } .ccx-hero-g { grid-template-columns:repeat(2,minmax(0,1fr)); } .ccx-modal .el-grid { grid-template-columns:1fr; } }
+
 
 
 /* ══ MENU LATERAL — visual profissional ══ */
@@ -5035,37 +5175,67 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 
 <!-- ══ MODAL CARTÃO — DESPESA ══ -->
 <div class="modal-overlay" id="modal-cc-despesa">
-  <div class="modal" style="width:620px;">
-    <div class="modal-title" id="cc-d-titulo">Nova Despesa no Cartão</div>
+  <div class="modal el-modal ccx-modal">
+    <div class="el-head">
+      <div class="el-head-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg></div>
+      <div><div class="modal-title" id="cc-d-titulo">Nova Despesa no Cartão</div><div class="el-head-sub" id="cc-d-sub">Compra lançada na fatura do cartão de crédito</div></div>
+      <button type="button" class="el-x" onclick="closeModal('modal-cc-despesa')" title="Fechar">✕</button>
+    </div>
     <input type="hidden" id="cc-d-grupo" />
     <input type="hidden" id="cc-d-orig-lanc" />
     <input type="hidden" id="cc-d-orig-parc" />
     <input type="hidden" id="cc-d-parc-fixa" />
-    <div id="cc-d-orig-info" class="lanc-note" style="display:none;margin-bottom:14px"></div>
-    <div class="form-group"><label>Cartão *</label>
-      <select id="cc-d-cartao" onchange="ccAtualizarFaturas(true);ccRenderChipsCartao()" style="display:none"></select>
-      <div class="cc-chips" id="cc-d-cartoes"></div>
-    </div>
-    <div class="form-group"><label>Data da Compra *</label><input id="cc-d-data" type="date" onchange="ccAtualizarFaturas(true)" /></div>
-    <div class="form-group"><label>Descrição *</label><input id="cc-d-desc" type="text" placeholder="Ex.: TV Samsung" /></div>
-    <div class="form-group"><label>Categoria</label><select id="cc-d-cat"><option value="">Nenhuma</option></select></div>
-    <div class="grid2">
-      <div class="form-group"><label>Valor (R$) *</label><input id="cc-d-valor" type="number" step="0.01" min="0" placeholder="0,00" oninput="ccPreviaParcelas()" /></div>
-      <div class="form-group"><label>Fatura (vencimento) *</label><select id="cc-d-fatura" onchange="ccPreviaParcelas()"></select></div>
-    </div>
-    <div class="grid2">
-      <div class="form-group"><label>Parcelada?</label>
-        <select id="cc-d-parcelada" onchange="ccToggleParcelada()"><option value="nao">Não (à vista)</option><option value="sim">Sim</option></select>
+    <div class="el-body">
+      <div id="cc-d-orig-info" class="lanc-note" style="display:none;margin:14px 0 0"></div>
+
+      <div class="el-sec">
+        <div class="el-sec-t">Cartão</div>
+        <select id="cc-d-cartao" onchange="ccAtualizarFaturas(true);ccRenderChipsCartao()" style="display:none"></select>
+        <div class="cc-chips" id="cc-d-cartoes" style="margin-bottom:14px"></div>
       </div>
-      <div class="form-group" id="cc-d-parc-grp" style="display:none"><label>Nº de Parcelas</label><select id="cc-d-parcelas" onchange="ccPreviaParcelas()"></select></div>
+
+      <div class="el-sec">
+        <div class="el-sec-t">Dados da compra</div>
+        <div class="el-grid">
+          <div class="form-group"><label>Data da Compra *</label><input id="cc-d-data" type="date" onchange="ccAtualizarFaturas(true)" /></div>
+          <div class="form-group span2"><label>Descrição *</label><input id="cc-d-desc" type="text" placeholder="Ex.: Combustível, Assinatura, Material de escritório..." /></div>
+        </div>
+        <div class="el-grid">
+          <div class="form-group el-valor"><label>Valor (R$) *</label><input id="cc-d-valor" type="number" step="0.01" placeholder="0,00" oninput="ccPreviaParcelas()" /></div>
+          <div class="form-group span2"><label>Observação</label><input id="cc-d-obs" type="text" placeholder="Opcional" /></div>
+        </div>
+      </div>
+
+      <div class="el-sec">
+        <div class="el-sec-t">Classificação (DRE / Fluxo de Caixa)</div>
+        <div class="el-grid g2">
+          <div class="form-group"><label>Grupo</label><select id="cc-d-dregrupo" onchange="ccOnGrupoDespesa()"><option value="">Todos os grupos</option></select></div>
+          <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="ccNovaCategoriaRapida()">+</button></label><select id="cc-d-cat" onchange="ccOnCatDespesa()"><option value="">Sem categoria</option></select></div>
+        </div>
+        <div class="ccx-classif" id="cc-d-classif"></div>
+      </div>
+
+      <div class="el-sec">
+        <div class="el-sec-t">Pagamento e fatura</div>
+        <select id="cc-d-parcelada" onchange="ccToggleParcelada()" style="display:none"><option value="nao">Não (à vista)</option><option value="sim">Sim</option></select>
+        <div class="el-grid">
+          <div class="form-group"><label>Forma</label>
+            <div class="el-seg" id="cc-d-parc-seg">
+              <button type="button" data-v="nao" onclick="ccSetParcelada('nao')">À vista</button>
+              <button type="button" data-v="sim" onclick="ccSetParcelada('sim')">Parcelado</button>
+            </div>
+          </div>
+          <div class="form-group" id="cc-d-parc-grp" style="display:none"><label>Nº de Parcelas</label><select id="cc-d-parcelas" onchange="ccPreviaParcelas()"></select></div>
+          <div class="form-group" id="cc-d-tipoval-grp" style="display:none"><label>O valor informado é</label>
+            <select id="cc-d-tipoval" onchange="ccPreviaParcelas()"><option value="total">Total da compra</option><option value="parcela">De cada parcela</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Fatura (1ª parcela) *</label><select id="cc-d-fatura" onchange="ccPreviaParcelas()"></select></div>
+        <div id="cc-d-previa" class="lanc-note" style="display:none;margin-bottom:14px"></div>
+      </div>
     </div>
-    <div class="form-group" id="cc-d-tipoval-grp" style="display:none"><label>O valor informado é</label>
-      <select id="cc-d-tipoval" onchange="ccPreviaParcelas()"><option value="total">Valor total da compra</option><option value="parcela">Valor de cada parcela</option></select>
-    </div>
-    <div id="cc-d-previa" class="lanc-note" style="display:none;margin-bottom:14px"></div>
-    <div class="form-group"><label>Observação</label><input id="cc-d-obs" type="text" placeholder="Opcional" /></div>
-    <div class="modal-footer">
-      <button class="btn btn-danger" id="cc-d-excluir" style="margin-right:auto;display:none" onclick="ccExcluirDespesa(document.getElementById('cc-d-grupo').value)">Apagar</button>
+    <div class="el-foot">
+      <button class="btn btn-danger" id="cc-d-excluir" style="margin-right:auto;display:none" onclick="ccExcluirDespesa(document.getElementById('cc-d-grupo').value)">Excluir</button>
       <button class="btn btn-secondary" onclick="closeModal('modal-cc-despesa')">Cancelar</button>
       <button class="btn btn-primary" onclick="ccSalvarDespesa()">Salvar Despesa</button>
     </div>
@@ -6955,6 +7125,10 @@ async function salvarCadastroRapido() {
     if (typeof populateDfcCatSelects === 'function') populateDfcCatSelects();
     if (typeof populateDfcCatProdSelects === 'function') populateDfcCatProdSelects();
     if (typeof popularCategoriasAnalise === 'function') popularCategoriasAnalise();
+    if (document.getElementById('rapido-destino').value === 'cc-d-cat' && typeof ccPopularCatsDespesa === 'function') {
+      const gc = document.getElementById('cc-d-dregrupo'); if (gc) gc.value = rec.grupo || '';
+      ccPopularCatsDespesa(rec.id);
+    }
     renderDfcCategorias();
   }
 
@@ -9971,7 +10145,10 @@ function renderPainelExecutivo() {
 
   // ── Bases ──
   const fatEm = (a, b) => db.lancreceber.reduce((s,l) => s + (dentro(l.dtvenda || l.dtcompra, a, b) ? (l.valor||0) : 0), 0);
-  const despEm = (a, b) => db.lancamentos.reduce((s,l) => s + (dentro(l.dtcompra, a, b) ? (l.valor||0) : 0), 0);
+  // Competência: fatura de cartão não conta (as compras do cartão entram pela data da compra)
+  const _ccComp = ccItensDespesas(false);
+  const despEm = (a, b) => db.lancamentos.reduce((s,l) => s + (!l.cartao_fatura && dentro(l.dtcompra, a, b) ? (l.valor||0) : 0), 0)
+    + _ccComp.reduce((s,it) => s + (dentro(it.data, a, b) ? it.valor : 0), 0);
   const fat = fatEm(ini, fim), fatAnt = fatEm(iniAnt, fimAnt);
   const desp = despEm(ini, fim), despAnt = despEm(iniAnt, fimAnt);
   const res = fat - desp, resAnt = fatAnt - despAnt;
@@ -9995,11 +10172,11 @@ function renderPainelExecutivo() {
 
   // Caixa efetivo no período (o que entrou e saiu de fato)
   const recebidoPer = getParcelasReceber(true).filter(p => dentro(p.dtrecebido, ini, fim)).reduce((s,p) => s + p.valParc, 0);
-  const pagoPer = getParcelas(true).filter(p => dentro(p.dtpago, ini, fim)).reduce((s,p) => s + p.valParc, 0);
+  const pagoPer = getParcelasCaixa(true).filter(p => dentro(p.dtpago, ini, fim)).reduce((s,p) => s + p.valParc, 0);
 
   // Gasto médio diário (pagos nos últimos 90 dias) => cobertura de caixa
   const ini90 = addDias(hoje, -90);
-  const pago90 = getParcelas(true).filter(p => dentro(p.dtpago, ini90, hoje)).reduce((s,p) => s + p.valParc, 0);
+  const pago90 = getParcelasCaixa(true).filter(p => dentro(p.dtpago, ini90, hoje)).reduce((s,p) => s + p.valParc, 0);
   const gastoDia = pago90 / 90;
   const cobertura = gastoDia > 0 ? saldoCaixa / gastoDia : null;
 
@@ -10099,10 +10276,11 @@ function renderPainelExecutivo() {
   // ── Despesas por categoria ──
   const porCat = {};
   getParcelas(false).concat(getParcelas(true)).forEach(p => {
-    if (!dentro(p.dtcompra, ini, fim)) return;
+    if (p.cartaoFatura || !dentro(p.dtcompra, ini, fim)) return;
     const k = p.catId || '';
     porCat[k] = (porCat[k]||0) + p.valParc;
   });
+  _ccComp.forEach(it => { if (dentro(it.data, ini, fim)) porCat[it.cat] = (porCat[it.cat]||0) + it.valor; });
   let catArr = Object.entries(porCat).map(([k,v]) => ({ nome: k ? getDreCatNome(k) : 'Sem categoria', v })).sort((a,b) => b.v - a.v);
   if (catArr.length > 8) { const resto = catArr.slice(7).reduce((s,x) => s + x.v, 0); catArr = catArr.slice(0,7).concat([{ nome:'Outras', v:resto }]); }
 
@@ -10747,7 +10925,7 @@ function _desenharGraficoForma(canvasId, subId, entradas, ano, mesFiltro, rotulo
 
 function renderGraficosFormas(ano, mesFiltro) {
   _desenharGraficoForma('chart-forma-pag', 'chart-forma-pag-sub',
-    _agruparPorForma(getParcelas(true), 'dtpago', ano, mesFiltro),
+    _agruparPorForma(getParcelasCaixa(true), 'dtpago', ano, mesFiltro),
     ano, mesFiltro, 'Nenhum pagamento no período');
 
   _desenharGraficoForma('chart-forma-rec', 'chart-forma-rec-sub',
@@ -10804,7 +10982,7 @@ function renderCalendario() {
   };
 
   if (showApagar)   getParcelas(false).forEach(p => _addDia(p.venc || p.dtcompra, 'apagar', p.valParc));
-  if (showPago)     getParcelas(true).forEach(p  => _addDia(p.venc || p.dtcompra, 'pago', p.valParc));
+  if (showPago)     getParcelasCaixa(true).forEach(p  => _addDia(p.venc || p.dtcompra, 'pago', p.valParc));
   if (showAReceber) getParcelasReceber(false).forEach(p => _addDia(p.venc || p.dtvenda, 'areceber', p.valParc));
   if (showRecebido) getParcelasReceber(true).forEach(p  => _addDia(p.venc || p.dtvenda, 'recebido', p.valParc));
 
@@ -10862,7 +11040,7 @@ function abrirDetalheDia(dia, mes, ano) {
 
   // Usa as parcelas expandidas (mesma fonte do calendário), filtrando pela
   // data de VENCIMENTO de cada parcela — não pela data de competência.
-  const parcelasPagar = [...getParcelas(false), ...getParcelas(true)]
+  const parcelasPagar = [...getParcelasCaixa(false), ...getParcelasCaixa(true)]
     .filter(p => (p.venc || p.dtcompra) === dateStr);
 
   const title = document.getElementById('cal-detail-title');
@@ -12807,7 +12985,9 @@ function renderDfc() {
 
   // 2. Pagamentos realizados → Categoria do lançamento, senão do produto, senão Custos
   if (inclPagar) {
-    getParcelas(true).forEach(p => {
+    // Fatura de cartão paga = saída de caixa aberta pelas categorias das despesas;
+    // contas pagas "via cartão" saem do caixa só quando a fatura é paga.
+    getParcelasGerenciais(true).forEach(p => {
       const dt = p.dtpago || p.venc;
       const m = _mesCaixa(dt);
       if (!m) return;
@@ -13648,6 +13828,34 @@ function renderDre() {
     });
   });
 
+  // 3. Despesas lançadas direto no cartão de crédito (pela data da compra; na
+  //    base "vencimento", pelo vencimento da fatura). As contas a pagar pagas
+  //    com cartão já entraram no passo 2 pelo lançamento original.
+  if (typeof ccItensDespesas === 'function') {
+    const _ccComp = ccItensDespesas(false), _ccVenc = ccItensDespesas(true);
+    const _usar = it => {
+      const catId = it.cat;
+      if (!catId) return;
+      const grupoId = getDreCatGrupo(catId);
+      if (!grupoId) return;
+      return grupoId;
+    };
+    const _lancarCc = (it, grupoId) => {
+      if (!it.data || parseInt(it.data.slice(0, 4)) !== ano) return;
+      const m = parseInt(it.data.slice(5, 7));
+      if (valoresMes[m][grupoId] === undefined) return;
+      const item = { tipo: 'pagar', id: it.grupo, ccGrupo: it.grupo, nf: '', data: it.data, nome: '💳 ' + it.nomeCartao,
+        prod: it.desc, valor: it.valor, status: it.quitado ? 'Pago' : 'A Pagar' };
+      const sinalCat = dreSinalCat(it.cat, grupoId);
+      valoresMes[m][grupoId] += it.valor * sinalCat;
+      itensMes[m][grupoId].push(item);
+      valoresMesCat[m][it.cat] = (valoresMesCat[m][it.cat] || 0) + it.valor * sinalCat;
+      (itensMesCat[m][it.cat] = itensMesCat[m][it.cat] || []).push(item);
+    };
+    _ccComp.forEach(it => { const g = _usar(it); if (g && baseDoGrupo(g) !== 'vencimento') _lancarCc(it, g); });
+    _ccVenc.forEach(it => { const g = _usar(it); if (g && baseDoGrupo(g) === 'vencimento') _lancarCc(it, g); });
+  }
+
   // Injeta a Variação de Estoque digitada manualmente (não vem de lançamentos).
   // O valor digitado (positivo ou negativo) é SOMADO diretamente ao grupo do CPV,
   // de modo que tanto o valor monetário do CPV quanto o % do CPV recalculam.
@@ -14103,7 +14311,7 @@ function renderAnaliseCategoria() {
       const pago = (typeof cobTotalBaixas === 'function') ? cobTotalBaixas(p.lancId, p.parcIdx) : 0;
       encaixar(p, 'receber', Math.max(0, (p.valParc || 0) - pago));
     });
-    getParcelas(false).forEach(p => encaixar(p, 'pagar', p.valParc || 0));
+    getParcelasGerenciais(false).forEach(p => encaixar(p, 'pagar', p.valParc || 0));
   } else {
   db.lancreceber.forEach(l => {
     const dtRef = l.dtvenda || l.dtcompra;
@@ -14136,6 +14344,15 @@ function renderAnaliseCategoria() {
       prod: l.prod ? getProdNome(l.prod) : '', valor: l.valor || 0,
       status: l.pago === 'sim' ? 'Pago' : 'A Pagar'
     });
+  });
+  // Compras feitas direto no cartão de crédito (pela data da compra)
+  ccItensDespesas(false).forEach(it => {
+    if (!it.cat || !valoresMes[it.cat] || !it.data) return;
+    if (parseInt(it.data.slice(0, 4)) !== ano) return;
+    const m = parseInt(it.data.slice(5, 7));
+    valoresMes[it.cat][m] += it.valor;
+    itensMes[m][it.cat].push({ tipo: 'pagar', id: it.grupo, ccGrupo: it.grupo, nf: '', data: it.data,
+      nome: '💳 ' + it.nomeCartao, prod: it.desc, valor: it.valor, status: it.quitado ? 'Pago' : 'A Pagar' });
   });
 
   }
@@ -14559,9 +14776,9 @@ function renderFluxoProjetado() {
     (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || dt || '').slice(0, 7));
     // Despesas já pagas não entram no fluxo projetado (só despesas em aberto)
   });
-  getParcelas(false).forEach(p => {
+  getParcelasGerenciais(false).forEach(p => {
     (mesesReaisLanc[p.lancId] = mesesReaisLanc[p.lancId] || new Set()).add((p.venc || '').slice(0, 7));
-    if (!(p.valParc > 0.005)) return;
+    if (!(p.valParc > 0.005) && !(p.ccParte && Math.abs(p.valParc) > 0.005)) return;
     aberto(p.venc, p.catId, SEM_PAG, -(p.valParc || 0), {
       tipo:'pagar', id:p.lancId, nf:p.nf||'', data:p.venc, nome:getFornNome(p.forn),
       prod:(p.prod ? getProdNome(p.prod) : '') + (p.totalParc > 1 ? ` (parc. ${p.parcIdx}/${p.totalParc})` : ''),
@@ -15104,8 +15321,9 @@ function _dreDetFiltrar() {
       baixa = `<button type="button" class="dre-det-baixa rec" onclick="baixarDoDetalheDre('receber','${it.id}',${it.parc})" title="Registrar o recebimento desta parcela">Receber</button>`;
     else if (pode && it.parc && !ok && it.tipo === 'pagar')
       baixa = `<button type="button" class="dre-det-baixa pag" onclick="baixarDoDetalheDre('pagar','${it.id}',${it.parc})" title="${it.cartao ? 'Fatura de cartão: abre a tela do cartão' : 'Registrar o pagamento desta parcela'}">Pagar</button>`;
-    const acoes = baixa + `<button type="button" class="dre-det-btn" ${pode ? `onclick="editarDoDetalheDre('${it.tipo}','${it.id}')"` : 'disabled'} title="Editar lançamento" aria-label="Editar lançamento de ${nomeTxt}">${_DRE_ICO_EDIT}</button>`
-                + `<button type="button" class="dre-det-btn del" ${pode ? `onclick="excluirDoDetalheDre('${it.tipo}','${it.id}')"` : 'disabled'} title="Excluir lançamento" aria-label="Excluir lançamento de ${nomeTxt}">${_DRE_ICO_DEL}</button>`;
+    const _tAc = it.ccGrupo ? 'cartao' : it.tipo;
+    const acoes = baixa + `<button type="button" class="dre-det-btn" ${pode ? `onclick="editarDoDetalheDre('${_tAc}','${it.id}')"` : 'disabled'} title="${it.ccGrupo ? 'Editar despesa do cartão' : 'Editar lançamento'}" aria-label="Editar lançamento de ${nomeTxt}">${_DRE_ICO_EDIT}</button>`
+                + `<button type="button" class="dre-det-btn del" ${pode ? `onclick="excluirDoDetalheDre('${_tAc}','${it.id}')"` : 'disabled'} title="Excluir lançamento" aria-label="Excluir lançamento de ${nomeTxt}">${_DRE_ICO_DEL}</button>`;
     const valCls = it.tipo === 'receber' ? ' v-rec' : (it.tipo === 'pagar' ? ' v-pag' : '');
     return `<tr class="${vencido ? 'is-venc' : ''}">
       <td class="c-data"${dataTit ? ` title="${dataTit}"` : ''}>${fmtDate(vencido && it.venc ? it.venc : it.data)}</td>
@@ -15144,6 +15362,7 @@ function _dreDetReabrir() {
 }
 
 function editarDoDetalheDre(tipo, id) {
+  if (tipo === 'cartao') { closeModal('modal-dre-detalhe'); ccAbrirDespesa(null, null, id); return; }
   const existe = tipo === 'receber' ? db.lancreceber.some(x => x.id === id) : db.lancamentos.some(x => x.id === id);
   if (!existe) { alert('Lançamento não encontrado. Ele pode ter sido excluído.'); return; }
   closeModal('modal-dre-detalhe');
@@ -15178,6 +15397,9 @@ function _dreDetAposEditar(modalId) {
 }
 
 async function excluirDoDetalheDre(tipo, id) {
+  if (tipo === 'cartao') { closeModal('modal-dre-detalhe'); await ccExcluirDespesa(id); return; }
+  { const _lf = tipo !== 'receber' && db.lancamentos.find(x => x.id === id);
+    if (_lf && _lf.cartao_fatura) { closeModal('modal-dre-detalhe'); ccIrParaFatura(_lf.cartao_fatura); return; } }
   const reg = tipo === 'receber' ? db.lancreceber.find(x => x.id === id) : db.lancamentos.find(x => x.id === id);
   if (!reg) { alert('Lançamento não encontrado. Ele pode ter sido excluído.'); return; }
   const quem = tipo === 'receber' ? getClienteNome(reg.cliente) : getFornNome(reg.forn);
@@ -15980,7 +16202,7 @@ function renderFluxoFuturo() {
   const porDia = {};
   datas.forEach(d => porDia[d] = { receber: 0, pagar: 0 });
 
-  getParcelas(false).forEach(p => {
+  getParcelasCaixa(false).forEach(p => {
     const d = p.venc || p.dtcompra;
     if (d && datasSet.has(d)) porDia[d].pagar += (p.valParc || 0);
   });
@@ -18976,7 +19198,7 @@ function sbErroDetalhe() { return typeof sbErroMsg === 'function' ? sbErroMsg() 
 //   informando a conta (banco) e a data — depois aparece em Contas Pagas.
 // ══════════════════════════════════════════════════════════════════
 const CC_FORMA_PAG = 'Cartão de Crédito';
-const ccSel = { cartao: null, mes: null, busca: '', pendente: null };
+const ccSel = { cartao: null, mes: null, busca: '', pendente: null, grupo: '', cat: '', ord: 'data', dir: -1 };
 
 // Bandeiras. Para exibir a logo oficial no lugar do selo, informe em "img"
 // o caminho do arquivo da logo (ex.: 'logos/visa.png') publicado junto do index.html.
@@ -19113,6 +19335,11 @@ function ccAtualizarTelas() {
   bumpDbVer();
   ccRender();
   if (typeof renderApagar === 'function') { try { renderApagar(); renderPagas(); renderLancamentos(); } catch (e) { console.warn(e); } }
+  // Relatórios que usam as despesas do cartão (só se a tela estiver aberta)
+  const _vis = id => { const el = document.getElementById('page-' + id); return el && el.classList.contains('active'); };
+  [['dre-demonstrativo', 'renderDre'], ['dre-analise-cat', 'renderAnaliseCategoria'], ['dfc-demonstrativo', 'renderDfc'],
+   ['fluxo-futuro', 'renderFluxoFuturo'], ['fluxo-projetado', 'renderFluxoProjetado'], ['fluxo-diario', 'renderFluxoDiario']]
+    .forEach(([pg, fn]) => { if (_vis(pg) && typeof window[fn] === 'function') { try { window[fn](); } catch (e) { console.warn(e); } } });
 }
 
 // ── Página ──
@@ -19143,51 +19370,126 @@ function ccRender() {
 }
 function ccVoltarLista() { ccSel.cartao = null; ccRender(); }
 
+// ── Visual do cartão (cor do "plástico" por bandeira) ──
+const CC_PLASTICO = {
+  mastercard: 'linear-gradient(135deg,#292524 0%,#1c1917 55%,#44403c 100%)',
+  visa:       'linear-gradient(135deg,#1a1f71 0%,#2b3595 55%,#0f1450 100%)',
+  elo:        'linear-gradient(135deg,#0a0a0a 0%,#262626 55%,#3f3f46 100%)',
+  amex:       'linear-gradient(135deg,#2e77bb 0%,#1f5a94 55%,#163f68 100%)',
+  hipercard:  'linear-gradient(135deg,#b3131b 0%,#8d0f15 55%,#5c0a0e 100%)',
+  outro:      'linear-gradient(135deg,#ea580c 0%,#c2410c 55%,#7c2d12 100%)'
+};
+function ccSitClasse(sit) { return ({ Paga: 'paga', Vencida: 'vencida', Fechada: 'fechada', Aberta: 'aberta' })[sit.txt] || 'neutra'; }
+function ccPlasticoHtml(c, mes, rotulo) {
+  const b = ccBandeira(c.bandeira);
+  const sit = ccSituacao(c.id, mes);
+  return `<div class="ccx-plastic" style="background:${CC_PLASTICO[b.id] || CC_PLASTICO.outro}">
+      <div class="ccx-pl-top"><div class="ccx-pl-nome">${esc(c.nome)}</div><div class="ccx-pl-band">${b.img ? `<img src="${b.img}" alt="${b.nome}" style="height:14px">` : esc(b.nome.toUpperCase())}</div></div>
+      <div class="ccx-pl-chip"></div>
+      <div class="ccx-pl-bot">
+        <div><div class="ccx-pl-lbl">${rotulo || 'Fatura ' + ccMesCurto(mes)}</div><div class="ccx-pl-val">${fmtBRL(ccTotalFatura(c.id, mes))}</div></div>
+        <span class="ccx-pill ${ccSitClasse(sit)}">${sit.txt}</span>
+      </div>
+    </div>`;
+}
+// Limite comprometido = tudo que está em faturas ainda não pagas (inclui parcelas futuras)
+function ccLimiteUsado(cid) {
+  const mesesC = [...new Set((db.cartao_despesas || []).filter(d => d.cartao_id === cid).map(d => d.fatura))];
+  return Math.round(mesesC.filter(m => !ccFaturaPaga(cid, m)).reduce((s, m) => s + ccTotalFatura(cid, m), 0) * 100) / 100;
+}
+// Faturas anteriores à atual que ainda não foram pagas (fechadas ou vencidas)
+function ccFaturasPendentes(c) {
+  const mes = ccMesAtualCartao(c);
+  return [...new Set((db.cartao_despesas || []).filter(d => d.cartao_id === c.id && d.fatura < mes).map(d => d.fatura))]
+    .filter(m => !ccFaturaPaga(c.id, m) && ccTotalFatura(c.id, m) > 0).sort();
+}
+function ccFaturasAtrasadas(c) { const h = today(); return ccFaturasPendentes(c).filter(m => ccDataVencimento(c, m) < h); }
+// Fatura que o usuário precisa olhar primeiro: a pendente mais antiga, senão a atual
+function ccFaturaFoco(c) { return ccFaturasPendentes(c)[0] || ccMesAtualCartao(c); }
+function ccLimiteHtml(c) {
+  if (!c.limite) return `<div class="ccx-row"><span>Limite</span><b style="color:#a8a29e;font-weight:600">não informado</b></div>`;
+  const usado = ccLimiteUsado(c.id);
+  const pct = Math.max(0, Math.min(100, usado / c.limite * 100));
+  const cls = pct >= 90 ? 'crit' : (pct >= 70 ? 'warn' : '');
+  return `<div class="ccx-lim">
+      <div class="ccx-row" style="padding-top:0"><span>Limite utilizado</span><b>${pct.toFixed(0)}%</b></div>
+      <div class="ccx-lim-bar"><i class="${cls}" style="width:${pct}%"></i></div>
+      <div class="ccx-lim-t"><span>${fmtBRL(usado)} usado</span><span>${fmtBRL(Math.max(0, c.limite - usado))} disponível</span></div>
+    </div>`;
+}
+
 function ccRenderLista() {
   const lw = document.getElementById('cc-lista-wrap');
   const cartoes = (db.cartoes || []).slice().sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
   if (!cartoes.length) {
-    lw.innerHTML = `<div class="cc-lista" style="padding:36px 24px;text-align:center;color:#78716c">
-      Nenhum cartão cadastrado ainda.<br><br>
+    lw.innerHTML = `<div class="ccx-panel" style="padding:48px 24px;text-align:center">
+      <div style="font-size:40px;margin-bottom:8px">💳</div>
+      <div style="font-size:16px;font-weight:800;color:#1c1917">Nenhum cartão cadastrado</div>
+      <div style="color:#78716c;font-size:13px;margin:6px 0 18px">Cadastre os cartões da empresa para lançar despesas, acompanhar faturas e pagá-las pelo banco.</div>
       <button class="btn btn-primary" onclick="ccAbrirCadastro()">💳 Cadastrar primeiro cartão</button></div>`;
     return;
   }
-  let totalGeral = 0;
-  const itens = cartoes.map(c => {
+  let totAtual = 0, totAtraso = 0, totLimite = 0, totUsado = 0, qtdAtraso = 0, proxVenc = null;
+  const tiles = cartoes.map(c => {
     const mes = ccMesAtualCartao(c);
     const val = ccTotalFatura(c.id, mes);
-    totalGeral += val;
-    // faturas anteriores ainda não pagas
-    const abertas = [...new Set((db.cartao_despesas || []).filter(d => d.cartao_id === c.id && d.fatura < mes).map(d => d.fatura))]
-      .filter(m => !ccFaturaPaga(c.id, m) && ccTotalFatura(c.id, m) > 0);
-    const atrasado = abertas.reduce((s, m) => s + ccTotalFatura(c.id, m), 0);
-    const sit = ccSituacao(c.id, mes);
-    return `<div class="cc-item" onclick="ccAbrirDetalhe('${c.id}')">
-      ${ccBandeiraHtml(c.bandeira)}
-      <div class="cc-info">
-        <div class="cc-nome">${c.nome} <span>· Fecha em ${fmtDate(ccDataFechamento(c, mes)).slice(0, 5)} · Vence ${fmtDate(ccDataVencimento(c, mes)).slice(0, 5)}</span></div>
-        <div class="cc-val">${fmtBRL(val)} <span style="font-size:12px;font-weight:600;color:${sit.cor};font-family:inherit">${sit.txt}</span></div>
-        ${atrasado > 0 ? `<div class="cc-sub">Faturas anteriores em aberto: <b>${fmtBRL(atrasado)}</b></div>` : ''}
-        <div class="cc-sub">🏦 ${c.banco_id ? 'Pago pela conta ' + getBancoNome(c.banco_id) : '<span style="color:#d97706">Sem banco vinculado — clique em ✎ para vincular</span>'}${c.limite ? ' · Limite ' + fmtBRL(c.limite) : ''}</div>
+    totAtual += val;
+    const atrasadas = ccFaturasAtrasadas(c);
+    const atraso = atrasadas.reduce((s, m) => s + ccTotalFatura(c.id, m), 0);
+    totAtraso += atraso; if (atraso > 0) qtdAtraso++;
+    const fechadas = ccFaturasPendentes(c).filter(m => !atrasadas.includes(m));
+    if (c.limite) { totLimite += Number(c.limite) || 0; totUsado += ccLimiteUsado(c.id); }
+    const venc = ccDataVencimento(c, mes);
+    const hoje = today();
+    fechadas.concat(val > 0 && !ccFaturaPaga(c.id, mes) ? [mes] : []).forEach(m => {
+      const dv = ccDataVencimento(c, m);
+      if (dv >= hoje && (!proxVenc || dv < proxVenc.data)) proxVenc = { data: dv, nome: c.nome, val: ccTotalFatura(c.id, m) };
+    });
+    const semCat = ccDespesasFatura(c.id, mes).filter(d => !d.cat_dre).length;
+    // botão Pagar: fatura pendente mais antiga (já fechada)
+    const aPagar = ccFaturasPendentes(c)[0] || (ccSituacao(c.id, mes).txt === 'Fechada' && val > 0 ? mes : null);
+    return `<div class="ccx-tile" onclick="ccAbrirDetalhe('${c.id}')">
+      ${ccPlasticoHtml(c, mes, 'Fatura atual · ' + ccMesCurto(mes))}
+      <div class="ccx-tile-body">
+        <div class="ccx-row"><span>Fechamento</span><b>${fmtDate(ccDataFechamento(c, mes))}</b></div>
+        <div class="ccx-row"><span>Vencimento</span><b>${fmtDate(venc)}</b></div>
+        <div class="ccx-row"><span>Débito em</span><b>${c.banco_id ? esc(getBancoNome(c.banco_id)) : '<span style="color:#d97706">sem banco vinculado</span>'}</b></div>
+        ${ccLimiteHtml(c)}
+        ${atraso > 0 ? `<div class="ccx-alert">⚠️ ${atrasadas.length} fatura(s) vencida(s): <b>${fmtBRL(atraso)}</b></div>` : ''}
+        ${fechadas.map(m => `<div class="ccx-alert amber">📄 Fatura ${ccMesCurto(m)} fechada: <b>${fmtBRL(ccTotalFatura(c.id, m))}</b> · vence ${ccDataVencimento(c, m) === hoje ? '<b>hoje</b>' : fmtDate(ccDataVencimento(c, m))}</div>`).join('')}
+        ${semCat ? `<div class="ccx-alert amber">🏷️ ${semCat} despesa(s) sem categoria nesta fatura</div>` : ''}
       </div>
-      <div class="cc-acts" onclick="event.stopPropagation()">
-        <button class="cc-mini" title="Editar cartão" onclick="ccAbrirCadastro('${c.id}')">✎</button>
-        <button class="cc-mini del" title="Excluir cartão" onclick="ccExcluirCartao('${c.id}')">🗑</button>
-        <button class="cc-add" title="Nova despesa neste cartão" onclick="ccAbrirDespesa('${c.id}')">+</button>
+      <div class="ccx-tile-foot" onclick="event.stopPropagation()">
+        <button class="ccx-btn pri" onclick="ccAbrirDespesa('${c.id}')">＋ Despesa</button>
+        ${aPagar ? `<button class="ccx-btn ok" title="Pagar a fatura de ${ccMesLabel(aPagar)}" onclick="ccAbrirPagamento('${c.id}','${aPagar}')">✓ Pagar ${ccMesCurto(aPagar)}</button>` : ''}
+        <span class="sp"></span>
+        <button class="ccx-btn ico" title="Importar fatura" onclick="ccAbrirImportacao('${c.id}','${mes}')">📥</button>
+        <button class="ccx-btn ico" title="Editar cartão" onclick="ccAbrirCadastro('${c.id}')">✎</button>
+        <button class="ccx-btn ico del" title="Excluir cartão" onclick="ccExcluirCartao('${c.id}')">🗑</button>
       </div>
     </div>`;
   }).join('');
-  lw.innerHTML = `<div class="cc-lista">${itens}
-    <div class="cc-total"><span>Total (faturas atuais)</span><span>${fmtBRL(totalGeral)}</span></div></div>`;
+  const pctLim = totLimite ? Math.min(100, totUsado / totLimite * 100) : 0;
+  lw.innerHTML = `
+    <div class="ccx-kpis">
+      <div class="ccx-kpi" style="--k:#ea580c"><div class="ccx-kpi-l">Faturas atuais</div><div class="ccx-kpi-v">${fmtBRL(totAtual)}</div><div class="ccx-kpi-s">${cartoes.length} cartão(ões) cadastrado(s)</div></div>
+      <div class="ccx-kpi" style="--k:#2563eb"><div class="ccx-kpi-l">Próximo vencimento</div><div class="ccx-kpi-v">${proxVenc ? fmtDate(proxVenc.data) : '—'}</div><div class="ccx-kpi-s">${proxVenc ? esc(proxVenc.nome) + ' · ' + fmtBRL(proxVenc.val) : 'Nenhuma fatura a pagar'}</div></div>
+      <div class="ccx-kpi" style="--k:${totAtraso > 0 ? '#dc2626' : '#16a34a'}"><div class="ccx-kpi-l">Faturas vencidas</div><div class="ccx-kpi-v" style="color:${totAtraso > 0 ? '#b91c1c' : '#15803d'}">${fmtBRL(totAtraso)}</div><div class="ccx-kpi-s">${qtdAtraso ? qtdAtraso + ' cartão(ões) com fatura vencida' : 'Nenhuma fatura vencida'}</div></div>
+      <div class="ccx-kpi" style="--k:#7c3aed"><div class="ccx-kpi-l">Limite disponível</div><div class="ccx-kpi-v">${totLimite ? fmtBRL(Math.max(0, totLimite - totUsado)) : '—'}</div><div class="ccx-kpi-s">${totLimite ? `${pctLim.toFixed(0)}% de ${fmtBRL(totLimite)} comprometido` : 'Informe o limite no cadastro'}</div></div>
+    </div>
+    <div class="ccx-grid">${tiles}
+      <div class="ccx-tile ccx-new" onclick="ccAbrirCadastro()"><span>＋</span>Novo cartão</div>
+    </div>`;
 }
 
 function ccAbrirDetalhe(cid) {
   const c = ccCartao(cid);
   if (!c) return;
-  ccSel.cartao = cid; ccSel.mes = ccMesAtualCartao(c); ccSel.busca = '';
+  ccSel.cartao = cid; ccSel.mes = ccFaturaFoco(c); ccSel.busca = ''; ccSel.grupo = ''; ccSel.cat = '';
   ccRender();
 }
 function ccNavMes(n) { ccSel.mes = ccAddMes(ccSel.mes, n); ccRenderDetalhe(); }
+function ccIrMes(m) { ccSel.mes = m; ccRenderDetalhe(); }
 
 function ccRenderDetalhe() {
   const dw = document.getElementById('cc-detalhe-wrap');
@@ -19196,69 +19498,184 @@ function ccRenderDetalhe() {
   const total = ccTotalFatura(c.id, mes);
   const sit = ccSituacao(c.id, mes);
   const l = ccLancFatura(c.id, mes);
-  const paga = l && l.pago === 'sim';
-  const pagoInfo = paga ? `<div><div class="lbl">Pago em</div><div class="val">${fmtDate(l.dtpago)} · ${getBancoNome(l.banco)}</div></div>` : '';
+  const paga = !!(l && l.pago === 'sim');
+  const desps = ccDespesasFatura(c.id, mes);
+  const nCompras = new Set(desps.map(d => d.grupo)).size;
+  const semCat = desps.filter(d => !d.cat_dre);
+  // faixa de faturas: 3 anteriores + 4 seguintes
+  const fats = []; for (let i = -3; i <= 4; i++) fats.push(ccAddMes(mes, i));
+  const strip = fats.map(m => {
+    const v = ccTotalFatura(c.id, m);
+    const s = ccSituacao(c.id, m);
+    const cor = v > 0 ? s.cor : '#d6d3d1';
+    return `<button class="ccx-fat ${m === mes ? 'sel' : ''}" onclick="ccIrMes('${m}')" title="Vence ${fmtDate(ccDataVencimento(c, m))}">
+      <div class="m"><i style="background:${cor}"></i>${ccMesCurto(m)}</div>
+      <div class="v ${v > 0 ? '' : 'zero'}">${v > 0 ? fmtBRL(v) : '—'}</div></button>`;
+  }).join('');
+  const lim = c.limite ? Math.max(0, c.limite - ccLimiteUsado(c.id)) : null;
   dw.innerHTML = `
-    <div style="margin-bottom:10px"><button class="btn btn-secondary btn-sm" onclick="ccVoltarLista()">← Todos os cartões</button></div>
-    <div class="cc-nav">
-      <button onclick="ccNavMes(-1)" title="Fatura anterior">‹</button>
-      <div>${ccMesLabel(mes)}</div>
-      <button onclick="ccNavMes(1)" title="Próxima fatura">›</button>
+    <div class="ccx-top">
+      <button class="ccx-btn" onclick="ccVoltarLista()">← Todos os cartões</button>
+      <span class="sp"></span>
+      <button class="ccx-btn" onclick="ccAbrirImportacao('${c.id}','${mes}')">📥 Importar fatura</button>
+      <button class="ccx-btn" onclick="ccAbrirCadastro('${c.id}')">✎ Editar cartão</button>
+      <button class="ccx-btn del" onclick="ccExcluirCartao('${c.id}')">🗑 Excluir</button>
     </div>
-    <div class="cc-det">
-      <div class="cc-det-nome" style="display:flex;align-items:center;justify-content:center;gap:12px">${ccBandeiraHtml(c.bandeira)}${c.nome}</div>
-      <div class="cc-det-info">
-        <div><div class="lbl">Fechamento</div><div class="val">${fmtDate(ccDataFechamento(c, mes))}</div></div>
-        <div><div class="lbl">Vencimento</div><div class="val">${fmtDate(ccDataVencimento(c, mes))}</div></div>
-        <div><div class="lbl">Situação</div><div class="val" style="color:${sit.cor}">${sit.txt}</div></div>
-        <div><div class="lbl">Valor</div><div class="val" style="color:#dc2626">${fmtBRL(total)}</div></div>
-        <div><div class="lbl">Banco vinculado</div><div class="val">${c.banco_id ? getBancoNome(c.banco_id) : '—'}</div></div>
-        ${pagoInfo}
+    <div class="ccx-hero">
+      ${ccPlasticoHtml(c, mes, 'Fatura ' + ccMesLabel(mes))}
+      <div class="ccx-hero-info">
+        <div class="ccx-hero-h"><h3>Fatura de ${ccMesLabel(mes)}</h3><span class="ccx-pill ${ccSitClasse(sit)}">${sit.txt}</span></div>
+        <div class="ccx-hero-g">
+          <div><div class="l">Valor da fatura</div><div class="v mono" style="color:#b91c1c">${fmtBRL(total)}</div></div>
+          <div><div class="l">Fechamento</div><div class="v">${fmtDate(ccDataFechamento(c, mes))}</div></div>
+          <div><div class="l">Vencimento</div><div class="v">${fmtDate(ccDataVencimento(c, mes))}</div></div>
+          <div><div class="l">Lançamentos</div><div class="v">${desps.length} <span style="font-size:12px;color:#a8a29e;font-weight:600">· ${nCompras} compra(s)</span></div></div>
+          <div><div class="l">${paga ? 'Pago em' : 'Débito em'}</div><div class="v">${paga ? fmtDate(l.dtpago) + ' · ' + esc(getBancoNome(l.banco)) : (c.banco_id ? esc(getBancoNome(c.banco_id)) : '—')}</div></div>
+          <div><div class="l">Limite disponível</div><div class="v mono">${lim != null ? fmtBRL(lim) : '—'}</div></div>
+        </div>
+        <div class="ccx-hero-act">
+          ${paga
+            ? `<button class="ccx-btn" onclick="ccEstornarFatura('${c.id}','${mes}')">↺ Desfazer pagamento</button>`
+            : `<button class="ccx-btn ok" ${total > 0 ? '' : 'disabled'} onclick="ccAbrirPagamento('${c.id}','${mes}')">✓ Pagar fatura</button>`}
+          ${paga ? '' : `<button class="ccx-btn pri" onclick="ccAbrirDespesa('${c.id}','${mes}')">＋ Nova despesa</button>`}
+          ${semCat.length && !paga ? `<span class="ccx-alert amber" style="margin:0;align-self:center">🏷️ ${semCat.length} sem categoria — não entram no DRE/Análise por categoria</span>` : ''}
+        </div>
       </div>
-      <div class="cc-det-acoes">
-        ${paga
-          ? `<button class="btn btn-secondary btn-sm" onclick="ccEstornarFatura('${c.id}','${mes}')">↺ Desfazer pagamento</button>`
-          : `<button class="btn btn-primary btn-sm" ${total > 0 ? '' : 'disabled'} onclick="ccAbrirPagamento('${c.id}','${mes}')">✓ Pagar fatura</button>`}
-        <button class="btn btn-secondary btn-sm" onclick="ccAbrirDespesa('${c.id}','${mes}')">+ Despesa</button>
-        <button class="btn btn-secondary btn-sm" onclick="ccAbrirImportacao('${c.id}','${mes}')">📥 Importar fatura</button>
-        <button class="btn btn-secondary btn-sm" onclick="ccAbrirCadastro('${c.id}')">✎ Editar cartão</button>
-        <button class="btn btn-danger btn-sm" onclick="ccExcluirCartao('${c.id}')">🗑 Excluir cartão</button>
+    </div>
+    <div class="ccx-strip">
+      <button class="ccx-strip-nav" onclick="ccNavMes(-1)" title="Fatura anterior">‹</button>
+      <div class="ccx-strip-in">${strip}</div>
+      <button class="ccx-strip-nav" onclick="ccNavMes(1)" title="Próxima fatura">›</button>
+    </div>
+    <div class="ccx-cols">
+      <div class="ccx-panel">
+        <div class="ccx-panel-h"><h4>Despesas da fatura</h4><span class="sp"></span><span id="cc-det-cont" style="font-size:12px;color:#78716c"></span></div>
+        <div class="ccx-filtros">
+          <input id="cc-busca" type="text" placeholder="🔍 Buscar descrição, categoria, obs..." value="${esc(ccSel.busca || '')}" oninput="ccSel.busca=this.value;ccRenderDetalheLista()" />
+          <select id="cc-f-grupo" onchange="ccSel.grupo=this.value;ccSel.cat='';ccRenderDetalheLista()"></select>
+          <select id="cc-f-cat" onchange="ccSel.cat=this.value;ccRenderDetalheLista()"></select>
+        </div>
+        <div class="ccx-scroll" id="cc-det-lista"></div>
       </div>
-      <input class="cc-busca" id="cc-busca" type="text" placeholder="Busca" value="${(ccSel.busca || '').replace(/"/g, '&quot;')}" oninput="ccSel.busca=this.value;ccRenderDetalheLista()" />
-      <div id="cc-det-lista"></div>
+      <div class="ccx-panel">
+        <div class="ccx-panel-h"><h4>Resumo por grupo e categoria</h4></div>
+        <div id="cc-det-resumo"></div>
+        <div class="ccx-note">As despesas do cartão entram no <b>DRE</b> e na <b>Análise por Categoria</b> pela data da compra, e no <b>Fluxo de Caixa</b> quando a fatura é paga — cada uma na sua categoria.</div>
+      </div>
     </div>`;
   ccRenderDetalheLista();
 }
+
+// Grupo do DRE de uma despesa (vem da categoria)
+function ccGrupoDesp(d) { return d.cat_dre ? (getDreCatGrupo(d.cat_dre) || '') : ''; }
+function ccOrdenar(k) { if (ccSel.ord === k) ccSel.dir = -(ccSel.dir || -1); else { ccSel.ord = k; ccSel.dir = k === 'data' || k === 'valor' ? -1 : 1; } ccRenderDetalheLista(); }
 
 function ccRenderDetalheLista() {
   const box = document.getElementById('cc-det-lista');
   if (!box) return;
   const c = ccCartao(ccSel.cartao);
   const paga = ccFaturaPaga(c.id, ccSel.mes);
+  const todas = ccDespesasFatura(c.id, ccSel.mes);
+  // filtros de grupo/categoria (só com o que existe na fatura)
+  const SEM = '__sem__';
+  const gruposIds = [...new Set(todas.map(ccGrupoDesp))];
+  const selG = document.getElementById('cc-f-grupo');
+  if (selG) {
+    selG.innerHTML = '<option value="">Todos os grupos</option>' + gruposIds.filter(Boolean)
+      .map(id => getDreGrupo(id)).filter(Boolean).sort((a, b) => (a.ordem || 0) - (b.ordem || 0))
+      .map(g => `<option value="${g.id}">${esc(g.nome)}</option>`).join('') + (gruposIds.includes('') ? `<option value="${SEM}">Sem categoria</option>` : '');
+    selG.value = ccSel.grupo || '';
+  }
+  const selCf = document.getElementById('cc-f-cat');
+  if (selCf) {
+    const cats = [...new Set(todas.filter(d => !ccSel.grupo || (ccSel.grupo === SEM ? !d.cat_dre : ccGrupoDesp(d) === ccSel.grupo)).map(d => d.cat_dre).filter(Boolean))];
+    selCf.innerHTML = '<option value="">Todas as categorias</option>' + cats.map(id => ({ id, n: getDreCatNome(id) }))
+      .sort((a, b) => a.n.localeCompare(b.n)).map(o => `<option value="${o.id}">${esc(o.n)}</option>`).join('');
+    selCf.value = ccSel.cat || '';
+    selCf.disabled = ccSel.grupo === SEM;
+  }
   const q = (ccSel.busca || '').trim().toLowerCase();
-  let lista = ccDespesasFatura(c.id, ccSel.mes);
-  if (q) lista = lista.filter(d => (d.descricao || '').toLowerCase().includes(q) || (d.cat_dre ? getDreCatNome(d.cat_dre) : '').toLowerCase().includes(q));
-  lista.sort((a, b) => (b.data || '').localeCompare(a.data || '') || (a.descricao || '').localeCompare(b.descricao || ''));
-  if (!lista.length) { box.innerHTML = '<div class="empty-state" style="padding:28px 0">Nenhuma despesa nesta fatura.</div>'; return; }
-  let html = '', diaAtual = null;
-  lista.forEach(d => {
-    if (d.data !== diaAtual) {
-      diaAtual = d.data;
-      const dt = new Date(d.data + 'T12:00:00');
-      const sem = dt.toLocaleDateString('pt-BR', { weekday: 'long' });
-      html += `<div class="cc-dia">${sem.charAt(0).toUpperCase() + sem.slice(1)}, ${dt.getDate()}</div>`;
-    }
-    const parc = (d.total_parcelas || 1) > 1 ? ` (${d.parcela}/${d.total_parcelas})` : '';
-    const cat = d.cat_dre ? getDreCatNome(d.cat_dre) : 'Sem categoria';
-    html += `<div class="cc-desp">
-      <div class="cc-desp-ico">💳</div>
-      <div class="cc-desp-txt"><b>${d.descricao || '—'}${parc}</b><div>${cat} | ${c.nome}${d.origem_lanc ? ' · <span style="color:#c2410c">conta a pagar</span>' : ''}${d.obs ? ' · ' + d.obs : ''}</div></div>
-      <div class="cc-desp-val" style="${Number(d.valor) < 0 ? 'color:#16a34a' : ''}">${fmtBRL(d.valor)}
-        ${paga ? '' : `<div class="actions"><button class="btn btn-secondary btn-sm" onclick="ccAbrirDespesa(null,null,'${d.grupo}')">Editar</button><button class="btn btn-danger btn-sm" onclick="ccExcluirDespesa('${d.grupo}')">Excluir</button></div>`}
-      </div>
-    </div>`;
+  let lista = todas.filter(d => {
+    if (ccSel.grupo === SEM && d.cat_dre) return false;
+    if (ccSel.grupo && ccSel.grupo !== SEM && ccGrupoDesp(d) !== ccSel.grupo) return false;
+    if (ccSel.cat && d.cat_dre !== ccSel.cat) return false;
+    if (!q) return true;
+    return [d.descricao, d.obs, d.cat_dre ? getDreCatNome(d.cat_dre) : 'sem categoria', ccGrupoDesp(d) ? getDreGrupoNome(ccGrupoDesp(d)) : '']
+      .join(' ').toLowerCase().includes(q);
   });
-  box.innerHTML = html;
+  const ord = ccSel.ord || 'data', dir = ccSel.dir || -1;
+  const chave = d => ord === 'valor' ? Number(d.valor) || 0
+    : ord === 'desc' ? (d.descricao || '').toLowerCase()
+    : ord === 'grupo' ? (ccGrupoDesp(d) ? getDreGrupoNome(ccGrupoDesp(d)) : '~').toLowerCase()
+    : ord === 'cat' ? (d.cat_dre ? getDreCatNome(d.cat_dre) : '~').toLowerCase()
+    : (d.data || '');
+  lista.sort((a, b) => { const x = chave(a), y = chave(b); return (x < y ? -1 : x > y ? 1 : 0) * dir || (a.descricao || '').localeCompare(b.descricao || ''); });
+  const cont = document.getElementById('cc-det-cont');
+  if (cont) cont.textContent = lista.length === todas.length ? `${todas.length} lançamento(s)` : `${lista.length} de ${todas.length} lançamento(s)`;
+  ccRenderResumo(todas);
+  if (!lista.length) {
+    box.innerHTML = `<div class="ccx-empty">${todas.length ? 'Nenhuma despesa corresponde aos filtros.' : 'Nenhuma despesa nesta fatura.' + (paga ? '' : `<br><br><button class="ccx-btn pri" onclick="ccAbrirDespesa('${c.id}','${ccSel.mes}')">＋ Lançar despesa</button>`)}</div>`;
+    return;
+  }
+  const seta = k => ord === k ? (dir > 0 ? ' ▲' : ' ▼') : '';
+  const linhas = lista.map(d => {
+    const gid = ccGrupoDesp(d);
+    const parc = (d.total_parcelas || 1) > 1 ? `<span class="ccx-tag par">${d.parcela}/${d.total_parcelas}</span>` : '<span style="color:#d6d3d1">—</span>';
+    const catHtml = d.cat_dre
+      ? `<span class="ccx-tag c" title="${esc(getDreCatNome(d.cat_dre))}">${esc(getDreCatNome(d.cat_dre))}</span>`
+      : `<span class="ccx-tag sem" ${paga ? '' : `onclick="ccAbrirDespesa(null,null,'${d.grupo}')" title="Clique para classificar"`}>Sem categoria</span>`;
+    const neg = Number(d.valor) < 0;
+    return `<tr>
+      <td style="white-space:nowrap;color:#57534e">${fmtDate(d.data)}</td>
+      <td class="ccx-desc"><b>${esc(d.descricao || '—')}</b>${d.origem_lanc || d.obs ? `<small>${d.origem_lanc ? '<span class="ccx-tag org" style="font-size:10px;padding:1px 6px">conta a pagar</span> ' : ''}${esc(d.obs || '')}</small>` : ''}</td>
+      <td>${gid ? `<span class="ccx-tag g" title="${esc(getDreGrupoNome(gid))}">${esc(getDreGrupoNome(gid))}</span>` : '<span style="color:#d6d3d1">—</span>'}</td>
+      <td>${catHtml}</td>
+      <td>${parc}</td>
+      <td class="r num ${neg ? 'neg' : ''}">${fmtBRL(d.valor)}</td>
+      <td>${paga ? '<span style="font-size:11px;color:#a8a29e">paga</span>' : `<div class="ccx-acts"><button class="ccx-ib" title="Editar" onclick="ccAbrirDespesa(null,null,'${d.grupo}')">✎</button><button class="ccx-ib del" title="Excluir" onclick="ccExcluirDespesa('${d.grupo}')">🗑</button></div>`}</td>
+    </tr>`;
+  }).join('');
+  const soma = lista.reduce((s, d) => s + (Number(d.valor) || 0), 0);
+  box.innerHTML = `<table class="ccx-tab"><thead><tr>
+      <th onclick="ccOrdenar('data')">Data${seta('data')}</th>
+      <th onclick="ccOrdenar('desc')">Descrição${seta('desc')}</th>
+      <th onclick="ccOrdenar('grupo')">Grupo${seta('grupo')}</th>
+      <th onclick="ccOrdenar('cat')">Categoria${seta('cat')}</th>
+      <th>Parc.</th>
+      <th class="r" onclick="ccOrdenar('valor')">Valor${seta('valor')}</th>
+      <th></th></tr></thead>
+    <tbody>${linhas}</tbody>
+    <tfoot><tr><td colspan="5">${lista.length === todas.length ? 'Total da fatura' : 'Total filtrado'}</td><td class="r num">${fmtBRL(soma)}</td><td></td></tr></tfoot></table>`;
+}
+
+// Resumo lateral: grupo → categorias, com barras proporcionais
+function ccRenderResumo(todas) {
+  const box = document.getElementById('cc-det-resumo');
+  if (!box) return;
+  if (!todas.length) { box.innerHTML = '<div class="ccx-empty">Sem despesas nesta fatura.</div>'; return; }
+  const porG = new Map();
+  todas.forEach(d => {
+    const gid = ccGrupoDesp(d) || '__sem__';
+    const g = porG.get(gid) || { total: 0, cats: new Map() }; porG.set(gid, g);
+    const v = Number(d.valor) || 0; g.total += v;
+    const ck = d.cat_dre || '__sem__'; g.cats.set(ck, (g.cats.get(ck) || 0) + v);
+  });
+  const max = Math.max(...[...porG.values()].flatMap(g => [...g.cats.values()]), 0.01);
+  const ordG = [...porG.entries()].sort((a, b) => {
+    if (a[0] === '__sem__') return 1; if (b[0] === '__sem__') return -1;
+    return ((getDreGrupo(a[0]) || {}).ordem || 0) - ((getDreGrupo(b[0]) || {}).ordem || 0);
+  });
+  box.innerHTML = '<div class="ccx-res">' + ordG.map(([gid, g]) => {
+    const nomeG = gid === '__sem__' ? 'Sem categoria' : getDreGrupoNome(gid);
+    const cats = [...g.cats.entries()].sort((a, b) => b[1] - a[1]).map(([cid, v]) => {
+      const on = ccSel.cat === cid || (cid === '__sem__' && ccSel.grupo === '__sem__');
+      const clk = cid === '__sem__' ? `ccSel.grupo='__sem__';ccSel.cat=''` : `ccSel.grupo='${gid}';ccSel.cat='${cid}'`;
+      return `<div class="ccx-res-it ${on ? 'on' : ''}" onclick="${on ? "ccSel.grupo='';ccSel.cat=''" : clk};ccRenderDetalheLista()" title="Filtrar a lista">
+        <div class="ccx-res-t"><span>${esc(cid === '__sem__' ? 'Sem categoria' : getDreCatNome(cid))}</span><b>${fmtBRL(v)}</b></div>
+        <div class="ccx-res-bar"><i class="${cid === '__sem__' ? 'sem' : ''}" style="width:${Math.max(2, Math.abs(v) / max * 100)}%"></i></div></div>`;
+    }).join('');
+    return `<div class="ccx-res-g"><div class="ccx-res-gh" style="${gid === '__sem__' ? 'color:#b45309' : ''}"><span>${esc(nomeG)}</span><span>${fmtBRL(g.total)}</span></div>${cats}</div>`;
+  }).join('') + '</div>';
 }
 
 // ── Cadastro de cartão ──
@@ -19378,9 +19795,9 @@ function ccAbrirDespesa(cid, mes, grupo, orig) {
   selC.innerHTML = (db.cartoes || []).slice().sort((a, b) => (a.nome || '').localeCompare(b.nome || ''))
     .map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
   const selCat = document.getElementById('cc-d-cat');
-  selCat.innerHTML = '<option value="">Nenhuma</option>' + (db.dfc_cats || []).slice()
-    .sort((a, b) => (a.nome || '').localeCompare(b.nome || ''))
-    .map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  ccPopularGruposDespesa();
+  document.getElementById('cc-d-dregrupo').value = '';
+  ccPopularCatsDespesa('');
   const selP = document.getElementById('cc-d-parcelas');
   selP.innerHTML = Array.from({ length: 47 }, (_, i) => `<option value="${i + 2}">${i + 2}x</option>`).join('');
 
@@ -19391,6 +19808,7 @@ function ccAbrirDespesa(cid, mes, grupo, orig) {
   document.getElementById('cc-d-data').value = p1 ? p1.data : today();
   document.getElementById('cc-d-desc').value = p1 ? p1.descricao : '';
   selCat.value = p1 ? (p1.cat_dre || '') : '';
+  ccOnCatDespesa();
   const n = linhas.length || 1;
   // despesa importada da fatura (ex.: parcela 4/10 sozinha): mantém a marcação
   document.getElementById('cc-d-parc-fixa').value = (linhas.length === 1 && (p1.total_parcelas || 1) > 1) ? `${p1.parcela}/${p1.total_parcelas}` : '';
@@ -19410,6 +19828,7 @@ function ccAbrirDespesa(cid, mes, grupo, orig) {
     document.getElementById('cc-d-desc').value = orig.desc || '';
     document.getElementById('cc-d-valor').value = orig.valor || '';
     selCat.value = orig.cat || '';
+    ccOnCatDespesa();
     if (orig.data) document.getElementById('cc-d-data').value = orig.data;
   }
   const infoO = document.getElementById('cc-d-orig-info');
@@ -19418,6 +19837,10 @@ function ccAbrirDespesa(cid, mes, grupo, orig) {
   ccAtualizarFaturas(false, p1 ? p1.fatura : (mes || null));
   ccRenderChipsCartao();
   ccToggleParcelada();
+  document.getElementById('cc-d-sub').textContent = p1
+    ? `Lançada em ${fmtDate(p1.data)} · ${linhas.length > 1 ? linhas.length + ' parcelas' : 'à vista'}`
+    : 'Compra lançada na fatura do cartão de crédito';
+  setTimeout(() => { const el = document.getElementById('cc-d-desc'); if (el && !el.value) el.focus(); }, 60);
   if (typeof enhanceSearchableSelect === 'function') { try { enhanceSearchableSelect(selCat); } catch (e) {} }
   openModal('modal-cc-despesa');
 }
@@ -19441,6 +19864,7 @@ function ccToggleParcelada() {
   const sim = document.getElementById('cc-d-parcelada').value === 'sim';
   document.getElementById('cc-d-parc-grp').style.display = sim ? '' : 'none';
   document.getElementById('cc-d-tipoval-grp').style.display = sim ? '' : 'none';
+  document.querySelectorAll('#cc-d-parc-seg button').forEach(b => b.classList.toggle('on', b.dataset.v === (sim ? 'sim' : 'nao')));
   ccPreviaParcelas();
 }
 // Divide o valor em parcelas (centavos de diferença ficam na 1ª)
@@ -19472,7 +19896,9 @@ function ccPreviaParcelas() {
   if (ps.length < 2 || v <= 0) { box.style.display = 'none'; return; }
   const total = ps.reduce((s, p) => s + p.valor, 0);
   box.style.display = '';
-  box.innerHTML = `<b>${ps.length}x</b> — total ${fmtBRL(total)} · 1ª parcela ${fmtBRL(ps[0].valor)} na fatura de ${ccMesCurto(ps[0].fatura)}, última na fatura de ${ccMesCurto(ps[ps.length - 1].fatura)}.`;
+  const cid = document.getElementById('cc-d-cartao').value;
+  box.innerHTML = `<b>${ps.length}x</b> — total <b>${fmtBRL(total)}</b> · da fatura de ${ccMesCurto(ps[0].fatura)} até ${ccMesCurto(ps[ps.length - 1].fatura)}`
+    + `<div class="ccx-parc-l">${ps.map(p => `<span class="${ccFaturaPaga(cid, p.fatura) ? 'pg' : ''}" title="${ccFaturaPaga(cid, p.fatura) ? 'Fatura já paga' : ''}">${p.parcela}/${p.total_parcelas} · ${ccMesCurto(p.fatura)} · <b>${fmtBRL(p.valor)}</b></span>`).join('')}</div>`;
 }
 async function ccSalvarDespesa() {
   const grupoAnt = document.getElementById('cc-d-grupo').value;
@@ -19640,6 +20066,167 @@ async function ccEstornarFatura(cid, mes) {
 }
 
 
+
+// ── Grupo / Categoria no formulário de despesa do cartão ──
+function ccGruposValor() {
+  return [...(db.dre_grupos || [])].filter(g => g.tipo === 'entrada' || g.tipo === 'saida').sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+}
+// Opções de categoria agrupadas por Grupo do DRE (optgroup). Com "grupoId", só as daquele grupo.
+function ccOptsCategorias(grupoId, rotuloVazio) {
+  const cats = (db.dfc_cats || []).slice().sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+  let html = `<option value="">${rotuloVazio || 'Sem categoria'}</option>`;
+  if (grupoId) return html + cats.filter(c => c.grupo === grupoId).map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+  ccGruposValor().forEach(g => {
+    const cs = cats.filter(c => c.grupo === g.id);
+    if (cs.length) html += `<optgroup label="${esc(g.nome)}">` + cs.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join('') + '</optgroup>';
+  });
+  const orf = cats.filter(c => !ccGruposValor().some(g => g.id === c.grupo));
+  if (orf.length) html += '<optgroup label="Sem grupo">' + orf.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join('') + '</optgroup>';
+  return html;
+}
+function ccPopularGruposDespesa() {
+  const sel = document.getElementById('cc-d-dregrupo');
+  if (!sel) return;
+  const v = sel.value;
+  sel.innerHTML = '<option value="">Todos os grupos</option>' + ccGruposValor().map(g => `<option value="${g.id}">${esc(g.nome)}</option>`).join('');
+  sel.value = ccGruposValor().some(g => g.id === v) ? v : '';
+}
+function ccPopularCatsDespesa(manter) {
+  const sel = document.getElementById('cc-d-cat');
+  const g = (document.getElementById('cc-d-dregrupo') || {}).value || '';
+  const v = manter !== undefined ? manter : sel.value;
+  sel.innerHTML = ccOptsCategorias(g);
+  sel.value = [...sel.options].some(o => o.value === v) ? v : '';
+  ccAtualizarClassif();
+}
+function ccOnGrupoDespesa() { ccPopularCatsDespesa(); }
+function ccOnCatDespesa() {
+  const cat = document.getElementById('cc-d-cat').value;
+  const gSel = document.getElementById('cc-d-dregrupo');
+  const gCat = cat ? getDreCatGrupo(cat) : '';
+  if (cat && gCat && gSel.value !== gCat && [...gSel.options].some(o => o.value === gCat)) {
+    gSel.value = gCat; ccPopularCatsDespesa(cat);
+  }
+  ccAtualizarClassif();
+}
+function ccAtualizarClassif() {
+  const box = document.getElementById('cc-d-classif');
+  if (!box) return;
+  const cat = document.getElementById('cc-d-cat').value;
+  if (!cat) {
+    box.className = 'ccx-classif vazio';
+    box.innerHTML = '🏷️ Sem categoria: a despesa entra na fatura e no caixa, mas <b>não aparece no DRE</b> nem na Análise por Categoria.';
+    return;
+  }
+  const cObj = (db.dfc_cats || []).find(x => x.id === cat) || {};
+  const gid = cObj.grupo || '';
+  box.className = 'ccx-classif';
+  box.innerHTML = `Classificação: <b>${esc(gid ? getDreGrupoNome(gid) : 'Sem grupo')}</b><span class="sep">›</span><b>${esc(cObj.nome || '')}</b>`
+    + (cObj.tipo ? `<span class="sep">·</span>${cObj.tipo === 'entrada' ? 'Entrada (+)' : 'Saída (−)'}` : '');
+}
+function ccNovaCategoriaRapida() {
+  abrirCadastroRapido('categoria', 'cc-d-cat');
+  const g = document.getElementById('cc-d-dregrupo').value;
+  if (g) { const rg = document.getElementById('rapido-grupo'); if (rg) rg.value = g; }
+}
+function ccSetParcelada(v) {
+  document.getElementById('cc-d-parcelada').value = v;
+  ccToggleParcelada();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CARTÕES × RELATÓRIOS (DRE, Análise por Categoria, DFC, Fluxos)
+// Regras:
+// • Competência (DRE / Análise por Categoria): cada compra feita direto no
+//   cartão entra pela data da compra, na categoria dela. As contas a pagar
+//   que foram pagas "com cartão" já estão no DRE pelo lançamento original,
+//   então a despesa de cartão ligada a elas (origem_lanc) não é somada de novo.
+// • Caixa / vencimento (DFC, Fluxo Diário, Fluxo Projetado, Análise em aberto):
+//   o dinheiro sai quando a FATURA é paga (ou vence). A conta original paga
+//   "via cartão" não é saída de caixa (seria contada duas vezes) e a fatura
+//   é aberta nas categorias das despesas que a compõem.
+// ══════════════════════════════════════════════════════════════════
+function ccChaveOrigem(p) { return `${p.lancId}|${p.parcIdx}`; }
+// Parcelas a pagar sem as que foram quitadas "via cartão"
+function getParcelasCaixa(pago = false) {
+  const ori = ccOrigensSet();
+  if (!ori.size) return getParcelas(pago);
+  return getParcelas(pago).filter(p => !ori.has(ccChaveOrigem(p)));
+}
+// Igual a getParcelasCaixa, mas cada fatura de cartão vira uma linha por categoria
+let _ccGerCache = { ver: -1, lista: null };
+function getParcelasGerenciais(pago = false) {
+  if (_ccGerCache.ver !== _dbVer || !_ccGerCache.lista) {
+    _ccGerCache.ver = _dbVer;
+    _ccGerCache.lista = ccExpandirFaturas(getParcelasCaixa(false).concat(getParcelasCaixa(true)));
+  }
+  return _ccGerCache.lista.filter(p => p.isPago === pago);
+}
+function ccExpandirFaturas(lista) {
+  const porFatura = {};
+  (db.cartao_despesas || []).forEach(d => { const k = ccChave(d.cartao_id, d.fatura); (porFatura[k] = porFatura[k] || []).push(d); });
+  const out = [];
+  lista.forEach(p => {
+    if (!p.cartaoFatura) { out.push(p); return; }
+    const [cid, mes] = String(p.cartaoFatura).split('|');
+    const c = ccCartao(cid);
+    const nomeC = c ? c.nome : 'Cartão';
+    const porCat = new Map();
+    (porFatura[p.cartaoFatura] || []).forEach(d => {
+      const k = d.cat_dre || '';
+      const o = porCat.get(k) || { v: 0, n: 0 };
+      o.v += Number(d.valor) || 0; o.n++; porCat.set(k, o);
+    });
+    let soma = 0;
+    porCat.forEach((o, k) => {
+      const v = Math.round(o.v * 100) / 100;
+      if (Math.abs(v) < 0.005) return;
+      soma += v;
+      out.push(Object.assign({}, p, {
+        catId: k, valParc: v, ccParte: true,
+        prod: `💳 ${nomeC} · Fatura ${ccMesCurto(mes)} · ${k ? getDreCatNome(k) : 'Sem categoria'} (${o.n} desp.)`
+      }));
+    });
+    const resto = Math.round(((p.valParc || 0) - soma) * 100) / 100;
+    if (Math.abs(resto) >= 0.01) out.push(Object.assign({}, p, { catId: '', valParc: resto, ccParte: true, prod: `💳 ${nomeC} · Fatura ${ccMesCurto(mes)} · ajuste` }));
+  });
+  return out;
+}
+// Compras feitas direto no cartão, para relatórios por competência.
+// Uma linha por compra (soma das parcelas). Parcela avulsa importada da
+// fatura (ex.: 4/10 sozinha) entra no mês de fechamento da fatura em que
+// ela caiu — senão cada fatura importada alteraria meses passados.
+// porVencimento = true: uma linha por parcela, pela data de vencimento da fatura.
+function ccItensDespesas(porVencimento) {
+  const diretas = (db.cartao_despesas || []).filter(d => !d.origem_lanc);
+  if (porVencimento) {
+    return diretas.map(d => {
+      const c = ccCartao(d.cartao_id);
+      return {
+        grupo: d.grupo, cartaoId: d.cartao_id, cat: d.cat_dre || '', valor: Number(d.valor) || 0,
+        data: c ? ccDataVencimento(c, d.fatura) : (d.fatura + '-01'),
+        desc: (d.descricao || '') + ((d.total_parcelas || 1) > 1 ? ` (parc. ${d.parcela}/${d.total_parcelas})` : ''),
+        nomeCartao: c ? c.nome : 'Cartão', quitado: ccFaturaPaga(d.cartao_id, d.fatura)
+      };
+    });
+  }
+  const m = new Map();
+  diretas.forEach(d => {
+    let o = m.get(d.grupo);
+    if (!o) { o = { d, valor: 0, n: 0, pagas: 0 }; m.set(d.grupo, o); }
+    o.valor += Number(d.valor) || 0; o.n++;
+    if (ccFaturaPaga(d.cartao_id, d.fatura)) o.pagas++;
+  });
+  return [...m.values()].map(o => {
+    const d = o.d, c = ccCartao(d.cartao_id);
+    const tp = d.total_parcelas || 1;
+    const avulsa = o.n === 1 && tp > 1 && (d.parcela || 1) > 1;
+    const data = avulsa && c ? ccDataFechamento(c, d.fatura) : d.data;
+    const desc = (d.descricao || '') + (tp > 1 ? (o.n > 1 ? ` (${o.n}x)` : ` (parc. ${d.parcela}/${tp})`) : '');
+    return { grupo: d.grupo, cartaoId: d.cartao_id, cat: d.cat_dre || '', valor: Math.round(o.valor * 100) / 100,
+             data, desc, nomeCartao: c ? c.nome : 'Cartão', quitado: o.pagas === o.n };
+  });
+}
 
 // ══════════════════════════════════════════════════════════════════
 // IMPORTAR FATURA DO CARTÃO (OFX, CSV ou Excel exportados pelo banco)
@@ -19963,8 +20550,7 @@ function ccImpRender() {
     box.innerHTML = '<div class="cc-imp-vazio">Escolha o arquivo da fatura exportado pelo banco.<br><span>Formatos aceitos: <b>PDF</b> da fatura (Sicoob e Unicred), <b>OFX</b>, <b>CSV</b> ou <b>Excel</b> (.xlsx)</span></div>';
     res.textContent = ''; btn.disabled = true; return;
   }
-  const optsCat = '<option value="">Sem categoria</option>' + (db.dfc_cats || []).slice()
-    .sort((a, b) => (a.nome || '').localeCompare(b.nome || '')).map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  const optsCat = ccOptsCategorias('');
   box.innerHTML = `<table class="cc-imp-tab"><thead><tr>
       <th style="width:30px"><input type="checkbox" ${ls.every(l => l.sel) ? 'checked' : ''} onchange="ccImpToggleTodos(this.checked)"></th>
       <th>Data</th><th>Descrição</th><th>Parcela</th><th>Categoria</th><th style="text-align:right">Valor</th></tr></thead><tbody>
@@ -20043,7 +20629,7 @@ async function elPagarComCartao() {
 }
 
 // ── Marcador de versão (para confirmar qual arquivo está no ar) ──
-window.APP_BUILD = '2026-11-01 · sevegnani · cartoes-credito';
+window.APP_BUILD = '2026-11-05 · sevegnani · cartoes-v2';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Fechar modais clicando fora
@@ -21400,7 +21986,7 @@ function renderFluxoDiario(repopular) {
       if (banco && p.banco !== banco) return;
       somar(p.dtrecebido, 'receita', p.valParc);
     });
-    getParcelas(true).forEach(p => {
+    getParcelasCaixa(true).forEach(p => {
       if (banco && p.banco !== banco) return;
       somar(p.dtpago, 'despesa', p.valParc);
     });
@@ -21409,7 +21995,7 @@ function renderFluxoDiario(repopular) {
       if (banco && p.banco !== banco) return;
       somar(p.venc, 'receita', p.valParc);
     });
-    getParcelas(false).concat(getParcelas(true)).forEach(p => {
+    getParcelasCaixa(false).concat(getParcelasCaixa(true)).forEach(p => {
       if (banco && p.banco !== banco) return;
       somar(p.venc, 'despesa', p.valParc);
     });
@@ -21672,7 +22258,7 @@ function abrirDetalheFluxoFuturo(data, tipo) {
       });
     }
     if (tipo === 'pagar' || tipo === 'ambos') {
-      getParcelas(false).forEach(p => {
+      getParcelasCaixa(false).forEach(p => {
         if ((p.venc || p.dtcompra) === data) des.push(p);
       });
     }
@@ -21729,8 +22315,8 @@ function _fdLancamentosDoDia(dia, tipo) {
   }
   if (tipo === 'despesa' || tipo === 'ambos') {
     (base === 'realizado'
-      ? getParcelas(true).filter(p => (!banco || p.banco === banco) && bate(p.dtpago))
-      : getParcelas(false).concat(getParcelas(true)).filter(p => bate(p.venc))
+      ? getParcelasCaixa(true).filter(p => (!banco || p.banco === banco) && bate(p.dtpago))
+      : getParcelasCaixa(false).concat(getParcelasCaixa(true)).filter(p => bate(p.venc))
     ).forEach(p => des.push(p));
   }
   return { rec, des, data };
