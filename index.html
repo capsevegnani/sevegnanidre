@@ -1686,7 +1686,9 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .bx-saldo { color:#57534e; font-size:12.5px; }
 .bx-pos { color:#16a34a; } .bx-neg { color:#dc2626 !important; }
 .bx-mut { color:#d6d3d1; }
-.bx-acao { width:40px; text-align:right; }
+.bx-acao { width:76px; text-align:right; white-space:nowrap; }
+.bx-acao .bx-abrir + .bx-abrir { margin-left:4px; }
+.bx-del:hover { background:#dc2626 !important; border-color:#dc2626 !important; color:#fff; }
 .bx-abrir { border:1px solid #e7e5e4; background:#fff; width:28px; height:28px; border-radius:8px; cursor:pointer; color:#78716c; font-size:13px; opacity:.5; transition:.12s; }
 .bx-row:hover .bx-abrir { opacity:1; }
 .bx-abrir:hover { background:#ea580c; border-color:#ea580c; color:#fff; }
@@ -16278,7 +16280,7 @@ function bxMovimentos(bancoIds, ini, fim) {
     movs.push({ k: 'P' + p.lancId + '_' + p.parcIdx, origem: 'pagar', tipo: 'S', data: p.dtpago, valor: -v,
       nome: getFornNome(p.forn), item: p.prod ? getProdNome(p.prod) : '', cat: p.catId ? getDfcCatNome(p.catId) : '',
       doc: p.nf || '', parc: parcTxt(p), forma: p.tipoPag || '', venc: p.venc || '', conta: p.banco,
-      lancId: p.lancId, editavel: ehLocalPag.has(p.lancId) });
+      lancId: p.lancId, parcIdx: p.parcIdx, totalParc: p.totalParc, editavel: ehLocalPag.has(p.lancId) });
   });
   getParcelasReceberBanco(true).forEach(p => {
     if (!ids.has(p.banco) || !p.dtrecebido) return;
@@ -16288,7 +16290,7 @@ function bxMovimentos(bancoIds, ini, fim) {
     movs.push({ k: 'R' + p.lancId + '_' + p.parcIdx, origem: 'receber', tipo: 'E', data: p.dtrecebido, valor: v,
       nome: getClienteNome(p.cliente), item: p.prod ? getProdVendaNome(p.prod) : '', cat: p.catId ? getDfcCatNome(p.catId) : '',
       doc: p.nf || '', parc: parcTxt(p), forma: p.tipoPag || '', venc: p.venc || '', conta: p.banco,
-      lancId: p.lancId, editavel: ehLocalRec.has(p.lancId) });
+      lancId: p.lancId, parcIdx: p.parcIdx, totalParc: p.totalParc, editavel: ehLocalRec.has(p.lancId) });
   });
   (db.transferencias || []).forEach(t => {
     if (!t.data) return;
@@ -16393,7 +16395,7 @@ function bxListaHtml(lista, opt) {
       const ic = m.tipo === 'T' ? '<span class="bx-ic bx-ic-t" title="Transferência">⇄</span>'
         : (m.valor >= 0 ? '<span class="bx-ic bx-ic-e" title="Entrada">↓</span>' : '<span class="bx-ic bx-ic-s" title="Saída">↑</span>');
       const meta = [m.item, m.parc ? 'Parcela ' + m.parc : '', agrup === 'mes' ? fmtDate(m.data) : ''].filter(Boolean).map(esc).join(' · ');
-      const acao = m.editavel ? `<button class="bx-abrir" title="Abrir lançamento" onclick="bxAbrirLanc('${m.origem}','${esc(m.lancId)}')">↗</button>` : '';
+      const acao = m.editavel ? `<button class="bx-abrir" title="Abrir lançamento" onclick="bxAbrirLanc('${m.origem}','${esc(m.lancId)}')">↗</button><button class="bx-abrir bx-del" title="Excluir" onclick="bxExcluir('${m.origem}','${esc(m.lancId)}',${m.parcIdx || 0})">🗑</button>` : '';
       linhas.push(`<tr class="bx-row ${m.valor >= 0 ? 'bx-row-e' : 'bx-row-s'}">
         <td><div class="bx-nome">${ic}<div><div class="bx-nome-t">${esc(m.nome)}</div>${meta ? `<div class="bx-meta">${meta}</div>` : ''}</div></div></td>
         <td>${m.cat ? `<span class="bx-chip">${esc(m.cat)}</span>` : '<span class="bx-mut">—</span>'}</td>
@@ -16427,6 +16429,40 @@ function bxAbrirLanc(origem, id) {
   if (origem === 'pagar') editLancamento(id);
   else if (origem === 'receber') editLancReceber(id);
   else if (origem === 'transf') showPage('transferencias');
+}
+
+// Excluir a partir da Análise Bancária / modal de lançamentos
+async function bxExcluir(origem, id, parcIdx) {
+  const refrescar = () => {
+    try { if (paginaVisivel('analise-bancos')) renderAnaliseBancos(); } catch (e) { console.error(e); }
+    try { const md = document.getElementById('modal-bx'); if (md && md.classList.contains('open')) bxmRender(); } catch (e) { console.error(e); }
+    try { renderBancos(); renderFluxoBancoDiario(); } catch (e) {}
+  };
+  if (origem === 'transf') { await deleteTransferencia(id); refrescar(); return; }
+  const pagar = origem === 'pagar';
+  const l = (pagar ? db.lancamentos : db.lancreceber).find(x => String(x.id) === String(id));
+  if (!l) { alert('Lançamento não encontrado. Ele pode ter sido excluído ou pertencer a outra empresa.'); return; }
+  if (pagar && l.cartao_fatura) { alert('Esta é a fatura de um cartão de crédito. Ela é atualizada automaticamente pelas despesas lançadas na tela Cartões de Crédito.'); return; }
+  const n = l.parcelas || 1;
+  if (n > 1 && parcIdx) {
+    // Lançamento parcelado: remove só a parcela que movimentou a conta
+    await excluirParcela(origem, l.id, parcIdx);
+    refrescar(); return;
+  }
+  const quem = pagar ? getFornNome(l.forn) : getClienteNome(l.cliente);
+  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(l.valor)}?\n\nEle sairá das contas ${pagar ? 'pagas' : 'recebidas'} e o saldo do banco será recalculado.`)) return;
+  const ok = await sbFetch(pagar ? 'lancamentos' : 'lancreceber', 'DELETE', null, `?id=eq.${l.id}`);
+  if (!ok) { alert('❌ Não foi possível excluir no banco de dados.' + sbErroMsg()); return; }
+  if (pagar) {
+    if (typeof cfEhCustoFixo === 'function' && cfEhCustoFixo(l.id)) await cfSalvarNoBanco(l.id, false, []);
+    db.lancamentos = db.lancamentos.filter(x => x.id !== l.id);
+    if (typeof renderCustosFixos === 'function') renderCustosFixos();
+  } else {
+    db.lancreceber = db.lancreceber.filter(x => x.id !== l.id);
+  }
+  bumpDbVer();
+  try { _atualizarTelasAposExcluir(origem); } catch (e) { console.error(e); }
+  refrescar();
 }
 
 // Exportação CSV (abre no Excel)
