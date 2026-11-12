@@ -1600,6 +1600,149 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .pd-seg { display:flex; gap:3px; background:#faf9f7; border-radius:8px; padding:3px; }
 .pd-seg button { padding:4px 10px; font-size:11.5px; font-weight:600; border:none; border-radius:6px; cursor:pointer; background:transparent; color:#57534e; }
 .pd-seg button.ativo { background:#ea580c; color:#fff; }
+/* ── EXTRATO / ANÁLISE BANCÁRIA ── */
+.banco-card .bx-click { cursor:pointer; border-radius:8px; padding:4px 8px; margin:-4px -8px; transition:.15s; }
+.banco-card .bx-click:hover { background:#fff7ed; }
+.banco-card .banco-saldo.bx-click:hover .banco-saldo-val { text-decoration:underline; text-underline-offset:3px; }
+.banco-saldo-lbl .bx-ver { color:#ea580c; font-weight:700; margin-left:4px; display:none; }
+.banco-card .banco-saldo.bx-click:hover .bx-ver, .banco-card:hover .bx-ver { display:inline; }
+.bx-cell { cursor:pointer; border-radius:6px; padding:2px 6px; margin:-2px -6px; transition:.12s; }
+.bx-cell:hover { background:#fff1e6; outline:1px solid #fed7aa; }
+.card.kpi.bx-kpi-click { cursor:pointer; transition:.15s; }
+.card.kpi.bx-kpi-click:hover { border-color:#ea580c; box-shadow:0 4px 14px rgba(234,88,12,.12); transform:translateY(-1px); }
+
+.bx-modal { width:min(1240px,97vw) !important; max-width:97vw; max-height:94vh; padding:0 !important; display:flex; flex-direction:column; overflow:hidden !important; }
+.bx-mhead { display:flex; align-items:center; gap:16px; padding:20px 26px; background:linear-gradient(120deg,#1c1917 0%,#292524 60%,#7c2d12 140%); color:#fff; }
+.bx-mhead .bx-logo { width:56px; height:56px; border-radius:14px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
+.bx-logo-emoji { font-size:30px; line-height:1; }
+.bx-mnome { font-size:19px; font-weight:800; letter-spacing:-.2px; }
+.bx-msub { font-size:12px; color:#d6d3d1; margin-top:2px; }
+.bx-mper { margin-left:auto; text-align:right; font-size:11px; color:#a8a29e; text-transform:uppercase; letter-spacing:.6px; }
+.bx-mper b { display:block; color:#fff; font-size:14px; text-transform:none; letter-spacing:0; margin-top:2px; }
+.bx-mx { background:rgba(255,255,255,.1); border:none; color:#fff; width:34px; height:34px; border-radius:9px; cursor:pointer; font-size:16px; flex-shrink:0; }
+.bx-mx:hover { background:rgba(255,255,255,.2); }
+.bx-mbody { padding:18px 26px 8px; overflow:auto; flex:1; background:#faf9f7; }
+.bx-mfoot { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:12px 26px; border-top:1px solid #e7e5e4; background:#fff; font-size:12px; color:#78716c; }
+.bx-mfoot .btns { display:flex; gap:8px; flex-wrap:wrap; }
+
+.bx-kpis { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-bottom:14px; }
+@media (max-width:900px) { .bx-kpis { grid-template-columns:1fr 1fr; } }
+.bx-kpi { background:#fff; border:1px solid #e7e5e4; border-radius:12px; padding:12px 14px; position:relative; overflow:hidden; }
+.bx-kpi::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c); }
+.bx-kpi span { display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; }
+.bx-kpi b { display:block; font-family:'DM Mono',monospace; font-size:18px; color:var(--c); margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bx-kpi small { font-size:11px; color:#a8a29e; }
+.bx-kpi-dest { background:linear-gradient(135deg,#fff 0%,#fff7ed 100%); border-color:#fed7aa; }
+
+.bx-barra { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; }
+.bx-seg { display:inline-flex; gap:2px; background:#fff; border:1px solid #e7e5e4; border-radius:9px; padding:3px; flex-wrap:wrap; }
+.bx-seg button { border:none; background:none; padding:6px 11px; border-radius:7px; font-size:12px; font-weight:600; color:#57534e; cursor:pointer; font-family:inherit; white-space:nowrap; }
+.bx-seg button:hover { background:#f5f5f4; }
+.bx-seg button.on { background:#1c1917; color:#fff; }
+.bx-seg.bx-seg-tipo button.on[data-t="ET"], .bx-seg.bx-seg-tipo button.on[data-t="E"] { background:#16a34a; }
+.bx-seg.bx-seg-tipo button.on[data-t="ST"], .bx-seg.bx-seg-tipo button.on[data-t="S"] { background:#dc2626; }
+.bx-seg.bx-seg-tipo button.on[data-t="T"] { background:#2563eb; }
+.bx-in { display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e7e5e4; border-radius:9px; padding:0 10px; height:36px; }
+.bx-in label { font-size:10.5px; font-weight:700; text-transform:uppercase; color:#a8a29e; letter-spacing:.4px; margin:0; white-space:nowrap; }
+.bx-in input { border:none !important; outline:none; background:transparent !important; padding:0 !important; height:34px; font-size:13px; width:auto; box-shadow:none !important; }
+.bx-in input[type=date] { width:128px; }
+.bx-in input[type=number] { width:96px; }
+.bx-in.bx-busca { flex:1; min-width:200px; }
+.bx-in.bx-busca input { width:100%; }
+
+.bx-lista { background:#fff; border:1px solid #e7e5e4; border-radius:12px; overflow:hidden; }
+.bx-mbody .bx-lista { max-height:none; }
+.bx-tab { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
+.bx-tab thead th { position:sticky; top:0; z-index:2; background:#faf9f7; text-align:left; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; padding:10px 14px; border-bottom:1px solid #e7e5e4; white-space:nowrap; }
+.bx-tab th.r { text-align:right; }
+.bx-tab td { padding:10px 14px; border-bottom:1px solid #f5f5f4; vertical-align:middle; }
+.bx-row:hover td { background:#fffaf5; }
+.bx-sep td { padding:0; border-bottom:none; background:#fff; }
+.bx-sep-in { display:flex; align-items:center; gap:12px; padding:14px 14px 8px; }
+.bx-sep:not(:first-child) .bx-sep-in { border-top:1px solid #e7e5e4; margin-top:2px; }
+.bx-sep-cal { width:42px; height:44px; border-radius:10px; background:#1c1917; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1; flex-shrink:0; }
+.bx-sep-cal b { font-size:17px; font-family:'DM Mono',monospace; }
+.bx-sep-cal small { font-size:9.5px; text-transform:uppercase; color:#fdba74; letter-spacing:.6px; margin-top:3px; font-weight:700; }
+.bx-sep-txt { display:flex; flex-direction:column; line-height:1.25; white-space:nowrap; }
+.bx-sep-txt b { font-size:13.5px; color:#1c1917; }
+.bx-sep-txt small { font-size:11px; color:#a8a29e; }
+.bx-sep-txt em { font-style:normal; font-size:9.5px; font-weight:800; letter-spacing:.6px; padding:2px 7px; border-radius:20px; width:max-content; margin-top:3px; }
+.bx-tag-hoje { background:#ea580c; color:#fff; } .bx-tag-fut { background:#dbeafe; color:#1e40af; }
+.bx-sep-line { flex:1; height:0; border-top:1.5px dashed #e7e5e4; min-width:20px; }
+.bx-sep-tot { display:flex; gap:12px; align-items:center; font-family:'DM Mono',monospace; font-size:12px; white-space:nowrap; flex-wrap:wrap; justify-content:flex-end; }
+.bx-sep-n { font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; color:#a8a29e; font-weight:600; }
+.bx-sep-saldo { background:#f5f5f4; padding:4px 10px; border-radius:20px; color:#57534e; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; }
+.bx-sep-saldo b { font-family:'DM Mono',monospace; font-size:12px; color:#1c1917; margin-left:3px; }
+.bx-nome { display:flex; align-items:center; gap:10px; min-width:0; }
+.bx-nome-t { font-weight:650; color:#1c1917; }
+.bx-meta { font-size:11px; color:#a8a29e; margin-top:2px; }
+.bx-ic { width:30px; height:30px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; flex-shrink:0; }
+.bx-ic-e { background:#dcfce7; color:#15803d; } .bx-ic-s { background:#fee2e2; color:#b91c1c; } .bx-ic-t { background:#dbeafe; color:#1d4ed8; }
+.bx-chip { display:inline-block; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; background:#f5f5f4; color:#57534e; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:middle; }
+.bx-doc { font-size:12px; color:#57534e; }
+.bx-conta { font-size:12px; color:#57534e; white-space:nowrap; }
+.bx-val, .bx-saldo { text-align:right; font-family:'DM Mono',monospace; white-space:nowrap; }
+.bx-val { font-weight:700; font-size:13.5px; }
+.bx-saldo { color:#57534e; font-size:12.5px; }
+.bx-pos { color:#16a34a; } .bx-neg { color:#dc2626 !important; }
+.bx-mut { color:#d6d3d1; }
+.bx-acao { width:40px; text-align:right; }
+.bx-abrir { border:1px solid #e7e5e4; background:#fff; width:28px; height:28px; border-radius:8px; cursor:pointer; color:#78716c; font-size:13px; opacity:.5; transition:.12s; }
+.bx-row:hover .bx-abrir { opacity:1; }
+.bx-abrir:hover { background:#ea580c; border-color:#ea580c; color:#fff; }
+.bx-vazio { display:flex; flex-direction:column; align-items:center; gap:4px; padding:46px 20px; color:#78716c; font-size:13px; text-align:center; }
+.bx-vazio span { font-size:12px; color:#a8a29e; }
+.bx-vazio-ic { font-size:30px; margin-bottom:6px; }
+
+/* Tela de análise */
+.ab-topo { display:flex; gap:16px; align-items:stretch; margin-bottom:16px; flex-wrap:wrap; }
+.ab-conta { flex:1; min-width:280px; display:flex; align-items:center; gap:14px; padding:16px 20px; border-radius:14px; background:linear-gradient(120deg,#1c1917 0%,#292524 60%,#7c2d12 140%); color:#fff; }
+.ab-conta .bx-logo { width:52px; height:52px; border-radius:13px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.bx-conta-nome { font-size:18px; font-weight:800; }
+.bx-conta-sub { font-size:12px; color:#d6d3d1; margin-top:2px; }
+.bx-conta-per { margin-left:auto; text-align:right; font-size:10.5px; color:#a8a29e; text-transform:uppercase; letter-spacing:.6px; }
+.bx-conta-per b { display:block; color:#fff; font-size:14px; text-transform:none; letter-spacing:0; margin-top:3px; }
+.ab-filtros { background:#fff; border:1px solid #e7e5e4; border-radius:14px; padding:16px 18px; margin-bottom:16px; }
+.ab-grid { display:grid; grid-template-columns:minmax(200px,1.4fr) repeat(2,minmax(140px,1fr)) minmax(150px,1fr) repeat(2,minmax(120px,1fr)) minmax(120px,1fr); gap:10px 12px; align-items:end; }
+@media (max-width:1200px) { .ab-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:640px) { .ab-grid { grid-template-columns:1fr 1fr; } }
+.ab-grid .form-group { margin:0; }
+.ab-grid label { font-size:10.5px !important; }
+.ab-linha2 { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px dashed #e7e5e4; }
+.ab-linha2 .lbl { font-size:10.5px; font-weight:700; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; margin-right:4px; }
+.ab-vrap button { border:1px solid #e7e5e4; background:#fff; border-radius:20px; padding:4px 10px; font-size:11.5px; font-weight:600; color:#57534e; cursor:pointer; font-family:inherit; }
+.ab-vrap button:hover { border-color:#ea580c; color:#ea580c; }
+.ab-chips { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:10px; }
+.bx-fchip { font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:20px; background:#fff1e6; color:#c2410c; border:1px solid #fed7aa; }
+.bx-link { background:none; border:none; color:#ea580c; font-weight:700; font-size:12px; cursor:pointer; font-family:inherit; text-decoration:underline; text-underline-offset:2px; }
+.ab-meio { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr); gap:16px; margin-bottom:16px; }
+@media (max-width:1000px) { .ab-meio { grid-template-columns:1fr; } }
+.ab-meio > .card { margin:0; }
+.bx-graf { width:100%; height:auto; display:block; overflow:visible; }
+.bx-graf-lbl text { font-size:10px; fill:#a8a29e; font-family:'Plus Jakarta Sans',sans-serif; }
+.bx-leg { display:flex; gap:16px; font-size:11.5px; color:#78716c; margin-top:8px; }
+.bx-leg i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+.bx-cat-bloco + .bx-cat-bloco { margin-top:16px; padding-top:14px; border-top:1px solid #f5f5f4; }
+.bx-cat-tit { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#a8a29e; margin-bottom:8px; }
+.bx-cat-l { margin-bottom:9px; }
+.bx-cat-top { display:flex; justify-content:space-between; gap:8px; font-size:12.5px; margin-bottom:4px; }
+.bx-cat-top span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#44403c; }
+.bx-cat-top b { font-family:'DM Mono',monospace; font-size:12px; white-space:nowrap; }
+.bx-cat-bar { height:6px; background:#f5f5f4; border-radius:4px; overflow:hidden; }
+.bx-cat-bar i { display:block; height:100%; border-radius:4px; opacity:.8; }
+.ab-lista-head { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+#page-analise-bancos .bx-lista { max-height:70vh; overflow:auto; }
+@media (max-width:760px) { .bx-tab th:nth-child(2), .bx-tab td:nth-child(2):not([colspan]), .bx-tab th:nth-child(3), .bx-tab td:nth-child(3):not([colspan]) { display:none; } .bx-mper, .bx-conta-per { display:none; } }
+
+/* Separador de data: linha leve azul (sem bloco escuro) */
+.bx-sep-cal { display:none !important; }
+.bx-sep-in { background:#eff6ff; border-top:1px solid #dbeafe !important; border-bottom:1px solid #dbeafe; padding:8px 14px !important; margin-top:0 !important; gap:10px; }
+.bx-sep-txt { flex-direction:row; align-items:baseline; gap:8px; }
+.bx-sep-txt b { font-size:13px; color:#1e3a8a; }
+.bx-sep-txt small { color:#60a5fa; }
+.bx-sep-txt em { margin-top:0; }
+.bx-sep-line { border-top:none; }
+.bx-sep-saldo { background:#fff; border:1px solid #dbeafe; }
 </style>
 </head>
 <body>
@@ -1691,6 +1834,10 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         <div class="nav-sub-item" onclick="showPage('bancos')" id="nav-bancos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           Bancos / Caixas
+        </div>
+        <div class="nav-sub-item" onclick="showPage('analise-bancos')" id="nav-analise-bancos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 13 10 10.5 12 12 14.5 9"/></svg>
+          Análise Bancária
         </div>
         <div class="nav-sub-item" onclick="showPage('transferencias')" id="nav-transferencias">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
@@ -3345,6 +3492,73 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       </div>
     </div>
 
+    <!-- ══ ANÁLISE BANCÁRIA ══ -->
+    <div class="page" id="page-analise-bancos">
+      <div class="page-header">
+        <div><div class="page-title">Análise Bancária <span style="display:inline-block;margin-left:10px;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;vertical-align:middle;background:#f5f5f4;color:#57534e;border:1px solid #e7e5e4;" title="Saldos e extratos das contas sempre somam todas as empresas">📊 Consolidado</span></div>
+          <div class="page-sub" style="margin-bottom:0">Lançamentos efetivados nas contas, agrupados por data — filtre por conta, período, tipo e valor</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-secondary btn-sm" onclick="abExportar()">⬇ Excel (CSV)</button>
+          <button class="btn btn-secondary btn-sm" onclick="abImprimir()">🖨 Imprimir / PDF</button>
+        </div>
+      </div>
+
+      <div class="ab-filtros">
+        <div class="ab-grid">
+          <div class="form-group"><label>Conta</label><select id="ab-banco" onchange="renderAnaliseBancos()"><option value="">Todas as Contas</option></select></div>
+          <div class="form-group"><label>Data inicial</label><input type="date" id="ab-ini" onchange="renderAnaliseBancos()"></div>
+          <div class="form-group"><label>Data final</label><input type="date" id="ab-fim" onchange="renderAnaliseBancos()"></div>
+          <div class="form-group"><label>Tipo</label>
+            <select id="ab-tipo" onchange="renderAnaliseBancos()">
+              <option value="">Todos</option>
+              <option value="ET">Entradas (tudo que entrou)</option>
+              <option value="ST">Saídas (tudo que saiu)</option>
+              <option value="E">Somente recebimentos</option>
+              <option value="S">Somente pagamentos</option>
+              <option value="T">Somente transferências</option>
+            </select></div>
+          <div class="form-group"><label>Valor mínimo (R$)</label><input type="number" step="0.01" min="0" id="ab-vmin" placeholder="0,00" oninput="renderAnaliseBancos()"></div>
+          <div class="form-group"><label>Valor máximo (R$)</label><input type="number" step="0.01" min="0" id="ab-vmax" placeholder="sem limite" oninput="renderAnaliseBancos()"></div>
+          <div class="form-group"><label>Agrupar por</label>
+            <select id="ab-agrup" onchange="renderAnaliseBancos()"><option value="dia">Dia</option><option value="mes">Mês</option></select></div>
+        </div>
+        <div class="ab-linha2">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span class="lbl">Período</span>
+            <div class="bx-seg" id="ab-presets">
+              <button data-p="hoje" onclick="abPreset('hoje')">Hoje</button>
+              <button data-p="7d" onclick="abPreset('7d')">7 dias</button>
+              <button data-p="30d" onclick="abPreset('30d')">30 dias</button>
+              <button data-p="mes" onclick="abPreset('mes')">Mês atual</button>
+              <button data-p="mesant" onclick="abPreset('mesant')">Mês anterior</button>
+              <button data-p="tri" onclick="abPreset('tri')">Trimestre</button>
+              <button data-p="ano" onclick="abPreset('ano')">Ano</button>
+              <button data-p="tudo" onclick="abPreset('tudo')">Tudo</button>
+            </div>
+          </div>
+          <div class="ab-vrap" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span class="lbl">Faixa de valor</span>
+            <button onclick="abValorRapido(null,1000)">até 1 mil</button>
+            <button onclick="abValorRapido(1000,10000)">1 mil – 10 mil</button>
+            <button onclick="abValorRapido(10000,null)">acima de 10 mil</button>
+            <button onclick="abValorRapido(null,null)">qualquer</button>
+          </div>
+        </div>
+        <div class="ab-chips" id="ab-chips"></div>
+      </div>
+
+      <div class="ab-topo"><div class="ab-conta" id="ab-conta-box"></div></div>
+      <div class="bx-kpis" id="ab-kpis"></div>
+
+      <div class="card">
+        <div class="ab-lista-head">
+          <div class="card-title" style="margin:0">Lançamentos <span id="ab-contagem" style="text-transform:none;letter-spacing:0;font-weight:500;margin-left:6px;color:#78716c"></span></div>
+          <div class="bx-in bx-busca" style="max-width:420px"><label>🔎</label><input type="text" id="ab-busca" placeholder="Buscar fornecedor, cliente, categoria, NF ou valor..." oninput="renderAnaliseBancos()"></div>
+        </div>
+        <div class="bx-lista" id="ab-lista"></div>
+      </div>
+    </div>
+
     <!-- ══ TRANSFERÊNCIA ENTRE CONTAS ══ -->
     <div class="page" id="page-transferencias">
       <div class="page-header">
@@ -4319,6 +4533,54 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modal-cob-msgs')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: LANÇAMENTOS DA CONTA (clique nos números do banco) ══ -->
+<div class="modal-overlay" id="modal-bx" style="z-index:195;" onclick="if(event.target===this)closeModal('modal-bx')">
+  <div class="modal bx-modal">
+    <div class="bx-mhead">
+      <div class="bx-logo" id="bxm-logo"></div>
+      <div style="min-width:0"><div class="bx-mnome" id="bxm-nome">Conta</div><div class="bx-msub" id="bxm-sub"></div></div>
+      <div class="bx-mper">Período<b id="bxm-periodo"></b></div>
+      <button class="bx-mx" onclick="closeModal('modal-bx')" title="Fechar">✕</button>
+    </div>
+    <div class="bx-mbody">
+      <div class="bx-kpis" id="bxm-kpis"></div>
+      <div class="bx-barra">
+        <div class="bx-seg" id="bxm-presets">
+          <button data-p="hoje" onclick="bxmPreset('hoje')">Hoje</button>
+          <button data-p="7d" onclick="bxmPreset('7d')">7 dias</button>
+          <button data-p="mes" onclick="bxmPreset('mes')">Mês atual</button>
+          <button data-p="mesant" onclick="bxmPreset('mesant')">Mês anterior</button>
+          <button data-p="90d" onclick="bxmPreset('90d')">90 dias</button>
+          <button data-p="ano" onclick="bxmPreset('ano')">Ano</button>
+          <button data-p="tudo" onclick="bxmPreset('tudo')">Tudo</button>
+        </div>
+        <div class="bx-in"><label>De</label><input type="date" id="bxm-ini" onchange="bxmDatas()"></div>
+        <div class="bx-in"><label>Até</label><input type="date" id="bxm-fim" onchange="bxmDatas()"></div>
+      </div>
+      <div class="bx-barra">
+        <div class="bx-seg bx-seg-tipo" id="bxm-tipos">
+          <button data-t="" onclick="bxmTipo('')">Todos</button>
+          <button data-t="ET" onclick="bxmTipo('ET')">Entradas</button>
+          <button data-t="ST" onclick="bxmTipo('ST')">Saídas</button>
+          <button data-t="T" onclick="bxmTipo('T')">Transferências</button>
+        </div>
+        <div class="bx-in"><label>Valor de</label><input type="number" step="0.01" min="0" id="bxm-vmin" placeholder="0,00" oninput="bxmFiltros()"></div>
+        <div class="bx-in"><label>até</label><input type="number" step="0.01" min="0" id="bxm-vmax" placeholder="sem limite" oninput="bxmFiltros()"></div>
+        <div class="bx-in bx-busca"><label>🔎</label><input type="text" id="bxm-busca" placeholder="Buscar fornecedor, cliente, categoria, NF ou valor..." oninput="bxmFiltros()"></div>
+      </div>
+      <div class="bx-lista" id="bxm-lista"></div>
+    </div>
+    <div class="bx-mfoot">
+      <span id="bxm-rodape"></span>
+      <div class="btns">
+        <button class="btn btn-secondary btn-sm" onclick="bxmExportar()">⬇ Excel (CSV)</button>
+        <button class="btn btn-secondary btn-sm" onclick="bxmImprimir()">🖨 Imprimir / PDF</button>
+        <button class="btn btn-primary btn-sm" onclick="bxmAbrirAnalise()">Abrir na Análise Bancária →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -5335,6 +5597,7 @@ function paginaOculta(p) { return PAGINAS_OCULTAS.includes(p); }
 const PAGES_CONFIG = [
   { id:'dashboard',         label:'Dashboard',           grupo:'geral'   },
   { id:'bancos',            label:'Bancos / Caixas',     grupo:'pagar'   },
+  { id:'analise-bancos',    label:'Análise Bancária',    grupo:'pagar'   },
   { id:'transferencias',    label:'Transferência entre Contas', grupo:'pagar' },
   { id:'fluxo-futuro',      label:'Fluxo de Caixa Futuro',grupo:'pagar'  },
   { id:'fluxo-projetado',   label:'Fluxo de Caixa Projetado',grupo:'pagar' },
@@ -6311,7 +6574,7 @@ function showPage(p) {
   }
   if (p !== 'usuarios' && p !== 'empresas' && currentUser && currentUser.role !== 'admin') {
     const allowed = currentUser.pages || [];
-    if (!allowed.includes(p)) { alert('Acesso não permitido para seu perfil.'); return; }
+    if (!allowed.includes(p) && !(p === 'analise-bancos' && allowed.includes('bancos'))) { alert('Acesso não permitido para seu perfil.'); return; }
   }
   _filtrosSnapshotAtiva();
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
@@ -6329,6 +6592,7 @@ function showPage(p) {
   if (p === 'cartoes')        ccAbrirPagina();
   if (p === 'custos-fixos')   renderCustosFixos();
   if (p === 'bancos')         { renderBancos(); renderFluxoBancoDiario(); }
+  if (p === 'analise-bancos') renderAnaliseBancos();
   if (p === 'transferencias') { populateTransfSelects(); renderTransferencias(); }
   if (p === 'fluxo-futuro')   renderFluxoFuturo();
   if (p === 'fluxo-projetado') abrirFluxoProjetado();
@@ -6374,6 +6638,7 @@ function renderPaginaAtual() {
   if (p === 'cartoes')        ccAbrirPagina();
   if (p === 'custos-fixos')   renderCustosFixos();
   if (p === 'bancos')         { renderBancos(); renderFluxoBancoDiario(); }
+  if (p === 'analise-bancos') renderAnaliseBancos();
   if (p === 'transferencias') { populateTransfSelects(); renderTransferencias(); }
   if (p === 'fluxo-futuro')   renderFluxoFuturo();
   if (p === 'fluxo-projetado') abrirFluxoProjetado();
@@ -11543,7 +11808,7 @@ function applyNavPermissions() {
     if (paginaOculta(pg)) { item.style.display = 'none'; return; }
     if (pg === 'usuarios' || pg === 'empresas') return;
     if (isAdmin) { item.style.display = ''; return; }
-    item.style.display = allowed.includes(pg) ? '' : 'none';
+    item.style.display = (allowed.includes(pg) || (pg === 'analise-bancos' && allowed.includes('bancos'))) ? '' : 'none';
   });
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
   ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-obras'].forEach(grpId => {
@@ -15800,10 +16065,10 @@ function renderFluxoBancoDiario() {
     const isToday = dateStr === todayStr;
     const saldoCls = saldoAcum >= 0 ? 'dfc-val-pos' : 'dfc-val-neg';
     linhas.push(`<tr class="${isToday ? 'fb-dia-hoje' : ''}">
-      <td style="font-weight:700">${String(d).padStart(2, '0')}${isToday ? ' <span style="font-size:9px;color:#ea580c">HOJE</span>' : ''}</td>
-      <td>${entrada > 0.005 ? `<span class="dfc-val-pos">+ ${fmtBRL(entrada)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
-      <td>${saida > 0.005 ? `<span class="dfc-val-neg">− ${fmtBRL(saida)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
-      <td>${Math.abs(entrada - saida) > 0.005 ? fmtDreVal(entrada - saida) : '<span class="dfc-val-zero">—</span>'}</td>
+      <td style="font-weight:700">${(entrada > 0.005 || saida > 0.005) ? `<span class="bx-cell" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${String(d).padStart(2, '0')}</span>` : String(d).padStart(2, '0')}${isToday ? ' <span style="font-size:9px;color:#ea580c">HOJE</span>' : ''}</td>
+      <td>${entrada > 0.005 ? `<span class="dfc-val-pos bx-cell" onclick="bxFluxoDia('${dateStr}','ET')" title="Ver entradas do dia">+ ${fmtBRL(entrada)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
+      <td>${saida > 0.005 ? `<span class="dfc-val-neg bx-cell" onclick="bxFluxoDia('${dateStr}','ST')" title="Ver saídas do dia">− ${fmtBRL(saida)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
+      <td>${Math.abs(entrada - saida) > 0.005 ? `<span class="bx-cell" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${fmtDreVal(entrada - saida)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
       <td class="${saldoCls}" style="font-weight:700">${fmtBRL(saldoAcum)}</td>
     </tr>`);
   }
@@ -15814,10 +16079,10 @@ function renderFluxoBancoDiario() {
 
   wrap.innerHTML = `
     <div class="grid4" style="margin-bottom:16px;">
-      <div class="card kpi"><div class="kpi-val" style="color:#166534">+ ${fmtBRL(totalEntradas)}</div><div class="kpi-lbl">Entradas no mês</div></div>
-      <div class="card kpi"><div class="kpi-val" style="color:#dc2626">− ${fmtBRL(totalSaidas)}</div><div class="kpi-lbl">Saídas no mês</div></div>
-      <div class="card kpi"><div class="kpi-val" style="color:${saldoMesCor}">${fmtDreVal(totalEntradas - totalSaidas)}</div><div class="kpi-lbl">Saldo do mês</div></div>
-      <div class="card kpi"><div class="kpi-val" style="color:${saldoFinalCor}">${fmtBRL(saldoAcum)}</div><div class="kpi-lbl">Saldo final — ${nomeBanco}</div></div>
+      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes('ET')" title="Ver entradas do mês"><div class="kpi-val" style="color:#166534">+ ${fmtBRL(totalEntradas)}</div><div class="kpi-lbl">Entradas no mês</div></div>
+      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes('ST')" title="Ver saídas do mês"><div class="kpi-val" style="color:#dc2626">− ${fmtBRL(totalSaidas)}</div><div class="kpi-lbl">Saídas no mês</div></div>
+      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes()" title="Ver todos os lançamentos do mês"><div class="kpi-val" style="color:${saldoMesCor}">${fmtDreVal(totalEntradas - totalSaidas)}</div><div class="kpi-lbl">Saldo do mês</div></div>
+      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes()" title="Ver todos os lançamentos do mês"><div class="kpi-val" style="color:${saldoFinalCor}">${fmtBRL(saldoAcum)}</div><div class="kpi-lbl">Saldo final — ${nomeBanco}</div></div>
     </div>
     <div style="max-height:520px;overflow-y:auto">
       <table class="dfc-table" style="width:100%">
@@ -15961,6 +16226,516 @@ function imprimirExtratoBanco(orientacao) {
   setTimeout(imprimir, 1200);
 }
 
+
+// ══════════════════════════════════════════════════════════════════
+// EXTRATO / ANÁLISE DE LANÇAMENTOS BANCÁRIOS
+// Motor único (bxMovimentos) usado por:
+//  • Modal de lançamentos ao clicar nos números de um banco / do fluxo diário
+//  • Tela "Análise Bancária" (filtros de conta, período, tipo e valor)
+// ══════════════════════════════════════════════════════════════════
+const BX_MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const BX_MESES_C = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const BX_SEMANA = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+
+function _bxIso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function _bxHoje() { return _bxIso(new Date()); }
+function _bxNum(v) { const n = parseFloat(String(v == null ? '' : v).replace(/\./g, '').replace(',', '.')); return isNaN(n) ? null : n; }
+function _bxNumInput(el) { if (!el || el.value === '') return null; const n = parseFloat(el.value); return isNaN(n) ? null : n; }
+
+// Períodos rápidos → [ini, fim]
+function bxPeriodo(chave) {
+  const h = new Date(); const y = h.getFullYear(), m = h.getMonth();
+  const ultimo = (yy, mm) => new Date(yy, mm + 1, 0);
+  switch (chave) {
+    case 'hoje':     return [_bxHoje(), _bxHoje()];
+    case '7d':       { const a = new Date(); a.setDate(a.getDate() - 6); return [_bxIso(a), _bxHoje()]; }
+    case '30d':      { const a = new Date(); a.setDate(a.getDate() - 29); return [_bxIso(a), _bxHoje()]; }
+    case '90d':      { const a = new Date(); a.setDate(a.getDate() - 89); return [_bxIso(a), _bxHoje()]; }
+    case 'mes':      return [_bxIso(new Date(y, m, 1)), _bxIso(ultimo(y, m))];
+    case 'mesant':   return [_bxIso(new Date(y, m - 1, 1)), _bxIso(ultimo(y, m - 1))];
+    case 'tri':      { const q = Math.floor(m / 3) * 3; return [_bxIso(new Date(y, q, 1)), _bxIso(ultimo(y, q + 2))]; }
+    case 'ano':      return [`${y}-01-01`, `${y}-12-31`];
+    case 'tudo':     return ['', ''];
+  }
+  return ['', ''];
+}
+
+// Monta todos os movimentos efetivados (pagos / recebidos / transferências) das contas
+// informadas, com saldo anterior ao período e saldo corrente após cada movimento.
+function bxMovimentos(bancoIds, ini, fim) {
+  const ids = new Set(bancoIds);
+  let saldoAnt = db.bancos.filter(b => ids.has(b.id)).reduce((s, b) => s + (b.saldo_inicial || 0), 0);
+  const movs = [];
+  const parcTxt = p => (p.totalParc > 1 ? `${p.parcIdx}/${p.totalParc}` : '');
+  const ehLocalPag = new Set(db.lancamentos.map(l => l.id));
+  const ehLocalRec = new Set(db.lancreceber.map(l => l.id));
+
+  getParcelasBanco(true).forEach(p => {
+    if (!ids.has(p.banco) || !p.dtpago) return;
+    const v = p.valParc || 0;
+    if (ini && p.dtpago < ini) { saldoAnt -= v; return; }
+    if (fim && p.dtpago > fim) return;
+    movs.push({ k: 'P' + p.lancId + '_' + p.parcIdx, origem: 'pagar', tipo: 'S', data: p.dtpago, valor: -v,
+      nome: getFornNome(p.forn), item: p.prod ? getProdNome(p.prod) : '', cat: p.catId ? getDfcCatNome(p.catId) : '',
+      doc: p.nf || '', parc: parcTxt(p), forma: p.tipoPag || '', venc: p.venc || '', conta: p.banco,
+      lancId: p.lancId, editavel: ehLocalPag.has(p.lancId) });
+  });
+  getParcelasReceberBanco(true).forEach(p => {
+    if (!ids.has(p.banco) || !p.dtrecebido) return;
+    const v = p.valParc || 0;
+    if (ini && p.dtrecebido < ini) { saldoAnt += v; return; }
+    if (fim && p.dtrecebido > fim) return;
+    movs.push({ k: 'R' + p.lancId + '_' + p.parcIdx, origem: 'receber', tipo: 'E', data: p.dtrecebido, valor: v,
+      nome: getClienteNome(p.cliente), item: p.prod ? getProdVendaNome(p.prod) : '', cat: p.catId ? getDfcCatNome(p.catId) : '',
+      doc: p.nf || '', parc: parcTxt(p), forma: p.tipoPag || '', venc: p.venc || '', conta: p.banco,
+      lancId: p.lancId, editavel: ehLocalRec.has(p.lancId) });
+  });
+  (db.transferencias || []).forEach(t => {
+    if (!t.data) return;
+    const sai = ids.has(t.origem), ent = ids.has(t.destino), v = t.valor || 0;
+    if (!sai && !ent) return;
+    if (ini && t.data < ini) { if (sai) saldoAnt -= v; if (ent) saldoAnt += v; return; }
+    if (fim && t.data > fim) return;
+    if (sai) movs.push({ k: 'TS' + t.id, origem: 'transf', tipo: 'T', data: t.data, valor: -v,
+      nome: 'Transferência enviada', item: 'para ' + getBancoNome(t.destino), cat: 'Transferência entre contas',
+      doc: '', parc: '', forma: t.obs || '', venc: '', conta: t.origem, lancId: t.id, editavel: true });
+    if (ent) movs.push({ k: 'TE' + t.id, origem: 'transf', tipo: 'T', data: t.data, valor: v,
+      nome: 'Transferência recebida', item: 'de ' + getBancoNome(t.origem), cat: 'Transferência entre contas',
+      doc: '', parc: '', forma: t.obs || '', venc: '', conta: t.destino, lancId: t.id, editavel: true });
+  });
+
+  movs.sort((a, b) => a.data.localeCompare(b.data) || (b.valor - a.valor));
+  let s = saldoAnt;
+  const fimDia = {};
+  movs.forEach(m => { s += m.valor; m.saldo = s; fimDia[m.data] = s; });
+  return { saldoAnt, saldoFinal: s, movs, fimDia };
+}
+
+// Filtros secundários (não alteram o saldo corrente, que é sempre o real da conta)
+function bxFiltrar(movs, f) {
+  const busca = (f.busca || '').trim().toLowerCase();
+  const buscaNum = _bxNum(busca);
+  return movs.filter(m => {
+    if (f.tipo === 'E' && !(m.valor > 0 && m.tipo !== 'T')) return false;
+    if (f.tipo === 'S' && !(m.valor < 0 && m.tipo !== 'T')) return false;
+    if (f.tipo === 'T' && m.tipo !== 'T') return false;
+    if (f.tipo === 'ET' && !(m.valor > 0)) return false;
+    if (f.tipo === 'ST' && !(m.valor < 0)) return false;
+    const abs = Math.abs(m.valor);
+    if (f.vmin != null && abs < f.vmin - 0.004) return false;
+    if (f.vmax != null && abs > f.vmax + 0.004) return false;
+    if (busca) {
+      const txt = [m.nome, m.item, m.cat, m.doc, m.forma, getBancoNome(m.conta), fmtBRL(abs)].join(' ').toLowerCase();
+      const okTxt = txt.includes(busca);
+      const okNum = buscaNum != null && Math.abs(abs - buscaNum) < 0.01;
+      if (!okTxt && !okNum) return false;
+    }
+    return true;
+  });
+}
+
+function bxResumo(lista) {
+  let ent = 0, sai = 0, nE = 0, nS = 0, maior = null;
+  lista.forEach(m => {
+    if (m.valor >= 0) { ent += m.valor; nE++; } else { sai += -m.valor; nS++; }
+    if (!maior || Math.abs(m.valor) > Math.abs(maior.valor)) maior = m;
+  });
+  return { ent, sai, nE, nS, maior, liq: ent - sai };
+}
+
+function bxDataLonga(d) {
+  const dt = new Date(d + 'T12:00:00');
+  return { dia: String(dt.getDate()).padStart(2, '0'), mes: BX_MESES_C[dt.getMonth()], ano: dt.getFullYear(), semana: BX_SEMANA[dt.getDay()], mesLongo: BX_MESES[dt.getMonth()] };
+}
+
+// Tabela agrupada por data (linha separadora com a data, totais e saldo do dia)
+function bxListaHtml(lista, opt) {
+  opt = opt || {};
+  const multi = !!opt.multi;
+  const agrup = opt.agrup || 'dia';
+  const fimDia = opt.fimDia || {};
+  const colsN = multi ? 7 : 6;
+  if (!lista.length) {
+    return `<div class="bx-vazio"><div class="bx-vazio-ic">🔎</div><b>Nenhum lançamento encontrado</b><span>Ajuste o período, a conta ou os filtros de valor.</span></div>`;
+  }
+  const hojeStr = _bxHoje();
+  const chaveDe = m => agrup === 'mes' ? m.data.slice(0, 7) : m.data;
+  const grupos = [];
+  lista.forEach(m => {
+    const k = chaveDe(m);
+    let g = grupos[grupos.length - 1];
+    if (!g || g.k !== k) { g = { k, itens: [] }; grupos.push(g); }
+    g.itens.push(m);
+  });
+  const ultimaDataDo = g => g.itens[g.itens.length - 1].data;
+  const linhas = [];
+  grupos.forEach(g => {
+    const r = bxResumo(g.itens);
+    let rotulo;
+    if (agrup === 'mes') {
+      const [yy, mm] = g.k.split('-');
+      rotulo = `<span class="bx-sep-cal"><b>${BX_MESES_C[parseInt(mm) - 1]}</b><small>${yy}</small></span><span class="bx-sep-txt"><b>${BX_MESES[parseInt(mm) - 1]} de ${yy}</b></span>`;
+    } else {
+      const d = bxDataLonga(g.k);
+      const tag = g.k === hojeStr ? '<em class="bx-tag-hoje">HOJE</em>' : (g.k > hojeStr ? '<em class="bx-tag-fut">FUTURO</em>' : '');
+      rotulo = `<span class="bx-sep-cal"><b>${d.dia}</b><small>${d.mes}</small></span><span class="bx-sep-txt"><b>${d.dia} de ${d.mesLongo} de ${d.ano}</b><small>${d.semana}</small>${tag}</span>`;
+    }
+    const saldoFim = fimDia[ultimaDataDo(g)];
+    linhas.push(`<tr class="bx-sep"><td colspan="${colsN}"><div class="bx-sep-in">
+      ${rotulo}<span class="bx-sep-line"></span>
+      <span class="bx-sep-tot">
+        <span class="bx-sep-n">${g.itens.length} lanç.</span>
+        ${r.ent > 0.004 ? `<span class="bx-pos">+ ${fmtBRL(r.ent)}</span>` : ''}
+        ${r.sai > 0.004 ? `<span class="bx-neg">− ${fmtBRL(r.sai)}</span>` : ''}
+        ${saldoFim != null ? `<span class="bx-sep-saldo" title="Saldo da conta ao final do ${agrup === 'mes' ? 'mês' : 'dia'}">Saldo <b class="${saldoFim < 0 ? 'bx-neg' : ''}">${fmtBRL(saldoFim)}</b></span>` : ''}
+      </span></div></td></tr>`);
+    g.itens.forEach(m => {
+      const ic = m.tipo === 'T' ? '<span class="bx-ic bx-ic-t" title="Transferência">⇄</span>'
+        : (m.valor >= 0 ? '<span class="bx-ic bx-ic-e" title="Entrada">↓</span>' : '<span class="bx-ic bx-ic-s" title="Saída">↑</span>');
+      const meta = [m.item, m.parc ? 'Parcela ' + m.parc : '', agrup === 'mes' ? fmtDate(m.data) : ''].filter(Boolean).map(esc).join(' · ');
+      const acao = m.editavel ? `<button class="bx-abrir" title="Abrir lançamento" onclick="bxAbrirLanc('${m.origem}','${esc(m.lancId)}')">↗</button>` : '';
+      linhas.push(`<tr class="bx-row ${m.valor >= 0 ? 'bx-row-e' : 'bx-row-s'}">
+        <td><div class="bx-nome">${ic}<div><div class="bx-nome-t">${esc(m.nome)}</div>${meta ? `<div class="bx-meta">${meta}</div>` : ''}</div></div></td>
+        <td>${m.cat ? `<span class="bx-chip">${esc(m.cat)}</span>` : '<span class="bx-mut">—</span>'}</td>
+        <td class="bx-doc">${m.doc ? esc(m.doc) : '<span class="bx-mut">—</span>'}${m.forma ? `<div class="bx-meta">${esc(m.forma)}</div>` : ''}</td>
+        ${multi ? `<td class="bx-conta">${esc(getBancoNome(m.conta))}</td>` : ''}
+        <td class="bx-val ${m.valor >= 0 ? 'bx-pos' : 'bx-neg'}">${m.valor >= 0 ? '+ ' : '− '}${fmtBRL(Math.abs(m.valor))}</td>
+        <td class="bx-saldo ${m.saldo < 0 ? 'bx-neg' : ''}">${fmtBRL(m.saldo)}</td>
+        <td class="bx-acao">${acao}</td>
+      </tr>`);
+    });
+  });
+  return `<table class="bx-tab">
+    <thead><tr><th>Lançamento</th><th>Categoria</th><th>Doc. / Forma</th>${multi ? '<th>Conta</th>' : ''}<th class="r">Valor</th><th class="r">Saldo</th><th></th></tr></thead>
+    <tbody>${linhas.join('')}</tbody></table>`;
+}
+
+function bxKpisHtml(ex, r, nTotal, nFiltrado) {
+  const varr = ex.saldoFinal - ex.saldoAnt;
+  return `
+    <div class="bx-kpi" style="--c:#57534e"><span>Saldo anterior</span><b>${fmtBRL(ex.saldoAnt)}</b><small>início do período</small></div>
+    <div class="bx-kpi" style="--c:#16a34a"><span>Entradas</span><b>+ ${fmtBRL(r.ent)}</b><small>${r.nE} lançamento(s)</small></div>
+    <div class="bx-kpi" style="--c:#dc2626"><span>Saídas</span><b>− ${fmtBRL(r.sai)}</b><small>${r.nS} lançamento(s)</small></div>
+    <div class="bx-kpi" style="--c:${r.liq >= 0 ? '#16a34a' : '#dc2626'}"><span>Resultado</span><b>${r.liq >= 0 ? '+ ' : '− '}${fmtBRL(Math.abs(r.liq))}</b><small>${nFiltrado === nTotal ? 'entradas − saídas' : 'dos lançamentos filtrados'}</small></div>
+    <div class="bx-kpi bx-kpi-dest" style="--c:${ex.saldoFinal >= 0 ? '#ea580c' : '#dc2626'}"><span>Saldo final</span><b>${fmtBRL(ex.saldoFinal)}</b><small>${varr >= 0 ? '▲' : '▼'} ${fmtBRL(Math.abs(varr))} no período</small></div>`;
+}
+
+// Abre o lançamento de origem (contas a pagar / receber / transferência)
+function bxAbrirLanc(origem, id) {
+  const modal = document.getElementById('modal-bx');
+  if (modal && modal.classList.contains('open')) closeModal('modal-bx');
+  if (origem === 'pagar') editLancamento(id);
+  else if (origem === 'receber') editLancReceber(id);
+  else if (origem === 'transf') showPage('transferencias');
+}
+
+// Exportação CSV (abre no Excel)
+function bxExportarCsv(lista, nomeArq, multi) {
+  const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  const n = v => (v || 0).toFixed(2).replace('.', ',');
+  const cab = ['Data', 'Tipo', 'Lançamento', 'Detalhe', 'Parcela', 'Categoria', 'Documento', 'Forma', ...(multi ? ['Conta'] : []), 'Entrada', 'Saída', 'Saldo'];
+  const rows = lista.map(m => [fmtDate(m.data), m.tipo === 'T' ? 'Transferência' : (m.valor >= 0 ? 'Entrada' : 'Saída'), m.nome, m.item, m.parc, m.cat, m.doc, m.forma,
+    ...(multi ? [getBancoNome(m.conta)] : []), m.valor >= 0 ? n(m.valor) : '', m.valor < 0 ? n(-m.valor) : '', n(m.saldo)]);
+  const csv = '﻿' + [cab, ...rows].map(r => r.map(q).join(';')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = nomeArq + '.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+// Impressão / PDF com separadores de data
+function bxImprimir(ctx) {
+  const { lista, ex, titulo, sub, periodo, multi, filtrosTxt } = ctx;
+  const r = bxResumo(lista);
+  const linhas = [];
+  let ult = null;
+  lista.forEach(m => {
+    if (m.data !== ult) {
+      ult = m.data;
+      const d = bxDataLonga(m.data);
+      linhas.push(`<tr class="sep"><td colspan="${multi ? 6 : 5}">${d.dia} de ${d.mesLongo} de ${d.ano} — ${d.semana}<span>Saldo do dia: ${fmtBRL(ex.fimDia[m.data])}</span></td></tr>`);
+    }
+    linhas.push(`<tr><td>${esc(m.nome)}${m.item ? `<div class="m">${esc(m.item)}${m.parc ? ' · ' + m.parc : ''}</div>` : ''}</td><td>${esc(m.cat || '')}</td><td>${esc(m.doc || '')}</td>
+      ${multi ? `<td>${esc(getBancoNome(m.conta))}</td>` : ''}<td class="n ${m.valor >= 0 ? 'c' : 'd'}">${m.valor >= 0 ? '+ ' : '− '}${fmtBRL(Math.abs(m.valor))}</td><td class="n">${fmtBRL(m.saldo)}</td></tr>`);
+  });
+  if (!lista.length) linhas.push(`<tr><td colspan="6" style="text-align:center;color:#888;padding:18px">Nenhum lançamento.</td></tr>`);
+  const agora = new Date();
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${esc(titulo)}</title><style>
+    @page { size: A4 landscape; margin: 11mm; }
+    *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Segoe UI',Arial,sans-serif;color:#1f2937;margin:0;font-size:11px}
+    .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #ea580c;padding-bottom:10px;margin-bottom:12px}
+    h1{margin:0;font-size:19px} .s{color:#78716c;font-size:11px;margin-top:3px}
+    .k{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+    .k div{border:1px solid #e7e5e4;border-radius:8px;padding:7px 10px} .k span{display:block;font-size:9px;text-transform:uppercase;color:#78716c;letter-spacing:.5px}
+    .k b{font-family:Consolas,monospace;font-size:13px}
+    table{width:100%;border-collapse:collapse} th{background:#1f2937;color:#fff;text-align:left;font-size:9.5px;text-transform:uppercase;padding:6px 8px}
+    td{padding:5px 8px;border-bottom:1px solid #eeecea;vertical-align:top} .n{text-align:right;font-family:Consolas,monospace;white-space:nowrap}
+    tr.sep td{background:#fff7ed;font-weight:700;color:#9a3412;border-top:1.5px solid #fdba74;padding:6px 8px;}
+    tr.sep span{float:right;font-family:Consolas,monospace;color:#57534e;text-transform:none}
+    .m{font-size:9.5px;color:#78716c} .c{color:#166534}.d{color:#dc2626} thead{display:table-header-group} tr{page-break-inside:avoid}
+  </style></head><body>
+    <div class="top"><div><h1>${esc(titulo)}</h1><div class="s">${esc(sub || '')}</div></div><div class="s" style="text-align:right">Período: <b>${esc(periodo)}</b><br>${esc(filtrosTxt || '')}<br>Emitido em ${agora.toLocaleDateString('pt-BR')} ${agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div></div>
+    <div class="k"><div><span>Saldo anterior</span><b>${fmtBRL(ex.saldoAnt)}</b></div><div><span>Entradas</span><b class="c">${fmtBRL(r.ent)}</b></div><div><span>Saídas</span><b class="d">${fmtBRL(r.sai)}</b></div><div><span>Resultado</span><b>${fmtBRL(r.liq)}</b></div><div><span>Saldo final</span><b>${fmtBRL(ex.saldoFinal)}</b></div></div>
+    <table><thead><tr><th>Lançamento</th><th>Categoria</th><th>Documento</th>${multi ? '<th>Conta</th>' : ''}<th class="n">Valor</th><th class="n">Saldo</th></tr></thead><tbody>${linhas.join('')}</tbody></table>
+  </body></html>`;
+  const win = window.open('', '_blank');
+  if (!win) { alert('O navegador bloqueou a janela de impressão. Libere os pop-ups para este site e tente de novo.'); return; }
+  win.document.write(html); win.document.close();
+  let ok = false; const go = () => { if (ok) return; ok = true; try { win.focus(); win.print(); } catch (e) {} };
+  win.onload = () => setTimeout(go, 300); setTimeout(go, 1200);
+}
+
+function bxPeriodoTxt(ini, fim) {
+  if (!ini && !fim) return 'Todo o histórico';
+  if (ini && !fim) return 'A partir de ' + fmtDate(ini);
+  if (!ini && fim) return 'Até ' + fmtDate(fim);
+  return fmtDate(ini) + ' a ' + fmtDate(fim);
+}
+
+function bxCabecalhoConta(bancoIds) {
+  if (bancoIds.length === 1) {
+    const b = db.bancos.find(x => x.id === bancoIds[0]);
+    if (b) {
+      const ic = bancoIconeHtml(b, 52);
+      return { nome: b.nome, sub: [b.tipo, b.banco, b.agencia ? 'Ag: ' + b.agencia : '', b.conta ? 'CC: ' + b.conta : ''].filter(Boolean).join(' · '),
+        logo: ic.startsWith('<img') ? ic : `<span class="bx-logo-emoji">${ic}</span>` };
+    }
+  }
+  return { nome: bancoIds.length === db.bancos.length ? 'Todas as Contas' : bancoIds.length + ' contas', sub: 'Visão consolidada de ' + bancoIds.length + ' conta(s)', logo: '<span class="bx-logo-emoji">🏦</span>' };
+}
+
+// ── MODAL: lançamentos da conta ─────────────────────────────────────
+const _bxm = { bancoIds: [], ini: '', fim: '', tipo: '', busca: '', vmin: null, vmax: null, preset: 'mes' };
+
+// bancoId: id da conta ('' = todas) · ini/fim: período · tipo: '', 'ET' (entradas), 'ST' (saídas)
+function abrirLancamentosBanco(bancoId, ini, fim, tipo) {
+  if (!db.bancos.length) return;
+  _bxm.bancoIds = bancoId ? [bancoId] : db.bancos.map(b => b.id);
+  if (ini === undefined) { const p = bxPeriodo('mes'); ini = p[0]; fim = p[1]; _bxm.preset = 'mes'; } else _bxm.preset = '';
+  _bxm.ini = ini || ''; _bxm.fim = fim || ''; _bxm.tipo = tipo || '';
+  _bxm.busca = ''; _bxm.vmin = null; _bxm.vmax = null;
+  ['bxm-busca', 'bxm-vmin', 'bxm-vmax'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const cab = bxCabecalhoConta(_bxm.bancoIds);
+  document.getElementById('bxm-logo').innerHTML = cab.logo;
+  document.getElementById('bxm-nome').textContent = cab.nome;
+  document.getElementById('bxm-sub').textContent = cab.sub;
+  openModal('modal-bx');
+  bxmRender();
+}
+function bxmPreset(chave) {
+  const p = bxPeriodo(chave); _bxm.ini = p[0]; _bxm.fim = p[1]; _bxm.preset = chave; bxmRender();
+}
+function bxmDatas() {
+  _bxm.ini = document.getElementById('bxm-ini').value; _bxm.fim = document.getElementById('bxm-fim').value; _bxm.preset = ''; bxmRender();
+}
+function bxmTipo(t) { _bxm.tipo = t; bxmRender(); }
+function bxmFiltros() {
+  _bxm.busca = document.getElementById('bxm-busca').value;
+  _bxm.vmin = _bxNumInput(document.getElementById('bxm-vmin'));
+  _bxm.vmax = _bxNumInput(document.getElementById('bxm-vmax'));
+  bxmRender();
+}
+function _bxmDados() {
+  const ex = bxMovimentos(_bxm.bancoIds, _bxm.ini, _bxm.fim);
+  const lista = bxFiltrar(ex.movs, _bxm);
+  return { ex, lista };
+}
+function bxmRender() {
+  const { ex, lista } = _bxmDados();
+  const r = bxResumo(lista);
+  document.getElementById('bxm-ini').value = _bxm.ini;
+  document.getElementById('bxm-fim').value = _bxm.fim;
+  document.getElementById('bxm-periodo').textContent = bxPeriodoTxt(_bxm.ini, _bxm.fim);
+  document.querySelectorAll('#bxm-presets button').forEach(b => b.classList.toggle('on', b.dataset.p === _bxm.preset));
+  document.querySelectorAll('#bxm-tipos button').forEach(b => b.classList.toggle('on', b.dataset.t === _bxm.tipo));
+  document.getElementById('bxm-kpis').innerHTML = bxKpisHtml(ex, r, ex.movs.length, lista.length);
+  document.getElementById('bxm-lista').innerHTML = bxListaHtml(lista, { multi: _bxm.bancoIds.length > 1, fimDia: ex.fimDia });
+  document.getElementById('bxm-rodape').innerHTML = `<b>${lista.length}</b> de ${ex.movs.length} lançamento(s) no período${r.maior ? ` · maior movimento: <b>${fmtBRL(Math.abs(r.maior.valor))}</b> (${esc(r.maior.nome)})` : ''}`;
+}
+function bxmExportar() {
+  const { lista } = _bxmDados();
+  const cab = bxCabecalhoConta(_bxm.bancoIds);
+  bxExportarCsv(lista, 'Lancamentos_' + cab.nome.replace(/[^\w]+/g, '_') + '_' + (_bxm.ini || 'inicio') + '_' + (_bxm.fim || 'hoje'), _bxm.bancoIds.length > 1);
+}
+function bxmImprimir() {
+  const { ex, lista } = _bxmDados();
+  const cab = bxCabecalhoConta(_bxm.bancoIds);
+  bxImprimir({ lista, ex, titulo: 'Lançamentos — ' + cab.nome, sub: cab.sub, periodo: bxPeriodoTxt(_bxm.ini, _bxm.fim), multi: _bxm.bancoIds.length > 1, filtrosTxt: '' });
+}
+// Leva os filtros do modal para a tela de Análise Bancária
+function bxmAbrirAnalise() {
+  closeModal('modal-bx');
+  showPage('analise-bancos');
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v == null ? '' : v; };
+  set('ab-banco', _bxm.bancoIds.length === 1 ? _bxm.bancoIds[0] : '');
+  set('ab-ini', _bxm.ini); set('ab-fim', _bxm.fim);
+  set('ab-tipo', _bxm.tipo); set('ab-busca', _bxm.busca);
+  set('ab-vmin', _bxm.vmin); set('ab-vmax', _bxm.vmax);
+  renderAnaliseBancos();
+}
+
+// Atalhos usados pelo Fluxo de Caixa Diário da tela Bancos
+function bxFluxoDia(dataStr, tipo) {
+  const bancoSel = (document.getElementById('fb-banco') || {}).value || '';
+  abrirLancamentosBanco(bancoSel, dataStr, dataStr, tipo || '');
+}
+function bxFluxoMes(tipo) {
+  const mes = parseInt(document.getElementById('fb-mes').value) || (new Date().getMonth() + 1);
+  const ano = parseInt(document.getElementById('fb-ano').value) || new Date().getFullYear();
+  const bancoSel = (document.getElementById('fb-banco') || {}).value || '';
+  const ms = String(mes).padStart(2, '0');
+  abrirLancamentosBanco(bancoSel, `${ano}-${ms}-01`, `${ano}-${ms}-${String(new Date(ano, mes, 0).getDate()).padStart(2, '0')}`, tipo || '');
+}
+
+// ── TELA: Análise Bancária ───────────────────────────────────────────
+function abPopularContas() {
+  const el = document.getElementById('ab-banco');
+  if (!el) return;
+  const val = el.value;
+  el.innerHTML = '<option value="">Todas as Contas</option>' + db.bancos.map(b => `<option value="${esc(b.id)}">${esc(b.nome)}</option>`).join('');
+  if (val && db.bancos.some(b => b.id === val)) el.value = val;
+}
+function abPreset(chave) {
+  const p = bxPeriodo(chave);
+  document.getElementById('ab-ini').value = p[0];
+  document.getElementById('ab-fim').value = p[1];
+  renderAnaliseBancos(chave);
+}
+function abLimpar() {
+  ['ab-tipo', 'ab-busca', 'ab-vmin', 'ab-vmax'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  abPreset('mes');
+}
+function abValorRapido(min, max) {
+  document.getElementById('ab-vmin').value = min == null ? '' : min;
+  document.getElementById('ab-vmax').value = max == null ? '' : max;
+  renderAnaliseBancos();
+}
+function _abFiltros() {
+  const g = id => (document.getElementById(id) || {}).value || '';
+  const bancoSel = g('ab-banco');
+  return {
+    bancoSel, bancoIds: bancoSel ? [bancoSel] : db.bancos.map(b => b.id),
+    ini: g('ab-ini'), fim: g('ab-fim'), tipo: g('ab-tipo'), busca: g('ab-busca'),
+    agrup: g('ab-agrup') || 'dia',
+    vmin: _bxNumInput(document.getElementById('ab-vmin')), vmax: _bxNumInput(document.getElementById('ab-vmax'))
+  };
+}
+function _abDados() {
+  const f = _abFiltros();
+  const ex = bxMovimentos(f.bancoIds, f.ini, f.fim);
+  const lista = bxFiltrar(ex.movs, f);
+  return { f, ex, lista };
+}
+function renderAnaliseBancos(preset) {
+  const wrap = document.getElementById('ab-lista');
+  if (!wrap) return;
+  abPopularContas();
+  const iniEl = document.getElementById('ab-ini'), fimEl = document.getElementById('ab-fim');
+  if (iniEl && fimEl && !iniEl.value && !fimEl.value && !iniEl.dataset.ok) { const p = bxPeriodo('mes'); iniEl.value = p[0]; fimEl.value = p[1]; preset = 'mes'; }
+  if (iniEl) iniEl.dataset.ok = '1';
+  if (!db.bancos.length) { wrap.innerHTML = '<div class="bx-vazio"><b>Cadastre uma conta bancária para analisar os lançamentos.</b></div>'; return; }
+  const { f, ex, lista } = _abDados();
+  const r = bxResumo(lista);
+
+  // Destaque dos períodos rápidos
+  let presetAtivo = typeof preset === 'string' ? preset : '';
+  if (!presetAtivo) ['hoje', '7d', '30d', 'mes', 'mesant', 'tri', 'ano', 'tudo'].forEach(k => { const p = bxPeriodo(k); if (p[0] === f.ini && p[1] === f.fim && !presetAtivo) presetAtivo = k; });
+  document.querySelectorAll('#ab-presets button').forEach(b => b.classList.toggle('on', b.dataset.p === presetAtivo));
+
+  // Cabeçalho da conta
+  const cab = bxCabecalhoConta(f.bancoIds);
+  document.getElementById('ab-conta-box').innerHTML = `<div class="bx-logo">${cab.logo}</div><div><div class="bx-conta-nome">${esc(cab.nome)}</div><div class="bx-conta-sub">${esc(cab.sub)}</div></div>
+    <div class="bx-conta-per"><span>Período</span><b>${esc(bxPeriodoTxt(f.ini, f.fim))}</b></div>`;
+
+  // Filtros ativos (chips)
+  const chips = [];
+  const tipoLbl = { ET: 'Entradas', ST: 'Saídas', E: 'Recebimentos', S: 'Pagamentos', T: 'Transferências' };
+  if (f.tipo) chips.push(`Tipo: ${tipoLbl[f.tipo] || f.tipo}`);
+  if (f.vmin != null) chips.push(`Valor ≥ ${fmtBRL(f.vmin)}`);
+  if (f.vmax != null) chips.push(`Valor ≤ ${fmtBRL(f.vmax)}`);
+  if (f.busca) chips.push(`Busca: “${esc(f.busca)}”`);
+  document.getElementById('ab-chips').innerHTML = chips.length
+    ? chips.map(c => `<span class="bx-fchip">${c}</span>`).join('') + `<button class="bx-link" onclick="abLimpar()">Limpar filtros</button>`
+    : '<span class="bx-mut" style="font-size:12px">Sem filtros adicionais — exibindo todos os lançamentos do período.</span>';
+
+  document.getElementById('ab-kpis').innerHTML = bxKpisHtml(ex, r, ex.movs.length, lista.length);
+  document.getElementById('ab-contagem').innerHTML = `<b>${lista.length}</b> de ${ex.movs.length} lançamento(s)`;
+  wrap.innerHTML = bxListaHtml(lista, { multi: f.bancoIds.length > 1, agrup: f.agrup, fimDia: ex.fimDia });
+}
+
+// Gráfico de barras (entradas acima / saídas abaixo) + linha de saldo, por dia ou mês
+function abGraficoHtml(lista, ex, f) {
+  if (!lista.length) return '<div class="bx-mut" style="padding:30px;text-align:center;font-size:12px">Sem dados para o gráfico.</div>';
+  const porMes = f.agrup === 'mes';
+  const key = d => porMes ? d.slice(0, 7) : d;
+  const buckets = new Map();
+  lista.forEach(m => {
+    const k = key(m.data);
+    if (!buckets.has(k)) buckets.set(k, { e: 0, s: 0, ultData: m.data });
+    const b = buckets.get(k);
+    if (m.valor >= 0) b.e += m.valor; else b.s += -m.valor;
+    b.ultData = m.data;
+  });
+  const arr = [...buckets.entries()];
+  const W = 900, H = 190, padL = 8, padR = 8, mid = 95, maxH = 78;
+  const maxV = Math.max(1, ...arr.map(([, b]) => Math.max(b.e, b.s)));
+  const saldos = arr.map(([, b]) => ex.fimDia[b.ultData]);
+  const sMin = Math.min(...saldos), sMax = Math.max(...saldos);
+  const step = (W - padL - padR) / arr.length;
+  const bw = Math.max(2, Math.min(26, step * 0.6));
+  const yS = v => sMax === sMin ? mid : 14 + (1 - (v - sMin) / (sMax - sMin)) * (H - 28);
+  let bars = '', pts = [], labels = '';
+  const cada = Math.ceil(arr.length / 16);
+  arr.forEach(([k, b], i) => {
+    const cx = padL + step * i + step / 2;
+    const he = b.e / maxV * maxH, hs = b.s / maxV * maxH;
+    const lbl = porMes ? (BX_MESES_C[parseInt(k.slice(5, 7)) - 1] + '/' + k.slice(2, 4)) : (k.slice(8, 10) + '/' + k.slice(5, 7));
+    const tip = `${porMes ? lbl : fmtDate(k)} — Entradas ${fmtBRL(b.e)} · Saídas ${fmtBRL(b.s)} · Saldo ${fmtBRL(ex.fimDia[b.ultData])}`;
+    bars += `<g><title>${tip}</title><rect x="${cx - step / 2}" y="0" width="${step}" height="${H}" fill="transparent"/>`;
+    if (he > 0) bars += `<rect x="${cx - bw / 2}" y="${mid - he}" width="${bw}" height="${he}" rx="2" fill="#16a34a" opacity=".85"/>`;
+    if (hs > 0) bars += `<rect x="${cx - bw / 2}" y="${mid}" width="${bw}" height="${hs}" rx="2" fill="#dc2626" opacity=".8"/>`;
+    bars += '</g>';
+    pts.push(`${cx.toFixed(1)},${yS(ex.fimDia[b.ultData]).toFixed(1)}`);
+    if (i % cada === 0) labels += `<text x="${cx}" y="${H + 14}" text-anchor="middle">${lbl}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H + 20}" class="bx-graf">
+    <line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="#e7e5e4"/>
+    ${bars}
+    <polyline points="${pts.join(' ')}" fill="none" stroke="#ea580c" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    ${pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="2.6" fill="#ea580c"/>`).join('')}
+    <g class="bx-graf-lbl">${labels}</g>
+  </svg>
+  <div class="bx-leg"><span><i style="background:#16a34a"></i>Entradas</span><span><i style="background:#dc2626"></i>Saídas</span><span><i style="background:#ea580c;height:3px"></i>Saldo da conta</span></div>`;
+}
+
+// Maiores categorias de saída e entrada no recorte filtrado
+function abCategoriasHtml(lista) {
+  const agrega = sinal => {
+    const m = new Map(); let tot = 0;
+    lista.forEach(x => { if ((sinal > 0) !== (x.valor >= 0)) return; const k = x.cat || 'Sem categoria'; const v = Math.abs(x.valor); m.set(k, (m.get(k) || 0) + v); tot += v; });
+    return { itens: [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5), tot };
+  };
+  const bloco = (titulo, d, cor) => `<div class="bx-cat-bloco"><div class="bx-cat-tit">${titulo}</div>${d.itens.length ? d.itens.map(([k, v]) => {
+    const pct = d.tot ? v / d.tot * 100 : 0;
+    return `<div class="bx-cat-l" title="${esc(k)}: ${fmtBRL(v)}"><div class="bx-cat-top"><span>${esc(k)}</span><b>${fmtBRL(v)}</b></div><div class="bx-cat-bar"><i style="width:${pct.toFixed(1)}%;background:${cor}"></i></div></div>`;
+  }).join('') : '<div class="bx-mut" style="font-size:12px;padding:6px 0">—</div>'}</div>`;
+  return bloco('Maiores saídas por categoria', agrega(-1), '#dc2626') + bloco('Maiores entradas por categoria', agrega(1), '#16a34a');
+}
+
+function abExportar() {
+  const { f, lista } = _abDados();
+  const cab = bxCabecalhoConta(f.bancoIds);
+  bxExportarCsv(lista, 'Analise_' + cab.nome.replace(/[^\w]+/g, '_') + '_' + (f.ini || 'inicio') + '_' + (f.fim || 'hoje'), f.bancoIds.length > 1);
+}
+function abImprimir() {
+  const { f, ex, lista } = _abDados();
+  const cab = bxCabecalhoConta(f.bancoIds);
+  const filtros = [f.tipo ? 'Tipo: ' + f.tipo : '', f.vmin != null ? 'Valor ≥ ' + fmtBRL(f.vmin) : '', f.vmax != null ? 'Valor ≤ ' + fmtBRL(f.vmax) : '', f.busca ? 'Busca: ' + f.busca : ''].filter(Boolean).join(' · ');
+  bxImprimir({ lista, ex, titulo: 'Análise Bancária — ' + cab.nome, sub: cab.sub, periodo: bxPeriodoTxt(f.ini, f.fim), multi: f.bancoIds.length > 1, filtrosTxt: filtros });
+}
+
 async function saveBanco() {
   const nome = document.getElementById('bnk-nome').value.trim();
   const tipo = document.getElementById('bnk-tipo').value;
@@ -15992,7 +16767,7 @@ function renderBancos() {
     const icon = bancoIconeHtml(b, 42);
     return `<div class="banco-card">
       <div class="banco-icon">${icon}</div>
-      <div class="banco-info">
+      <div class="banco-info bx-click" onclick="abrirLancamentosBanco('${b.id}')" title="Ver lançamentos desta conta">
         <div class="banco-nome">${b.nome}</div>
         <div class="banco-tipo">
           <span class="badge-tipo-banco">${b.tipo}</span>
@@ -16001,9 +16776,9 @@ function renderBancos() {
           ${b.conta ? ' · CC: '+b.conta : ''}
         </div>
       </div>
-      <div class="banco-saldo">
+      <div class="banco-saldo bx-click" onclick="abrirLancamentosBanco('${b.id}')" title="Ver lançamentos desta conta">
         <div class="banco-saldo-val ${saldoCls}">${fmtBRL(saldo)}</div>
-        <div class="banco-saldo-lbl">Saldo estimado</div>
+        <div class="banco-saldo-lbl">Saldo estimado<span class="bx-ver">· ver lançamentos ›</span></div>
       </div>
       <div class="actions" style="margin-left:8px">
         <button class="btn btn-secondary btn-sm" onclick="editBanco('${b.id}')">Editar</button>
