@@ -8271,7 +8271,17 @@ async function updateLancamento() {
   if (!okU) { alert('❌ Não foi possível salvar a edição no banco de dados.' + sbErroMsg()); return; }
   const okCfE = await cfSalvarNoBanco(l.id, ehCustoFixoEdit, _vigTemp.edit);
   if (!okCfE) alert('⚠ O lançamento foi salvo, mas o custo fixo/vigências não puderam ser gravados.' + sbErroMsg());
-  else if (ehCustoFixoEdit) await cfGerarLancamentosMensais(l);
+  else if (ehCustoFixoEdit) {
+    window._cfUltimaSync = null;
+    await cfGerarLancamentosMensais(l);
+    const sy = window._cfUltimaSync;
+    if (sy && (sy.excluidos || sy.atualizados || sy.pagosForaVig)) {
+      alert('🔁 Custo fixo atualizado conforme as vigências:' +
+        (sy.excluidos ? `\n• ${sy.excluidos} lançamento(s) mensal(is) em aberto fora da vigência foram excluídos` : '') +
+        (sy.atualizados ? `\n• ${sy.atualizados} lançamento(s) em aberto tiveram o valor atualizado` : '') +
+        (sy.pagosForaVig ? `\n• ${sy.pagosForaVig} lançamento(s) já pago(s) fora da vigência foram mantidos` : ''));
+    }
+  }
   await obraVincular('p', l.id, campoValor('edit-obra'));
   // Se a empresa foi trocada para uma diferente da ativa no seletor, o
   // registro tem que sumir da lista atual (senão fica aparecendo na empresa errada).
@@ -19966,9 +19976,61 @@ async function cfSalvarNoBanco(lancId, ativo, vigencias) {
 // Custo fixo: gera automaticamente um lançamento a pagar para cada mês das
 // vigências (exceto o mês do próprio lançamento original). Os meses já gerados
 // ficam registrados em "gerados" para não duplicar ao editar novamente.
+// Acerta os lançamentos mensais JÁ GERADOS com as vigências atuais:
+//  • mês que deixou de estar em alguma vigência (ex.: vigência encurtada) → exclui o lançamento, se ainda em aberto;
+//  • mês coberto mas com valor diferente da vigência → atualiza o valor, se ainda em aberto.
+// Lançamentos já pagos nunca são mexidos. Retorna o que fez (e altera dados.gerados).
+async function cfSincronizarGerados(l, dados) {
+  const r = { excluidos: 0, atualizados: 0, pagosForaVig: 0, mudou: false };
+  if (!l || !dados) return r;
+  const vigs = vigOrdenar(dados.vigencias || []);
+  const baseKey = (l.dtprev || l.dtcompra || '').slice(0, 7);
+  const valorDoMes = {};
+  vigs.forEach(v => {
+    const val = (v.valor != null && v.valor !== '') ? (parseFloat(v.valor) || 0) : (l.valor || 0);
+    cfMesesVigencia(v).forEach(k => { valorDoMes[k] = val; });
+  });
+  // Vigência indeterminada: cfMesesVigencia só vai 12 meses à frente — meses além disso continuam valendo.
+  const temAberta = vigs.some(v => v.inicio && !v.fim);
+  const ultimaAberta = temAberta ? vigs.filter(v => v.inicio && !v.fim).map(v => v.inicio.slice(0, 7)).sort()[0] : null;
+  const gerados = Object.assign({}, dados.gerados || {});
+  const excluir = [];
+  for (const k of Object.keys(gerados)) {
+    const gid = gerados[k];
+    if (!gid || gid === l.id || k === baseKey) continue;
+    const g = db.lancamentos.find(x => x.id === gid);
+    if (!g) { delete gerados[k]; r.mudou = true; continue; }       // já não existe
+    const coberto = (k in valorDoMes) || (ultimaAberta && k >= ultimaAberta);
+    const pago = _cfLancEstaPago(g);
+    if (!coberto) {
+      if (pago) { r.pagosForaVig++; continue; }
+      excluir.push({ k, gid });
+      continue;
+    }
+    const val = valorDoMes[k];
+    if (!pago && val != null && Math.abs((g.valor || 0) - val) >= 0.005 && (g.parcelas || 1) === 1) {
+      const ok = await sbFetch('lancamentos', 'PATCH', { valor: val }, `?id=eq.${gid}`);
+      if (ok) { g.valor = val; r.atualizados++; r.mudou = true; }
+    }
+  }
+  if (excluir.length) {
+    const { sucesso } = await sbDeleteMany('lancamentos', excluir.map(e => e.gid));
+    const ok = new Set(sucesso);
+    excluir.forEach(e => { if (ok.has(e.gid)) delete gerados[e.k]; });
+    db.lancamentos = db.lancamentos.filter(x => !ok.has(x.id));
+    r.excluidos = sucesso.length;
+    if (sucesso.length) r.mudou = true;
+  }
+  dados.gerados = gerados;
+  if (r.mudou) bumpDbVer();
+  return r;
+}
+
 async function cfGerarLancamentosMensais(l) {
   const dados = cfDadosDoLanc(l.id);
   if (!dados || !l) return 0;
+  const _sync = await cfSincronizarGerados(l, dados);
+  window._cfUltimaSync = _sync;
   const base = l.dtprev || l.dtcompra;
   if (!base) return 0;
   const baseKey = base.slice(0, 7);
@@ -20836,9 +20898,13 @@ async function cfManterHorizonte() {
       const d = db.custosfixos[lancId];
       if (!d || !d.ativo) continue;
       const vigs = d.vigencias || [];
-      if (!vigs.some(v => v.inicio && !v.fim)) continue;
       const l = db.lancamentos.find(x => x.id === lancId);
       if (!l) continue;
+      // Remove/acerta lançamentos mensais que ficaram fora da vigência (ex.: vigência encurtada antes desta correção)
+      const sync = await cfSincronizarGerados(l, d);
+      if (sync.mudou) await sbFetch('config', 'PATCH', { value: JSON.stringify({ ativo: true, vigencias: d.vigencias, gerados: d.gerados }) },
+        `?key=eq.${encodeURIComponent(CF_CONFIG_PREFIX + lancId)}`);
+      if (!vigs.some(v => v.inicio && !v.fim)) continue;
       const g = d.gerados || {};
       const base = (l.dtprev || l.dtcompra || '').slice(0, 7);
       const falta = vigs.some(v => cfMesesVigencia(v).some(k => k !== base && !g[k]));
