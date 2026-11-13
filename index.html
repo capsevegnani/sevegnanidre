@@ -1395,9 +1395,22 @@ tr.cob-dia-vazio > td {
 body.menu-oculto .sidebar { transform:translateX(-248px); }
 .sidebar-logo { padding:18px 18px 14px; border-bottom:1px solid #f1efed; }
 .sidebar-logo img { max-width:128px !important; }
-.nav { padding:6px 12px 14px; scrollbar-width:thin; scrollbar-color:#e7e5e4 transparent; }
-.nav::-webkit-scrollbar { width:6px; }
-.nav::-webkit-scrollbar-thumb { background:#e7e5e4; border-radius:3px; }
+.nav { padding:6px 6px 14px 12px; scrollbar-width:auto; scrollbar-color:#c4bfba #f5f3f1; }
+.nav::-webkit-scrollbar { width:14px; }
+.nav::-webkit-scrollbar-track { background:#f5f3f1; border-radius:7px; }
+.nav::-webkit-scrollbar-thumb { background:#c4bfba; border-radius:7px; border:3px solid #f5f3f1; min-height:48px; }
+.nav::-webkit-scrollbar-thumb:hover { background:#ea580c; }
+.nav::-webkit-scrollbar-thumb:active { background:#c2410c; }
+/* Linha de total por dia — Lançamento de Contas a Pagar */
+tr.lanc-dia-row td { background:#fff7ed !important; border-top:2px solid #fed7aa; border-bottom:1px solid #fed7aa; padding:7px 12px !important; }
+tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580c; }
+#tb-lancamentos > tr.lanc-dia-row > td { display:table-cell !important; }
+.lanc-dia-inner { display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-size:12.5px; color:#57534e; }
+.lanc-dia-data { font-weight:700; color:#9a3412; font-size:13px; }
+.lanc-dia-data small { font-weight:500; color:#c2410c; margin-left:4px; }
+.lanc-dia-qtd { color:#a8a29e; font-size:12px; }
+.lanc-dia-ab b { color:#b45309; font-family:'DM Mono',monospace; }
+.lanc-dia-tot b { color:#dc2626; font-family:'DM Mono',monospace; font-size:13.5px; }
 .nav-label, .nav-group-header {
   font-size:10.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
   color:#a8a29e; padding:16px 10px 6px; margin:0; border-radius:0; background:none !important;
@@ -2152,6 +2165,13 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
             <input type="text" id="lf-nf" oninput="renderLancamentos()" placeholder="Nº da NF" style="width:120px" />
           </div>
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearLancamentoFiltros()">Limpar Filtros</button></div>
+          <div class="form-group" style="margin-left:auto"><label>📅 Total por dia</label>
+            <select id="lf-totdia" onchange="lancSetTotalDia(this.value)" title="Separa os lançamentos por dia, com uma linha de total de cada dia">
+              <option value="">Não usar</option>
+              <option value="dtprev">Por Prev. Pgto (a pagar no dia)</option>
+              <option value="dtcompra">Por Data Competência</option>
+            </select>
+          </div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-lancamentos-row">
           <th>Data Competência</th><th>Despesas/Fornecedor</th><th>Item</th><th>Categoria</th><th>Valor</th><th>Parcelas</th>
@@ -2320,11 +2340,72 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group"><label>Busca</label>
             <input type="text" id="cf-f-texto" oninput="renderCustosFixos()" placeholder="fornecedor, item, obs..." style="width:170px" />
           </div>
+          <div class="form-group"><label>Valor Mín. (R$)</label>
+            <input type="text" inputmode="decimal" id="cf-f-vmin" oninput="renderCustosFixos()" placeholder="0,00" style="width:110px" />
+          </div>
+          <div class="form-group"><label>Valor Máx. (R$)</label>
+            <input type="text" inputmode="decimal" id="cf-f-vmax" oninput="renderCustosFixos()" placeholder="0,00" style="width:110px" />
+          </div>
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearCustosFixosFiltros()">Limpar</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-custos-fixos-row">
           <th>Despesas/Fornecedor</th><th>Item</th><th>Categoria</th><th>Vigência atual</th><th>Valor mensal</th><th>Situação</th><th>Vigências</th><th>Ações</th>
         </tr></thead><tbody id="tb-custos-fixos"><tr><td colspan="8" class="empty-state">Nenhum lançamento marcado como custo fixo.</td></tr></tbody></table></div>
+      </div>
+      <div class="card" id="cf-lancs-card">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <span>Lançamentos de Custo Fixo (base, gerados mensalmente e órfãos)</span>
+        </div>
+        <div style="font-size:12px;color:#78716c;margin:-4px 0 12px;line-height:1.5">
+          Aqui aparecem <b>todos</b> os lançamentos ligados a custos fixos, inclusive os criados automaticamente mês a mês
+          e os <b>órfãos</b> (de custos fixos que já foram removidos, mas cujos lançamentos mensais continuaram no Contas a Pagar e no Fluxo de Caixa).
+          Filtre pelo valor (ex.: 600,00), marque e exclua todos de uma vez.
+        </div>
+        <div class="filter-row">
+          <div class="form-group"><label>Situação</label>
+            <select id="cfl-f-sit" onchange="renderCfLancamentos()">
+              <option value="aberto">Em aberto</option>
+              <option value="pago">Pagos</option>
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Origem</label>
+            <select id="cfl-f-orig" onchange="renderCfLancamentos()">
+              <option value="">Todas</option>
+              <option value="base">Base (custo fixo ativo)</option>
+              <option value="gerado">Gerado (mensal)</option>
+              <option value="orfao">Órfão (custo fixo removido)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Valor Exato (R$)</label>
+            <input type="text" inputmode="decimal" id="cfl-f-vexato" oninput="renderCfLancamentos()" placeholder="ex.: 600,00" style="width:110px" />
+          </div>
+          <div class="form-group"><label>Valor Mín. (R$)</label>
+            <input type="text" inputmode="decimal" id="cfl-f-vmin" oninput="renderCfLancamentos()" placeholder="0,00" style="width:100px" />
+          </div>
+          <div class="form-group"><label>Valor Máx. (R$)</label>
+            <input type="text" inputmode="decimal" id="cfl-f-vmax" oninput="renderCfLancamentos()" placeholder="0,00" style="width:100px" />
+          </div>
+          <div class="form-group"><label>Venc. de</label>
+            <input type="date" id="cfl-f-de" onchange="renderCfLancamentos()" style="padding:7px 10px;font-size:13px" />
+          </div>
+          <div class="form-group"><label>Venc. até</label>
+            <input type="date" id="cfl-f-ate" onchange="renderCfLancamentos()" style="padding:7px 10px;font-size:13px" />
+          </div>
+          <div class="form-group"><label>Busca</label>
+            <input type="text" id="cfl-f-texto" oninput="renderCfLancamentos()" placeholder="fornecedor, item, obs..." style="width:160px" />
+          </div>
+          <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearCfLancFiltros()">Limpar</button></div>
+        </div>
+        <div id="cfl-barra" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#faf9f7;border:1px solid #ece9e6;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:13px">
+          <span id="cfl-resumo" style="color:#57534e"></span>
+          <span style="flex:1"></span>
+          <button class="btn btn-danger btn-sm" id="cfl-btn-excluir" onclick="cfExcluirLancsSelecionados()" disabled>🗑 Excluir selecionados</button>
+        </div>
+        <div class="table-scroll"><table><thead><tr>
+          <th style="width:34px;text-align:center"><input type="checkbox" id="cfl-sel-todos" onchange="cfSelTodos(this.checked)" title="Selecionar todos os filtrados" /></th>
+          <th>Vencimento</th><th>Despesas/Fornecedor</th><th>Item</th><th>Categoria</th><th>Valor</th><th>Situação</th><th>Origem</th><th>Obs.</th><th>Ações</th>
+        </tr></thead><tbody id="tb-cf-lancs"><tr><td colspan="10" class="empty-state">Nenhum lançamento.</td></tr></tbody></table></div>
       </div>
       <div class="card" id="cf-detalhe-card" style="display:none">
         <div class="card-title" id="cf-detalhe-titulo">Vigências</div>
@@ -5099,7 +5180,15 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     <div class="modal-title">Confirmar Pagamento</div>
     <input type="hidden" id="modal-pago-id" />
     <input type="hidden" id="modal-pago-parc" />
-    <p style="font-size:13px;color:#57534e;margin-bottom:20px;">Informe a data em que o pagamento foi realizado:</p>
+    <div id="modal-pago-resumo" style="background:#faf9f7;border:1px solid #ece9e6;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:#57534e;line-height:1.5"></div>
+    <div class="form-group">
+      <label>Valor a Pagar (R$) *</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="modal-pago-valor" type="text" inputmode="decimal" placeholder="0,00" oninput="mpAtualizarDifValor()" style="flex:1;font-family:'DM Mono',monospace;font-size:15px;font-weight:600" />
+        <button type="button" class="btn btn-secondary" style="font-size:12px;white-space:nowrap" onclick="mpRestaurarValor()" title="Voltar ao valor original da conta">↺ Original</button>
+      </div>
+      <div id="modal-pago-valor-dif" style="font-size:11.5px;margin-top:5px;color:#a8a29e">Altere se pagou com juros, multa ou desconto.</div>
+    </div>
     <div class="form-group">
       <label>Data do Pagamento *</label>
       <input id="modal-pago-data" type="date" />
@@ -7793,8 +7882,49 @@ function renderLancamentos() {
 
   if(!list.length) { tb.innerHTML='<tr><td colspan="12" class="empty-state">Nenhum lançamento encontrado.</td></tr>'; return; }
 
+  // "Total por dia": agrupa por data e insere uma linha com o total de cada dia.
+  const _totDia = _lancTotalDiaModo();
+  const _selTd = document.getElementById('lf-totdia');
+  if (_selTd && _selTd.value !== _totDia) _selTd.value = _totDia;
+  if (_totDia) {
+    const _st = _efState('lancamentos');
+    const dir = (_st.sortKey === _totDia && _st.sortDir === -1) ? -1 : 1;
+    list = list.slice().sort((a, b) => ((a[_totDia] || '9999-99-99').localeCompare(b[_totDia] || '9999-99-99')) * dir);
+  }
+  const _diaTotais = {};
+  if (_totDia) list.forEach(l => { const d = l[_totDia] || ''; const t = _diaTotais[d] || (_diaTotais[d] = { n:0, v:0, aberto:0 }); t.n++; t.v += (l.valor || 0); if (l.pago !== 'sim') t.aberto += (l.valor || 0); });
+  const _DSEM = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  const _linhaDia = d => {
+    const t = _diaTotais[d];
+    const dsem = d ? _DSEM[new Date(d + 'T12:00').getDay()] : '';
+    const ehHoje = d === today();
+    return `<tr class="lanc-dia-row${ehHoje ? ' hoje' : ''}"><td colspan="12">
+      <div class="lanc-dia-inner">
+        <span class="lanc-dia-data">📅 ${d ? fmtDate(d) : 'Sem data'}${dsem ? ` <small>${dsem}${ehHoje ? ' · hoje' : ''}</small>` : ''}</span>
+        <span class="lanc-dia-qtd">${t.n} lançamento${t.n === 1 ? '' : 's'}</span>
+        <span style="flex:1"></span>
+        ${Math.abs(t.aberto - t.v) >= 0.005 ? `<span class="lanc-dia-ab">Em aberto: <b>${fmtBRL(t.aberto)}</b></span>` : ''}
+        <span class="lanc-dia-tot">Total do dia: <b>${fmtBRL(t.v)}</b></span>
+      </div></td></tr>`;
+  };
+  let _diaAnt = null;
+
   const _c = _cortarLista(list, 12);
   tb.innerHTML = _c.aviso + _c.itens.map(l => {
+    let _cab = '';
+    if (_totDia) { const d = l[_totDia] || ''; if (d !== _diaAnt) { _diaAnt = d; _cab = _linhaDia(d); } }
+    return _cab + _lancLinhaHtml(l);
+  }).join('');
+}
+
+const LANC_TOTDIA_KEY = 'sevegnani_lanc_total_dia';
+function _lancTotalDiaModo() { try { return localStorage.getItem(LANC_TOTDIA_KEY) || ''; } catch (e) { return ''; } }
+function lancSetTotalDia(v) {
+  try { if (v) localStorage.setItem(LANC_TOTDIA_KEY, v); else localStorage.removeItem(LANC_TOTDIA_KEY); } catch (e) {}
+  renderLancamentos();
+}
+function _lancLinhaHtml(l) {
+  {
     const refDate = l.dtprev || today();
     const lt = diffDias(l.dtcompra, refDate);
     const ltClass = lt > 30 ? 'lead-time-warn' : 'lead-time-ok';
@@ -7820,7 +7950,7 @@ function renderLancamentos() {
         <button class="btn btn-danger btn-sm" onclick="deleteLancamento('${l.id}')">Excluir</button>`}
       </td>
     </tr>`;
-  }).join('');
+  }
 }
 
 function clearLancamentoFiltros() {
@@ -8977,7 +9107,42 @@ function marcarPago(id, parcIdx) {
   selPagForma.innerHTML = _montarOptsFormas(getFormasPagamento().filter(f => !ccEhFormaCartao(f)), _tipoIniOk, '+ Cadastrar nova forma de pagamento...');
   selPagForma.value = _tipoIniOk;
   document.getElementById('modal-pago-banco').value = l.banco || '';
+  // Valor da parcela que está sendo paga (editável)
+  const _pi = parseInt(parcIdx) || 1;
+  const _parc = getParcelas(false).find(p => p.lancId === id && p.parcIdx === _pi);
+  const _valOrig = _parc ? (_parc.valParc || 0) : ((l.valor || 0) / (l.parcelas || 1));
+  _mpValorOriginal = Math.round(_valOrig * 100) / 100;
+  document.getElementById('modal-pago-valor').value = _mpFmtNum(_mpValorOriginal);
+  const _n = l.parcelas || 1;
+  const _venc = _parc ? _parc.venc : l.dtprev;
+  document.getElementById('modal-pago-resumo').innerHTML =
+    `<b style="color:#1c1917">${esc(getFornNome(l.forn) || '—')}</b>${l.prod ? ' · ' + esc(getProdNome(l.prod)) : ''}<br>` +
+    `${_n > 1 ? `Parcela ${_pi}/${_n} · ` : ''}Vencimento: <b>${_venc ? fmtDate(_venc) : '—'}</b> · Valor: <b style="color:#dc2626">${fmtBRL(_mpValorOriginal)}</b>`;
+  mpAtualizarDifValor();
   openModal('modal-pago');
+}
+
+let _mpValorOriginal = 0;
+function _mpFmtNum(v) { return new Intl.NumberFormat('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }).format(v || 0); }
+function _mpLerValor() {
+  const t = (document.getElementById('modal-pago-valor').value || '').trim();
+  if (!t) return NaN;
+  const v = (typeof parseValorBR === 'function') ? parseValorBR(t) : parseFloat(t.replace(/\./g, '').replace(',', '.'));
+  return Math.round((v || 0) * 100) / 100;
+}
+function mpRestaurarValor() {
+  document.getElementById('modal-pago-valor').value = _mpFmtNum(_mpValorOriginal);
+  mpAtualizarDifValor();
+}
+function mpAtualizarDifValor() {
+  const el = document.getElementById('modal-pago-valor-dif');
+  if (!el) return;
+  const v = _mpLerValor();
+  if (isNaN(v)) { el.style.color = '#dc2626'; el.textContent = 'Informe o valor pago.'; return; }
+  const d = Math.round((v - _mpValorOriginal) * 100) / 100;
+  if (Math.abs(d) < 0.005) { el.style.color = '#a8a29e'; el.textContent = 'Altere se pagou com juros, multa ou desconto.'; return; }
+  el.style.color = d > 0 ? '#dc2626' : '#16a34a';
+  el.textContent = (d > 0 ? '▲ Acréscimo (juros/multa) de ' : '▼ Desconto de ') + fmtBRL(Math.abs(d)) + ' sobre o valor original (' + fmtBRL(_mpValorOriginal) + ').';
 }
 
 function usarHoje() {
@@ -9006,10 +9171,26 @@ async function confirmarPago() {
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return;
   const n = l.parcelas || 1;
+  const valorPago = _mpLerValor();
+  if (isNaN(valorPago) || valorPago <= 0) { alert('Informe o valor pago (maior que zero).'); return; }
+  const mudouValor = Math.abs(valorPago - _mpValorOriginal) >= 0.005;
   // Guarda o estado anterior para poder reverter caso a gravação no banco falhe.
-  const anterior = { banco: l.banco, tipo_pag: l.tipo_pag, parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago };
+  const anterior = { banco: l.banco, tipo_pag: l.tipo_pag, parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago, valor: l.valor };
   l.banco = banco;
   l.tipo_pag = tipoPag;
+  if (mudouValor) {
+    if (n > 1) {
+      // Fixa o valor de todas as parcelas (para as demais não mudarem) e troca só a paga.
+      const pp = _parseParcelas(l.parcela_datas);
+      const vals = [];
+      for (let i = 0; i < n; i++) vals.push(pp.valores[i] != null ? pp.valores[i] : (l.valor || 0) / n);
+      vals[parcIdx - 1] = valorPago;
+      l.parcela_datas = JSON.stringify({ datas: pp.datas, valores: vals, pagos: pp.pagos, dtpagos: pp.dtpagos });
+      l.valor = Math.round(vals.reduce((t, v) => t + (v || 0), 0) * 100) / 100;
+    } else {
+      l.valor = valorPago;
+    }
+  }
 
   let ok;
   if (n > 1) {
@@ -9022,11 +9203,11 @@ async function confirmarPago() {
     // manter compatibilidade com Dashboard/DFC, que ainda leem esses campos.
     l.pago = todasPagas ? 'sim' : 'nao';
     l.dtpago = todasPagas ? dtpago : '';
-    ok = await sbFetch('lancamentos', 'PATCH', {parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago, banco, tipo_pag: tipoPag}, `?id=eq.${id}`);
+    ok = await sbFetch('lancamentos', 'PATCH', {parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago, banco, tipo_pag: tipoPag, valor: l.valor}, `?id=eq.${id}`);
   } else {
     l.pago = 'sim';
     l.dtpago = dtpago;
-    ok = await sbFetch('lancamentos', 'PATCH', {pago:'sim', dtpago, banco, tipo_pag: tipoPag}, `?id=eq.${id}`);
+    ok = await sbFetch('lancamentos', 'PATCH', {pago:'sim', dtpago, banco, tipo_pag: tipoPag, valor: l.valor}, `?id=eq.${id}`);
   }
 
   if (!ok) {
@@ -9035,6 +9216,7 @@ async function confirmarPago() {
     alert('❌ Não foi possível salvar o pagamento no banco de dados.' + sbErroMsg());
     return;
   }
+  if (mudouValor) bumpDbVer();
 
   closeModal('modal-pago'); renderApagar(); renderPagas();
 }
@@ -19405,7 +19587,11 @@ function renderCustosFixos() {
   const fCat    = campoValor('cf-f-cat');
   const fData   = campoValor('cf-f-data');
   const fTexto  = (campoValor('cf-f-texto') || '').trim().toLowerCase();
+  const _vminT  = (campoValor('cf-f-vmin') || '').trim(), _vmaxT = (campoValor('cf-f-vmax') || '').trim();
+  const fVmin   = _vminT ? parseValorBR(_vminT) : null;
+  const fVmax   = _vmaxT ? parseValorBR(_vmaxT) : null;
   const ref     = fData || today();
+  renderCfLancamentos();
 
   let itens = db.lancamentos.filter(l => cfEhCustoFixo(l.id)).map(l => {
     const vigs   = vigOrdenar((cfDadosDoLanc(l.id) || {}).vigencias || []);
@@ -19439,6 +19625,8 @@ function renderCustosFixos() {
     if (fStatus && i.status !== fStatus) return false;
     if (fForn && i.forn !== fForn) return false;
     if (fCat && i.catId !== fCat) return false;
+    if (fVmin !== null && (i.valorRef || 0) < fVmin - 0.004) return false;
+    if (fVmax !== null && (i.valorRef || 0) > fVmax + 0.004) return false;
     if (fTexto) {
       const alvo = [getFornNome(i.forn), i.prod ? getProdNome(i.prod) : '', i.catId ? getDreCatNome(i.catId) : '', i.obs]
         .join(' ').toLowerCase();
@@ -19980,8 +20168,153 @@ async function cfManterHorizonte() {
   } catch (e) { console.error('Custos fixos: falha ao manter o horizonte de 12 meses.', e); }
 }
 
+// ══════════════════════════════════════════════════════════════════════
+// LANÇAMENTOS DE CUSTO FIXO — base, gerados mês a mês e órfãos.
+// Órfão = lançamento criado automaticamente por um custo fixo que depois foi
+// removido/excluído: continua no Contas a Pagar e no Fluxo de Caixa, mas não
+// aparecia em lugar nenhum da tela de Custos Fixos.
+// ══════════════════════════════════════════════════════════════════════
+const _CF_OBS_RE = /\(custo fixo\s*[–-]/i;
+let _cflSel = new Set();
+let _cflLista = [];
+
+function _cfLancsVinculados() {
+  const base = new Set(), gerado = new Map();   // gerado: lancId -> baseId
+  Object.keys(db.custosfixos || {}).forEach(baseId => {
+    const d = db.custosfixos[baseId];
+    if (!d || !d.ativo) return;
+    base.add(baseId);
+    Object.values(d.gerados || {}).forEach(gid => { if (gid && gid !== baseId) gerado.set(gid, baseId); });
+  });
+  const out = [];
+  db.lancamentos.forEach(l => {
+    if (l.cartao_fatura) return;
+    let origem = null;
+    if (base.has(l.id)) origem = 'base';
+    else if (gerado.has(l.id)) origem = 'gerado';
+    else if (_CF_OBS_RE.test(l.obs || '')) origem = 'orfao';
+    if (!origem) return;
+    const n = l.parcelas || 1;
+    const { pagos } = _parseParcelas(l.parcela_datas);
+    const pago = n > 1 ? pagos.slice(0, n).filter(Boolean).length === n : l.pago === 'sim';
+    const prodObj = l.prod ? db.produtos.find(x => x.id === l.prod) : null;
+    out.push({ l, origem, pago, catId: l.cat_dre || (prodObj ? prodObj.cat : '') || '', venc: l.dtprev || l.dtcompra || '' });
+  });
+  return out;
+}
+
+function renderCfLancamentos() {
+  const tb = document.getElementById('tb-cf-lancs');
+  if (!tb) return;
+  const sit = campoValor('cfl-f-sit'), orig = campoValor('cfl-f-orig');
+  const num = id => { const t = (campoValor(id) || '').trim(); return t ? parseValorBR(t) : null; };
+  const vEx = num('cfl-f-vexato'), vMin = num('cfl-f-vmin'), vMax = num('cfl-f-vmax');
+  const de = campoValor('cfl-f-de'), ate = campoValor('cfl-f-ate');
+  const txt = (campoValor('cfl-f-texto') || '').trim().toLowerCase();
+
+  let itens = _cfLancsVinculados().filter(i => {
+    const v = i.l.valor || 0;
+    if (sit === 'aberto' && i.pago) return false;
+    if (sit === 'pago' && !i.pago) return false;
+    if (orig && i.origem !== orig) return false;
+    if (vEx !== null && Math.abs(v - vEx) > 0.004) return false;
+    if (vMin !== null && v < vMin - 0.004) return false;
+    if (vMax !== null && v > vMax + 0.004) return false;
+    if (de && i.venc < de) return false;
+    if (ate && i.venc > ate) return false;
+    if (txt) {
+      const a = [getFornNome(i.l.forn), i.l.prod ? getProdNome(i.l.prod) : '', i.catId ? getDreCatNome(i.catId) : '', i.l.obs || '', i.l.nf || ''].join(' ').toLowerCase();
+      if (a.indexOf(txt) === -1) return false;
+    }
+    return true;
+  }).sort((a, b) => (a.venc || '').localeCompare(b.venc || ''));
+  _cflLista = itens;
+  // Mantém só seleções que ainda estão visíveis
+  const vis = new Set(itens.map(i => i.l.id));
+  _cflSel = new Set([..._cflSel].filter(id => vis.has(id)));
+
+  const ORIG = { base:'<span class="badge badge-green">Base</span>', gerado:'<span class="badge badge-blue">Gerado</span>', orfao:'<span class="badge badge-red" title="O custo fixo que criou este lançamento foi removido">Órfão</span>' };
+  if (!itens.length) {
+    tb.innerHTML = '<tr><td colspan="10" class="empty-state">Nenhum lançamento de custo fixo encontrado com esses filtros.</td></tr>';
+  } else {
+    const _c = _cortarLista(itens, 10);
+    tb.innerHTML = _c.aviso + _c.itens.map(i => {
+      const l = i.l;
+      return `<tr>
+        <td style="text-align:center"><input type="checkbox" class="cfl-chk" ${_cflSel.has(l.id) ? 'checked' : ''} onchange="cfSelUm('${l.id}', this.checked)" /></td>
+        <td style="font-family:DM Mono,monospace;font-size:12px">${i.venc ? fmtDate(i.venc) : '—'}</td>
+        <td><b>${esc(getFornNome(l.forn) || '—')}</b></td>
+        <td>${l.prod ? esc(getProdNome(l.prod)) : '—'}</td>
+        <td>${i.catId ? `<span class="badge badge-blue">${esc(getDreCatNome(i.catId))}</span>` : '<span class="badge badge-gray">Sem categoria</span>'}</td>
+        <td style="font-family:DM Mono,monospace;font-weight:600">${fmtBRL(l.valor || 0)}</td>
+        <td>${i.pago ? '<span class="badge badge-green">Pago</span>' : '<span class="badge badge-yellow">Em aberto</span>'}</td>
+        <td>${ORIG[i.origem]}</td>
+        <td style="font-size:11.5px;color:#78716c;max-width:220px;white-space:normal">${esc(l.obs || '—')}</td>
+        <td class="actions">
+          <button class="btn btn-secondary btn-sm" onclick="editLancamento('${l.id}')">Editar</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  _cfAtualizarBarraSel();
+}
+
+function _cfAtualizarBarraSel() {
+  const tot = _cflLista.reduce((s, i) => s + (i.l.valor || 0), 0);
+  const selItens = _cflLista.filter(i => _cflSel.has(i.l.id));
+  const totSel = selItens.reduce((s, i) => s + (i.l.valor || 0), 0);
+  const r = document.getElementById('cfl-resumo');
+  if (r) r.innerHTML = `<b>${_cflLista.length}</b> lançamento(s) · total <b>${fmtBRL(tot)}</b>` +
+    (selItens.length ? ` &nbsp;|&nbsp; <span style="color:#b91c1c"><b>${selItens.length}</b> selecionado(s) · ${fmtBRL(totSel)}</span>` : '');
+  const b = document.getElementById('cfl-btn-excluir');
+  if (b) { b.disabled = !selItens.length; b.textContent = selItens.length ? `🗑 Excluir ${selItens.length} selecionado(s)` : '🗑 Excluir selecionados'; }
+  const all = document.getElementById('cfl-sel-todos');
+  if (all) { all.checked = _cflLista.length > 0 && selItens.length === _cflLista.length; all.indeterminate = selItens.length > 0 && selItens.length < _cflLista.length; }
+}
+function cfSelUm(id, on) { if (on) _cflSel.add(id); else _cflSel.delete(id); _cfAtualizarBarraSel(); }
+function cfSelTodos(on) {
+  _cflSel = on ? new Set(_cflLista.map(i => i.l.id)) : new Set();
+  document.querySelectorAll('#tb-cf-lancs .cfl-chk').forEach(c => c.checked = on);
+  _cfAtualizarBarraSel();
+}
+function clearCfLancFiltros() {
+  ['cfl-f-orig','cfl-f-vexato','cfl-f-vmin','cfl-f-vmax','cfl-f-de','cfl-f-ate','cfl-f-texto'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const s = document.getElementById('cfl-f-sit'); if (s) s.value = 'aberto';
+  renderCfLancamentos();
+}
+
+async function cfExcluirLancsSelecionados() {
+  const alvos = _cflLista.filter(i => _cflSel.has(i.l.id));
+  if (!alvos.length) return;
+  const tot = alvos.reduce((s, i) => s + (i.l.valor || 0), 0);
+  const nBase = alvos.filter(i => i.origem === 'base').length;
+  const nPagos = alvos.filter(i => i.pago).length;
+  let msg = `Excluir ${alvos.length} lançamento(s), totalizando ${fmtBRL(tot)}?`;
+  if (nBase) msg += `\n\n• ${nBase} é(são) lançamento(s) BASE de custo fixo: a marcação de custo fixo e as vigências também serão apagadas (deixa de projetar no Fluxo de Caixa).`;
+  if (nPagos) msg += `\n• ${nPagos} já está(ão) PAGO(S) — a exclusão altera o saldo das contas.`;
+  msg += '\n\nEsta ação não pode ser desfeita.';
+  if (!confirm(msg)) return;
+
+  const ids = alvos.map(i => i.l.id);
+  const btn = document.getElementById('cfl-btn-excluir');
+  if (btn) { btn.disabled = true; btn.textContent = 'Excluindo...'; }
+  const { sucesso, falha } = await sbDeleteMany('lancamentos', ids);
+  const ok = new Set(sucesso);
+  for (const i of alvos) {
+    if (ok.has(i.l.id) && cfDadosDoLanc(i.l.id)) await cfSalvarNoBanco(i.l.id, false, []);
+  }
+  db.lancamentos = db.lancamentos.filter(x => !ok.has(x.id));
+  _cflSel = new Set();
+  bumpDbVer();
+  renderCustosFixos();
+  try { renderLancamentos(); renderApagar(); } catch (e) {}
+  alert(falha.length
+    ? `⚠️ ${sucesso.length} excluído(s), mas ${falha.length} não puderam ser excluídos.` + (typeof sbErroMsg === 'function' ? sbErroMsg() : '')
+    : `✅ ${sucesso.length} lançamento(s) excluído(s).`);
+}
+
 function clearCustosFixosFiltros() {
-  ['cf-f-status','cf-f-forn','cf-f-cat','cf-f-data','cf-f-texto'].forEach(id => {
+  ['cf-f-status','cf-f-forn','cf-f-cat','cf-f-data','cf-f-texto','cf-f-vmin','cf-f-vmax'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   renderCustosFixos();
