@@ -1401,6 +1401,69 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .nav::-webkit-scrollbar-thumb { background:#c4bfba; border-radius:7px; border:3px solid #f5f3f1; min-height:48px; }
 .nav::-webkit-scrollbar-thumb:hover { background:#ea580c; }
 .nav::-webkit-scrollbar-thumb:active { background:#c2410c; }
+/* ══ Confirmar Pagamento — layout novo ══ */
+.pg-modal { width:600px !important; max-width:96vw; padding:0 !important; overflow:hidden; border-radius:18px !important; display:flex; flex-direction:column; max-height:92vh; }
+.pg-head { display:flex; align-items:center; gap:14px; padding:20px 24px 16px; background:linear-gradient(135deg,#fff7ed 0%,#ffffff 70%); border-bottom:1px solid #f1efed; }
+.pg-head-ico { width:42px; height:42px; border-radius:12px; background:#ea580c; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; box-shadow:0 6px 16px rgba(234,88,12,.28); flex-shrink:0; }
+.pg-head-tit { font-size:18px; font-weight:800; color:#1c1917; letter-spacing:-.2px; }
+.pg-head-sub { font-size:12.5px; color:#a8a29e; margin-top:2px; }
+.pg-x { border:none; background:#f5f5f4; width:32px; height:32px; border-radius:9px; cursor:pointer; color:#78716c; font-size:14px; }
+.pg-x:hover { background:#e7e5e4; color:#1c1917; }
+.pg-body { padding:18px 24px 6px; overflow-y:auto; }
+.pg-resumo { display:flex; gap:16px; align-items:center; justify-content:space-between; border:1px solid #ece9e6; border-radius:14px; padding:14px 16px; margin-bottom:18px; background:#fafaf9; }
+.pg-res-esq { min-width:0; flex:1; }
+.pg-res-nome { font-size:15px; font-weight:700; color:#1c1917; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pg-res-item { font-size:12.5px; color:#78716c; margin:2px 0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pg-res-chips { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.pg-tag { font-size:11.5px; font-weight:600; color:#57534e; background:#fff; border:1px solid #e7e5e4; border-radius:999px; padding:2px 9px; }
+.pg-res-dir { text-align:right; flex-shrink:0; padding-left:16px; border-left:1px dashed #e7e5e4; }
+.pg-res-lbl { font-size:10.5px; text-transform:uppercase; letter-spacing:1px; color:#a8a29e; font-weight:700; }
+.pg-res-val { font-family:'DM Mono',monospace; font-size:21px; font-weight:700; color:#dc2626; margin-top:2px; white-space:nowrap; }
+.pg-sec { margin-bottom:18px; }
+.pg-sec-tit { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:#57534e; margin-bottom:8px; }
+.pg-n { width:20px; height:20px; border-radius:50%; background:#1c1917; color:#fff; font-size:11px; display:inline-flex; align-items:center; justify-content:center; letter-spacing:0; flex-shrink:0; }
+.pg-valor-box { display:flex; align-items:center; gap:10px; border:1.5px solid #e7e5e4; border-radius:12px; padding:6px 8px 6px 14px; background:#fff; transition:border-color .15s, box-shadow .15s; }
+.pg-valor-box:focus-within { border-color:#ea580c; box-shadow:0 0 0 4px rgba(234,88,12,.1); }
+.pg-rs { font-size:15px; font-weight:700; color:#a8a29e; }
+.pg-valor-box input { flex:1; border:none !important; outline:none; box-shadow:none !important; font-family:'DM Mono',monospace; font-size:22px; font-weight:700; color:#1c1917; padding:6px 0 !important; background:transparent; min-width:0; }
+.pg-chip { border:1px solid #e7e5e4; background:#fafaf9; color:#57534e; border-radius:9px; padding:8px 12px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.pg-chip:hover { background:#f5f5f4; color:#1c1917; }
+.pg-hint { font-size:11.5px; margin-top:6px; color:#a8a29e; }
+.pg-data-row { display:flex; gap:10px; align-items:stretch; }
+.pg-data-row input[type=date] { flex:1; }
+.pg-seg { display:flex; background:#f5f5f4; border-radius:10px; padding:3px; gap:3px; }
+.pg-seg button { border:none; background:transparent; padding:0 14px; border-radius:8px; font-size:12.5px; font-weight:600; color:#57534e; cursor:pointer; }
+.pg-seg button:hover { background:#fff; color:#ea580c; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+.pg-add { border:1px dashed #fdba74; background:#fff7ed; color:#c2410c; border-radius:8px; padding:5px 10px; font-size:11.5px; font-weight:700; cursor:pointer; text-transform:none; letter-spacing:0; }
+.pg-add:hover { background:#ffedd5; border-style:solid; }
+.pg-formas { display:flex; flex-direction:column; gap:8px; }
+.pg-forma { position:relative; display:flex; gap:10px; align-items:flex-start; border:1px solid #ece9e6; border-radius:12px; padding:10px 12px; background:#fff; }
+.pg-forma-num { display:none; width:22px; height:22px; border-radius:50%; background:#fff7ed; color:#c2410c; font-size:11px; font-weight:800; align-items:center; justify-content:center; margin-top:22px; flex-shrink:0; }
+.pg-formas.multi .pg-forma-num { display:flex; }
+.pg-forma-campos { flex:1; display:grid; grid-template-columns:1fr 1.2fr; gap:10px; min-width:0; }
+.pg-formas.multi .pg-forma-campos { grid-template-columns:1fr 1.2fr 120px; }
+.pg-f-valor { display:none; }
+.pg-formas.multi .pg-f-valor { display:block; }
+.pg-forma-campos label { display:block; font-size:11px; font-weight:600; color:#78716c; margin-bottom:4px; text-transform:none; letter-spacing:0; }
+.pg-forma-campos select, .pg-forma-campos input { width:100%; }
+.pg-f-val { font-family:'DM Mono',monospace; font-weight:700; }
+.pg-forma-del { border:none; background:transparent; color:#a8a29e; cursor:pointer; font-size:13px; margin-top:22px; width:26px; height:30px; border-radius:7px; }
+.pg-forma-del:hover { background:#fef2f2; color:#dc2626; }
+.pg-rateio { margin-top:10px; border-radius:10px; padding:9px 12px; font-size:12.5px; }
+.pg-rateio.ok { background:#f0fdf4; color:#15803d; } .pg-rateio.falta { background:#fffbeb; color:#b45309; } .pg-rateio.sobra { background:#fef2f2; color:#b91c1c; }
+.pg-rat-bar { height:5px; border-radius:3px; background:rgba(0,0,0,.07); overflow:hidden; margin-bottom:6px; }
+.pg-rat-bar i { display:block; height:100%; background:currentColor; border-radius:3px; transition:width .2s; }
+.pg-rat-txt { display:flex; justify-content:space-between; gap:10px; }
+.pg-rat-txt span:last-child { font-family:'DM Mono',monospace; opacity:.85; }
+.pg-cartao { width:100%; border:1px solid #e7e5e4; background:#fff; color:#1c1917; border-radius:12px; padding:11px 14px; font-size:13px; font-weight:700; cursor:pointer; margin:2px 0 14px; text-align:left; transition:all .15s; }
+.pg-cartao small { font-weight:500; color:#a8a29e; }
+.pg-cartao:hover { border-color:#1c1917; background:#fafaf9; }
+.pg-foot { display:flex; align-items:center; gap:10px; padding:14px 24px; border-top:1px solid #f1efed; background:#fafaf9; }
+.pg-foot-tot { flex:1; font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:#a8a29e; font-weight:700; display:flex; flex-direction:column; }
+.pg-foot-tot b { font-family:'DM Mono',monospace; font-size:17px; color:#1c1917; letter-spacing:0; text-transform:none; }
+.pg-btn-ok { padding:11px 20px !important; font-weight:700 !important; }
+.pg-btn-ok:disabled { opacity:.5; cursor:not-allowed; }
+@media (max-width:560px) { .pg-forma-campos, .pg-formas.multi .pg-forma-campos { grid-template-columns:1fr; } .pg-resumo { flex-direction:column; align-items:flex-start; } .pg-res-dir { border-left:none; padding-left:0; text-align:left; } .pg-data-row { flex-direction:column; } .pg-seg button { padding:8px 14px; } }
 /* Linha de total por dia — Lançamento de Contas a Pagar */
 tr.lanc-dia-row td { background:#fff7ed !important; border-top:2px solid #fed7aa; border-bottom:1px solid #fed7aa; padding:7px 12px !important; }
 tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580c; }
@@ -3747,6 +3810,7 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(true)">▾ Expandir</button>
             <button class="btn btn-secondary btn-sm" onclick="fpTodosGrupos(false)">▸ Recolher</button>
             <button class="btn btn-secondary btn-sm" onclick="fpExportar()">⬇ Excel</button>
+            <button class="btn btn-primary btn-sm" onclick="fpAbrirLocalizar()" title="Descobrir de onde vem um valor e removê-lo">🔎 Localizar / remover valor</button>
             <button class="btn btn-secondary btn-sm" id="fp-btn-restaurar" onclick="fpRestaurarAno()">↺ Voltar período ao automático</button>
           </div>
         </div>
@@ -5189,41 +5253,97 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
   </div>
 </div>
 
-<!-- ══ MODAL DATA PAGAMENTO ══ -->
+<!-- ══ MODAL CONFIRMAR PAGAMENTO (layout novo, com várias formas de pagamento) ══ -->
 <div class="modal-overlay" id="modal-pago">
-  <div class="modal" style="width:400px;">
-    <div class="modal-title">Confirmar Pagamento</div>
+  <div class="modal pg-modal">
     <input type="hidden" id="modal-pago-id" />
     <input type="hidden" id="modal-pago-parc" />
-    <div id="modal-pago-resumo" style="background:#faf9f7;border:1px solid #ece9e6;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:#57534e;line-height:1.5"></div>
-    <div class="form-group">
-      <label>Valor a Pagar (R$) *</label>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input id="modal-pago-valor" type="text" inputmode="decimal" placeholder="0,00" oninput="mpAtualizarDifValor()" style="flex:1;font-family:'DM Mono',monospace;font-size:15px;font-weight:600" />
-        <button type="button" class="btn btn-secondary" style="font-size:12px;white-space:nowrap" onclick="mpRestaurarValor()" title="Voltar ao valor original da conta">↺ Original</button>
+    <div class="pg-head">
+      <div class="pg-head-ico">✓</div>
+      <div style="flex:1;min-width:0">
+        <div class="pg-head-tit">Confirmar Pagamento</div>
+        <div class="pg-head-sub">Registre como esta conta foi paga</div>
       </div>
-      <div id="modal-pago-valor-dif" style="font-size:11.5px;margin-top:5px;color:#a8a29e">Altere se pagou com juros, multa ou desconto.</div>
+      <button type="button" class="pg-x" onclick="closeModal('modal-pago')" aria-label="Fechar">✕</button>
     </div>
-    <div class="form-group">
-      <label>Data do Pagamento *</label>
-      <input id="modal-pago-data" type="date" />
+
+    <div class="pg-body">
+      <div id="modal-pago-resumo" class="pg-resumo"></div>
+
+      <div class="pg-sec">
+        <div class="pg-sec-tit"><span class="pg-n">1</span> Valor pago</div>
+        <div class="pg-valor-box">
+          <span class="pg-rs">R$</span>
+          <input id="modal-pago-valor" type="text" inputmode="decimal" placeholder="0,00" oninput="mpAtualizarDifValor(); pgAtualizarRateio()" />
+          <button type="button" class="pg-chip" onclick="mpRestaurarValor()" title="Voltar ao valor original da conta">↺ Original</button>
+        </div>
+        <div id="modal-pago-valor-dif" class="pg-hint">Altere se pagou com juros, multa ou desconto.</div>
+      </div>
+
+      <div class="pg-sec">
+        <div class="pg-sec-tit"><span class="pg-n">2</span> Data do pagamento</div>
+        <div class="pg-data-row">
+          <input id="modal-pago-data" type="date" />
+          <div class="pg-seg">
+            <button type="button" onclick="usarHoje()">Hoje</button>
+            <button type="button" onclick="usarVencimento()">Vencimento</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg-sec">
+        <div class="pg-sec-tit" style="justify-content:space-between">
+          <span style="display:flex;align-items:center;gap:8px"><span class="pg-n">3</span> Forma de pagamento</span>
+          <button type="button" class="pg-add" onclick="pgAdicionarForma()">＋ Adicionar outra forma</button>
+        </div>
+        <div id="pg-formas" class="pg-formas">
+          <div class="pg-forma" data-i="0">
+            <div class="pg-forma-num">1</div>
+            <div class="pg-forma-campos">
+              <div class="pg-f-tipo"><label>Forma</label><select id="modal-pago-tipo-pag" onchange="onTipoPagChange(this)"><option value="">Não informado</option></select></div>
+              <div class="pg-f-banco"><label>Banco / Conta *</label><select id="modal-pago-banco"><option value="">Não informado</option></select></div>
+              <div class="pg-f-valor"><label>Valor</label><input type="text" inputmode="decimal" class="pg-f-val" placeholder="0,00" oninput="pgAtualizarRateio()" /></div>
+            </div>
+          </div>
+        </div>
+        <div id="pg-rateio" class="pg-rateio" style="display:none"></div>
+      </div>
+
+      <button type="button" class="pg-cartao" onclick="ccPagarContaComCartao()">💳 Pagar com Cartão de Crédito <small>— lança na fatura do cartão</small></button>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:20px;">
-      <button class="btn btn-secondary" style="flex:1;font-size:12px" onclick="usarHoje()">Hoje</button>
-      <button class="btn btn-secondary" style="flex:1;font-size:12px" onclick="usarVencimento()">Data de Vencimento</button>
-    </div>
-    <button type="button" class="cc-pagar-cartao" onclick="ccPagarContaComCartao()">💳 Pagar com Cartão de Crédito</button>
-    <div class="form-group">
-      <label>Forma de Pagamento</label>
-      <select id="modal-pago-tipo-pag" onchange="onTipoPagChange(this)"><option value="">Não informado</option></select>
-    </div>
-    <div class="form-group">
-      <label>Banco / Conta *</label>
-      <select id="modal-pago-banco"><option value="">Não informado</option></select>
-    </div>
-    <div class="modal-footer">
+
+    <div class="pg-foot">
+      <div id="pg-foot-tot" class="pg-foot-tot"></div>
       <button class="btn btn-secondary" onclick="closeModal('modal-pago')">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmarPago()">✓ Confirmar Pagamento</button>
+      <button class="btn btn-primary pg-btn-ok" id="pg-btn-ok" onclick="confirmarPago()">✓ Confirmar Pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL LOCALIZAR VALOR NO FLUXO PROJETADO ══ -->
+<div class="modal-overlay" id="modal-fp-localizar">
+  <div class="modal" style="width:900px;max-width:96vw;">
+    <div class="modal-title">🔎 Localizar e remover um valor do Fluxo Projetado</div>
+    <p style="font-size:12.5px;color:#57534e;margin:-4px 0 14px;line-height:1.5">Procura o valor em <b>todas as origens</b> que alimentam o fluxo: contas a pagar/receber em aberto, custos fixos (projeção mensal), lançamentos do DFC e <b>ajustes manuais</b> feitos nas células do próprio fluxo.</p>
+    <div class="filter-row" style="margin-bottom:10px">
+      <div class="form-group"><label>Valor (R$) *</label>
+        <input type="text" inputmode="decimal" id="fpl-valor" placeholder="ex.: 600,00" style="width:130px;font-family:'DM Mono',monospace;font-weight:700" onkeydown="if(event.key==='Enter')fpLocalizar()" />
+      </div>
+      <div class="form-group"><label>Até o mês</label>
+        <input type="month" id="fpl-ate" style="padding:7px 10px;font-size:13px" />
+      </div>
+      <div class="form-group" style="align-self:flex-end">
+        <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;margin:0 0 9px">
+          <input type="checkbox" id="fpl-semgrupo" style="width:auto;accent-color:#ea580c" /> Só os que estão <b>sem grupo</b>
+        </label>
+      </div>
+      <div style="align-self:flex-end"><button class="btn btn-primary" onclick="fpLocalizar()">Procurar</button></div>
+    </div>
+    <div id="fpl-res" style="max-height:52vh;overflow:auto"></div>
+    <div class="modal-footer" style="align-items:center">
+      <span id="fpl-sel-info" style="flex:1;font-size:12.5px;color:#57534e"></span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-fp-localizar')">Fechar</button>
+      <button class="btn btn-danger" id="fpl-btn-rem" onclick="fpRemoverLocalizados()" disabled>🗑 Remover selecionados</button>
     </div>
   </div>
 </div>
@@ -8092,6 +8212,8 @@ async function updateLancamento() {
     alert('Você marcou este lançamento como Custo Fixo, mas nenhuma vigência foi incluída.\n\nPreencha o início da vigência e clique em "+ Incluir vigência".');
     return;
   }
+  if (!ehCustoFixoEdit && cfEhCustoFixo(l.id) && cfGeradosDoLanc(l.id).length &&
+      !confirm('Você desmarcou "Custo Fixo" deste lançamento.' + cfAvisoGerados(l.id) + '\n\nContinuar?')) return;
   const _empEdit = empresaDoForm('edit-empresa');
   if (_empEdit === null) return;
   if (!validarParcelasPagasForm('edit-parcela-dates', parseInt(document.getElementById('edit-parcelas').value)||1, banco)) return;
@@ -8161,11 +8283,13 @@ async function updateLancamento() {
 async function deleteLancamento(id) {
   const _lcc = db.lancamentos.find(x=>x.id===id);
   if (_lcc && _lcc.cartao_fatura) { alert('Esta é a fatura de um cartão de crédito. Ela é atualizada automaticamente pelas despesas lançadas na tela Cartões de Crédito.'); return; }
-  if(!confirm('Excluir este lançamento?')) return;
+  if(!confirm('Excluir este lançamento?' + cfAvisoGerados(id))) return;
   await sbFetch('lancamentos', 'DELETE', null, `?id=eq.${id}`);
   if (cfEhCustoFixo(id)) await cfSalvarNoBanco(id, false, []);
   db.lancamentos = db.lancamentos.filter(x=>x.id!==id);
+  bumpDbVer();
   renderLancamentos(); renderCustosFixos();
+  try { renderApagar(); renderPagas(); } catch (e) {}
 }
 
 // ══════════════════════════════════════════
@@ -9170,9 +9294,20 @@ function marcarPago(id, parcIdx) {
   document.getElementById('modal-pago-valor').value = _mpFmtNum(_mpValorOriginal);
   const _n = l.parcelas || 1;
   const _venc = _parc ? _parc.venc : l.dtprev;
-  document.getElementById('modal-pago-resumo').innerHTML =
-    `<b style="color:#1c1917">${esc(getFornNome(l.forn) || '—')}</b>${l.prod ? ' · ' + esc(getProdNome(l.prod)) : ''}<br>` +
-    `${_n > 1 ? `Parcela ${_pi}/${_n} · ` : ''}Vencimento: <b>${_venc ? fmtDate(_venc) : '—'}</b> · Valor: <b style="color:#dc2626">${fmtBRL(_mpValorOriginal)}</b>`;
+  const _sit = _venc ? situacaoParcela(_venc) : null;
+  const _nomeF = getFornNome(l.forn) || (l.obs ? l.obs : 'Sem fornecedor');
+  document.getElementById('modal-pago-resumo').innerHTML = `
+    <div class="pg-res-esq">
+      <div class="pg-res-nome" title="${esc(_nomeF)}">${esc(_nomeF)}</div>
+      <div class="pg-res-item">${l.prod ? esc(getProdNome(l.prod)) : (l.nf ? 'NF ' + esc(l.nf) : '&nbsp;')}</div>
+      <div class="pg-res-chips">
+        ${_n > 1 ? `<span class="pg-tag">Parcela ${_pi}/${_n}</span>` : ''}
+        <span class="pg-tag">Venc. ${_venc ? fmtDate(_venc) : '—'}</span>
+        ${_sit ? `<span class="badge ${_sit.cls}">${_sit.label}</span>` : ''}
+      </div>
+    </div>
+    <div class="pg-res-dir"><div class="pg-res-lbl">Valor da conta</div><div class="pg-res-val">${fmtBRL(_mpValorOriginal)}</div></div>`;
+  pgResetFormas();
   mpAtualizarDifValor();
   openModal('modal-pago');
 }
@@ -9187,7 +9322,7 @@ function _mpLerValor() {
 }
 function mpRestaurarValor() {
   document.getElementById('modal-pago-valor').value = _mpFmtNum(_mpValorOriginal);
-  mpAtualizarDifValor();
+  mpAtualizarDifValor(); pgAtualizarRateio();
 }
 function mpAtualizarDifValor() {
   const el = document.getElementById('modal-pago-valor-dif');
@@ -9218,18 +9353,133 @@ async function confirmarPago() {
   const id = document.getElementById('modal-pago-id').value;
   const parcIdx = parseInt(document.getElementById('modal-pago-parc').value) || 1;
   const dtpago = document.getElementById('modal-pago-data').value;
-  const banco = document.getElementById('modal-pago-banco').value;
-  const tipoPag = document.getElementById('modal-pago-tipo-pag').value;
   if(!dtpago) { alert('Informe a data do pagamento.'); return; }
-  if (ccEhFormaCartao(tipoPag)) { ccPagarContaComCartao(); return; }
-  if(!banco) { alert('Selecione o banco/conta de onde o valor foi pago.'); return; }
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return;
   const valorPago = _mpLerValor();
   if (isNaN(valorPago) || valorPago <= 0) { alert('Informe o valor pago (maior que zero).'); return; }
-  const ok = await _pagarParcelaCore(l, parcIdx, dtpago, banco, tipoPag, valorPago, _mpValorOriginal);
-  if (!ok) { alert('❌ Não foi possível salvar o pagamento no banco de dados.' + sbErroMsg()); return; }
-  closeModal('modal-pago'); renderApagar(); renderPagas();
+  const formas = pgLerFormas();
+  if (formas.some(f => ccEhFormaCartao(f.tipo))) {
+    if (formas.length > 1) { alert('Cartão de crédito não pode ser combinado com outras formas. Use o botão "Pagar com Cartão de Crédito".'); return; }
+    ccPagarContaComCartao(); return;
+  }
+  if (formas.some(f => !f.banco)) { alert('Selecione o banco/conta de cada forma de pagamento.'); return; }
+  if (formas.length > 1) {
+    if (formas.some(f => isNaN(f.valor) || f.valor <= 0)) { alert('Informe o valor de cada forma de pagamento.'); return; }
+    const soma = Math.round(formas.reduce((t, f) => t + f.valor, 0) * 100) / 100;
+    if (Math.abs(soma - valorPago) >= 0.005) { alert(`A soma das formas (${fmtBRL(soma)}) precisa ser igual ao valor pago (${fmtBRL(valorPago)}).`); return; }
+  } else formas[0].valor = valorPago;
+
+  const btn = document.getElementById('pg-btn-ok');
+  if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+  try {
+    // 1ª forma fica no próprio lançamento (parcela)
+    const ok = await _pagarParcelaCore(l, parcIdx, dtpago, formas[0].banco, formas[0].tipo, formas[0].valor, _mpValorOriginal);
+    if (!ok) { alert('❌ Não foi possível salvar o pagamento no banco de dados.' + sbErroMsg()); return; }
+    // Demais formas: cada uma vira um lançamento pago separado (mesmo fornecedor/item/categoria),
+    // assim o saldo de cada banco fica certo.
+    if (formas.length > 1) {
+      const parc = _buildParcelas([l]).find(p => p.parcIdx === parcIdx);
+      const prodObj = l.prod ? db.produtos.find(x => x.id === l.prod) : null;
+      const catId = l.cat_dre || (prodObj ? prodObj.cat : '') || '';
+      const falhas = [];
+      for (let k = 1; k < formas.length; k++) {
+        const f = formas[k];
+        const novo = {
+          id: uid(), empresa_id: l.empresa_id, dtcompra: l.dtcompra || dtpago, dtprev: (parc && parc.venc) || l.dtprev || dtpago,
+          nf: l.nf || '', forn: l.forn, prod: l.prod, valor: f.valor, parcelas: 1, financeiro: l.financeiro,
+          pago: 'sim', dtpago, tipo_pag: f.tipo, banco: f.banco, cat_dre: catId,
+          obs: ((l.obs ? l.obs + ' ' : '') + `(pagamento dividido ${k + 1}/${formas.length}${(l.parcelas || 1) > 1 ? ` – parc. ${parcIdx}/${l.parcelas}` : ''})`).trim(),
+          parcela_datas: null
+        };
+        const r = await sbFetch('lancamentos', 'POST', novo);
+        if (r) { if (pertenceEmpresaAtiva(novo.empresa_id)) db.lancamentos.push(novo); }
+        else falhas.push(`${f.tipo || 'forma ' + (k + 1)} ${fmtBRL(f.valor)}`);
+      }
+      bumpDbVer();
+      if (falhas.length) alert('⚠️ A primeira forma foi salva, mas estas não: ' + falhas.join(', ') + '.' + sbErroMsg());
+    }
+    closeModal('modal-pago'); renderApagar(); renderPagas();
+    try { renderLancamentos(); } catch (e) {}
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '✓ Confirmar Pagamento'; }
+  }
+}
+
+// ── Várias formas de pagamento no Confirmar Pagamento ──
+function _pgOptsFormas(sel) { return _montarOptsFormas(getFormasPagamento().filter(f => !ccEhFormaCartao(f)), sel || '', '+ Cadastrar nova forma de pagamento...'); }
+function _pgOptsBancos() { return '<option value="">Selecione...</option>' + db.bancos.map(b => `<option value="${esc(b.id)}">${esc(b.nome)}</option>`).join(''); }
+function pgResetFormas() {
+  document.querySelectorAll('#pg-formas .pg-forma').forEach(r => { if (r.dataset.i !== '0') r.remove(); });
+  const v = document.querySelector('#pg-formas .pg-forma[data-i="0"] .pg-f-val');
+  if (v) v.value = '';
+  pgAtualizarRateio();
+}
+let _pgSeq = 0;
+function pgAdicionarForma() {
+  const box = document.getElementById('pg-formas');
+  const linhas = box.querySelectorAll('.pg-forma');
+  const total = _mpLerValor();
+  // Ao passar de 1 para 2 formas, a 1ª fica com o valor total e a nova com o que faltar
+  if (linhas.length === 1) { const v0 = linhas[0].querySelector('.pg-f-val'); if (v0 && !v0.value) v0.value = _mpFmtNum(isNaN(total) ? 0 : total); }
+  const usado = [...box.querySelectorAll('.pg-f-val')].reduce((t, el) => t + (el.value.trim() ? parseValorBR(el.value) : 0), 0);
+  const resto = Math.max(0, Math.round(((isNaN(total) ? 0 : total) - usado) * 100) / 100);
+  const i = ++_pgSeq;
+  const div = document.createElement('div');
+  div.className = 'pg-forma'; div.dataset.i = String(i);
+  div.innerHTML = `<div class="pg-forma-num"></div>
+    <div class="pg-forma-campos">
+      <div class="pg-f-tipo"><label>Forma</label><select id="pg-tipo-${i}" onchange="onTipoPagChange(this)">${_pgOptsFormas('')}</select></div>
+      <div class="pg-f-banco"><label>Banco / Conta *</label><select id="pg-banco-${i}">${_pgOptsBancos()}</select></div>
+      <div class="pg-f-valor"><label>Valor</label><input type="text" inputmode="decimal" class="pg-f-val" placeholder="0,00" value="${resto ? _mpFmtNum(resto) : ''}" oninput="pgAtualizarRateio()" /></div>
+    </div>
+    <button type="button" class="pg-forma-del" onclick="pgRemoverForma(this)" title="Remover esta forma">✕</button>`;
+  box.appendChild(div);
+  try {
+    const iconeBanco = v => { const b = (db.bancos || []).find(x => x.id === v); return b ? bancoIconeHtml(b, 20) : ''; };
+    enhanceSearchableSelect(document.getElementById('pg-banco-' + i), { icone: iconeBanco });
+  } catch (e) {}
+  pgAtualizarRateio();
+  const inp = div.querySelector('.pg-f-val'); if (inp) setTimeout(() => { inp.focus(); inp.select(); }, 30);
+}
+function pgRemoverForma(btn) {
+  const row = btn.closest('.pg-forma'); if (row) row.remove();
+  const linhas = document.querySelectorAll('#pg-formas .pg-forma');
+  if (linhas.length === 1) { const v = linhas[0].querySelector('.pg-f-val'); if (v) v.value = ''; }
+  pgAtualizarRateio();
+}
+function pgLerFormas() {
+  return [...document.querySelectorAll('#pg-formas .pg-forma')].map(r => {
+    const sels = r.querySelectorAll('select');
+    const v = r.querySelector('.pg-f-val');
+    return { tipo: sels[0] ? sels[0].value : '', banco: sels[1] ? sels[1].value : '',
+             valor: v && v.value.trim() ? Math.round(parseValorBR(v.value) * 100) / 100 : NaN };
+  });
+}
+function pgAtualizarRateio() {
+  const box = document.getElementById('pg-formas');
+  if (!box) return;
+  const linhas = [...box.querySelectorAll('.pg-forma')];
+  const multi = linhas.length > 1;
+  box.classList.toggle('multi', multi);
+  linhas.forEach((r, k) => { const n = r.querySelector('.pg-forma-num'); if (n) n.textContent = k + 1; });
+  const total = _mpLerValor();
+  const rat = document.getElementById('pg-rateio');
+  const foot = document.getElementById('pg-foot-tot');
+  const btn = document.getElementById('pg-btn-ok');
+  if (foot) foot.innerHTML = isNaN(total) ? '' : `Total pago<b>${fmtBRL(total)}</b>`;
+  if (!multi) { if (rat) rat.style.display = 'none'; if (btn) btn.disabled = false; return; }
+  const soma = Math.round(pgLerFormas().reduce((t, f) => t + (isNaN(f.valor) ? 0 : f.valor), 0) * 100) / 100;
+  const dif = Math.round(((isNaN(total) ? 0 : total) - soma) * 100) / 100;
+  const pct = total > 0 ? Math.min(100, soma / total * 100) : 0;
+  let cls = 'ok', txt = '✓ Valores conferem com o total pago';
+  if (dif > 0.004) { cls = 'falta'; txt = `Falta distribuir <b>${fmtBRL(dif)}</b>`; }
+  else if (dif < -0.004) { cls = 'sobra'; txt = `Passou <b>${fmtBRL(-dif)}</b> do total pago`; }
+  rat.style.display = '';
+  rat.className = 'pg-rateio ' + cls;
+  rat.innerHTML = `<div class="pg-rat-bar"><i style="width:${pct}%"></i></div>
+    <div class="pg-rat-txt"><span>${txt}</span><span>${fmtBRL(soma)} de ${fmtBRL(isNaN(total) ? 0 : total)}</span></div>`;
+  if (btn) btn.disabled = cls !== 'ok';
 }
 
 // Marca UMA parcela como paga (com valor possivelmente alterado) e grava no banco.
@@ -15733,6 +15983,204 @@ function fpVerLancamentos() {
   _dreDetalheRender(linha ? linha.nome : 'Lançamentos', `${_fpTxtMes(mes)} · valores automáticos`, itens, { origem:'fp', chave, mes });
 }
 
+// ══════════════════════════════════════════════════════════════════════
+// LOCALIZAR / REMOVER VALOR DO FLUXO PROJETADO
+// ══════════════════════════════════════════════════════════════════════
+let _fplRes = [];
+function _fplMesesTxt(ks) {
+  ks = [...new Set(ks)].sort();
+  if (!ks.length) return '—';
+  if (ks.length === 1) return _fpRotuloMes(ks[0]);
+  return `${_fpRotuloMes(ks[0])} → ${_fpRotuloMes(ks[ks.length - 1])} <span style="color:#a8a29e">(${ks.length} meses)</span>`;
+}
+function _fplInfoCat(catId) {
+  const cat = catId ? db.dfc_cats.find(c => c.id === catId) : null;
+  const gOk = cat && db.dre_grupos.some(g => g.id === cat.grupo && (g.tipo === 'entrada' || g.tipo === 'saida'));
+  return { nome: cat ? cat.nome : 'Sem categoria', semGrupo: !gOk, grupo: gOk ? getDreGrupoNome(cat.grupo) : '' };
+}
+async function fpAbrirLocalizar() {
+  await carregarFpAjustes();
+  const ate = document.getElementById('fpl-ate');
+  if (ate && !ate.value) { const h = new Date(); ate.value = _fpAddMes(_fpMesKey(h.getFullYear(), h.getMonth() + 1), 24); }
+  document.getElementById('fpl-res').innerHTML = '<div class="empty-state" style="padding:24px">Digite o valor e clique em <b>Procurar</b>.</div>';
+  _fplRes = []; _fplAtualizarSel();
+  openModal('modal-fp-localizar');
+  setTimeout(() => document.getElementById('fpl-valor').focus(), 60);
+}
+function fpLocalizar() {
+  const t = (document.getElementById('fpl-valor').value || '').trim();
+  if (!t) { alert('Informe o valor a procurar.'); return; }
+  const alvo = Math.round(parseValorBR(t) * 100) / 100;
+  const igual = v => Math.abs(Math.abs(v || 0) - alvo) < 0.011;
+  const ateK = document.getElementById('fpl-ate').value || '9999-12';
+  const soSemGrupo = document.getElementById('fpl-semgrupo').checked;
+  const h = new Date(), kAtual = _fpMesKey(h.getFullYear(), h.getMonth() + 1);
+  const res = [];
+
+  // 1. Ajustes manuais feitos no próprio Fluxo Projetado
+  const porLinha = {};
+  Object.keys(_fpAjustes || {}).forEach(ano => Object.keys(_fpAjustes[ano] || {}).forEach(linha => {
+    Object.keys(_fpAjustes[ano][linha] || {}).forEach(mes => {
+      const aj = _fpAjustes[ano][linha][mes];
+      if (!aj || aj.m !== 'manual' || !igual(aj.v)) return;
+      const k = _fpMesKey(parseInt(ano), parseInt(mes));
+      if (k > ateK) return;
+      (porLinha[linha] = porLinha[linha] || []).push(k);
+    });
+  }));
+  Object.keys(porLinha).forEach(chave => {
+    let nome = (_fpLinhas[chave] || {}).nome, semGrupo = false;
+    const id = chave.slice(4);
+    if (!nome) {
+      if (chave.startsWith('grp:')) nome = id === '__semgrp_sai__' ? 'Outras saídas (sem grupo)' : id === '__semgrp_ent__' ? 'Outras entradas (sem grupo)' : getDreGrupoNome(id);
+      else if (chave.startsWith('cat:')) nome = id === '__semcat_pag__' ? 'Sem categoria (a pagar)' : id === '__semcat_rec__' ? 'Sem categoria (a receber)' : _fplInfoCat(id).nome;
+      else nome = chave;
+    }
+    if (chave.startsWith('grp:')) semGrupo = id.startsWith('__semgrp');
+    else if (chave.startsWith('cat:')) semGrupo = id.startsWith('__semcat') || _fplInfoCat(id).semGrupo;
+    res.push({ tipo:'ajuste', chave, meses: porLinha[chave], valor: alvo, semGrupo,
+      titulo: `Valor digitado manualmente na linha “${nome}”`, origem: '✎ Ajuste manual no Fluxo', acao: 'Volta a linha para o automático nesses meses' });
+  });
+
+  // 2. Custos fixos (projeção mensal)
+  db.lancamentos.forEach(l => {
+    if (!cfEhCustoFixo(l.id)) return;
+    const vigs = (cfDadosDoLanc(l.id) || {}).vigencias || [];
+    const ks = [];
+    vigs.forEach(v => {
+      const val = (v.valor != null && v.valor !== '') ? (parseFloat(v.valor) || 0) : (l.valor || 0);
+      if (!igual(val)) return;
+      cfMesesVigencia(v, ateK).forEach(k => { if (k >= kAtual) ks.push(k); });
+    });
+    if (!ks.length) return;
+    const prodObj = l.prod ? db.produtos.find(x => x.id === l.prod) : null;
+    const ic = _fplInfoCat(l.cat_dre || (prodObj ? prodObj.cat : ''));
+    res.push({ tipo:'cf', lancId: l.id, meses: ks, valor: alvo, semGrupo: ic.semGrupo, cat: ic,
+      titulo: `${getFornNome(l.forn) || 'Sem fornecedor'}${l.prod ? ' · ' + getProdNome(l.prod) : ''}`, origem: '🔁 Custo fixo (projeção)',
+      acao: 'Encerra o custo fixo e exclui os lançamentos mensais em aberto dele' });
+  });
+
+  // 3. Contas a pagar em aberto (agrupa por lançamento)
+  const pag = {};
+  getParcelas(false).forEach(p => {
+    if (p.cartaoFatura || !igual(p.valParc)) return;
+    const k = (p.venc || '').slice(0, 7);
+    if (k && k > ateK) return;
+    (pag[p.lancId] = pag[p.lancId] || []).push(p);
+  });
+  Object.keys(pag).forEach(id => {
+    const ps = pag[id], l = db.lancamentos.find(x => x.id === id); if (!l) return;
+    const ic = _fplInfoCat(ps[0].catId);
+    const todas = (l.parcelas || 1) === ps.length;
+    res.push({ tipo:'pagar', lancId: id, parcs: ps.map(p => p.parcIdx), todas, meses: ps.map(p => (p.venc || '').slice(0, 7)).filter(Boolean), valor: alvo,
+      semGrupo: ic.semGrupo, cat: ic, titulo: `${getFornNome(l.forn) || 'Sem fornecedor'}${l.prod ? ' · ' + getProdNome(l.prod) : ''}${l.obs ? ` <span style="color:#a8a29e;font-weight:400">— ${esc(l.obs)}</span>` : ''}`,
+      origem: cfEhCustoFixo(id) ? '📄 Conta a pagar (base de custo fixo)' : (_CF_OBS_RE.test(l.obs || '') ? '📄 Conta a pagar (gerada por custo fixo)' : '📄 Conta a pagar em aberto'),
+      acao: todas ? 'Exclui o lançamento' : `Exclui ${ps.length} parcela(s) em aberto` });
+  });
+
+  // 4. Contas a receber em aberto
+  const rec = {};
+  getParcelasReceber(false).forEach(p => {
+    if (!igual(p.valParc)) return;
+    const k = (p.venc || '').slice(0, 7);
+    if (k && k > ateK) return;
+    (rec[p.lancId] = rec[p.lancId] || []).push(p);
+  });
+  Object.keys(rec).forEach(id => {
+    const ps = rec[id], l = db.lancreceber.find(x => x.id === id); if (!l) return;
+    const ic = _fplInfoCat(ps[0].catId);
+    res.push({ tipo:'receber', lancId: id, parcs: ps.map(p => p.parcIdx), todas: (l.parcelas || 1) === ps.length, meses: ps.map(p => (p.venc || '').slice(0, 7)).filter(Boolean), valor: alvo,
+      semGrupo: ic.semGrupo, cat: ic, titulo: getClienteNome(l.cliente) || 'Sem cliente', origem: '📥 Conta a receber em aberto', acao: 'Exclui o lançamento a receber' });
+  });
+
+  // 5. Lançamentos do DFC
+  (db.dfc_lans || []).forEach(l => {
+    if (!igual(l.valor) || !l.data || l.data.slice(0, 7) > ateK) return;
+    const ic = _fplInfoCat(l.cat);
+    res.push({ tipo:'dfc', id: l.id, meses: [l.data.slice(0, 7)], valor: alvo, semGrupo: ic.semGrupo, cat: ic,
+      titulo: l.desc || 'Lançamento DFC', origem: '📊 Lançamento DFC', acao: 'Exclui o lançamento do DFC' });
+  });
+
+  _fplRes = soSemGrupo ? res.filter(r => r.semGrupo) : res;
+  _fplRes.forEach((r, i) => { r.i = i; r.sel = false; });
+  const box = document.getElementById('fpl-res');
+  if (!_fplRes.length) {
+    box.innerHTML = `<div class="empty-state" style="padding:24px">Nenhuma origem com ${fmtBRL(alvo)} encontrada${soSemGrupo ? ' sem grupo' : ''}. Tente desmarcar “Só sem grupo” ou aumentar o “Até o mês”.</div>`;
+  } else {
+    box.innerHTML = `<div class="table-scroll"><table><thead><tr>
+      <th style="width:34px;text-align:center"><input type="checkbox" onchange="fplSelTodos(this.checked)" /></th>
+      <th>Origem</th><th>Descrição</th><th>Categoria / Grupo</th><th>Meses no fluxo</th><th>Valor</th><th>Ao remover</th></tr></thead><tbody>` +
+      _fplRes.map(r => `<tr>
+        <td style="text-align:center"><input type="checkbox" class="fpl-chk" data-i="${r.i}" onchange="fplSel(${r.i}, this.checked)" /></td>
+        <td style="white-space:nowrap;font-size:12px;font-weight:600">${r.origem}</td>
+        <td style="white-space:normal;max-width:240px"><b>${r.titulo}</b></td>
+        <td style="font-size:12px">${r.cat ? esc(r.cat.nome) + '<br>' : ''}${r.semGrupo ? '<span class="badge badge-red">sem grupo</span>' : `<span class="badge badge-blue">${esc((r.cat || {}).grupo || '')}</span>`}</td>
+        <td style="font-size:12px;white-space:nowrap">${_fplMesesTxt(r.meses)}</td>
+        <td style="font-family:DM Mono,monospace;font-weight:700">${fmtBRL(r.valor)}</td>
+        <td style="font-size:11.5px;color:#78716c;white-space:normal;max-width:200px">${r.acao}</td>
+      </tr>`).join('') + '</tbody></table></div>';
+  }
+  _fplAtualizarSel();
+}
+function fplSel(i, on) { const r = _fplRes[i]; if (r) r.sel = on; _fplAtualizarSel(); }
+function fplSelTodos(on) { _fplRes.forEach(r => r.sel = on); document.querySelectorAll('#fpl-res .fpl-chk').forEach(c => c.checked = on); _fplAtualizarSel(); }
+function _fplAtualizarSel() {
+  const n = _fplRes.filter(r => r.sel).length;
+  const info = document.getElementById('fpl-sel-info');
+  if (info) info.innerHTML = _fplRes.length ? `<b>${_fplRes.length}</b> origem(ns) encontrada(s)${n ? ` · <b style="color:#b91c1c">${n} selecionada(s)</b>` : ''}` : '';
+  const b = document.getElementById('fpl-btn-rem'); if (b) b.disabled = !n;
+}
+async function fpRemoverLocalizados() {
+  const alvos = _fplRes.filter(r => r.sel);
+  if (!alvos.length) return;
+  if (!confirm(`Remover ${alvos.length} origem(ns) selecionada(s)?\n\n` + alvos.map(r => `• ${r.origem.replace(/^\S+\s/, '')}: ${r.titulo.replace(/<[^>]+>/g, '')} — ${r.acao}`).join('\n') + '\n\nEsta ação não pode ser desfeita.')) return;
+  const btn = document.getElementById('fpl-btn-rem'); if (btn) { btn.disabled = true; btn.textContent = 'Removendo...'; }
+  const erros = [];
+  let mexeuAjuste = false;
+  for (const r of alvos) {
+    try {
+      if (r.tipo === 'ajuste') {
+        r.meses.forEach(k => _fpSetAjK(r.chave, k, null)); mexeuAjuste = true;
+      } else if (r.tipo === 'cf') {
+        if (!(await cfSalvarNoBanco(r.lancId, false, []))) erros.push(r.titulo);
+      } else if (r.tipo === 'pagar') {
+        const l = db.lancamentos.find(x => x.id === r.lancId); if (!l) continue;
+        if (r.todas) {
+          const ok = await sbFetch('lancamentos', 'DELETE', null, `?id=eq.${r.lancId}`);
+          if (!ok) { erros.push(r.titulo); continue; }
+          if (cfDadosDoLanc(r.lancId)) await cfSalvarNoBanco(r.lancId, false, []);
+          db.lancamentos = db.lancamentos.filter(x => x.id !== r.lancId);
+        } else {
+          for (const pi of r.parcs.slice().sort((a, b) => b - a)) await _fplExcluirParcelaSilenciosa('pagar', r.lancId, pi);
+        }
+      } else if (r.tipo === 'receber') {
+        if (r.todas) {
+          const ok = await sbFetch('lancreceber', 'DELETE', null, `?id=eq.${r.lancId}`);
+          if (!ok) { erros.push(r.titulo); continue; }
+          db.lancreceber = db.lancreceber.filter(x => x.id !== r.lancId);
+        } else {
+          for (const pi of r.parcs.slice().sort((a, b) => b - a)) await _fplExcluirParcelaSilenciosa('receber', r.lancId, pi);
+        }
+      } else if (r.tipo === 'dfc') {
+        const ok = await sbFetch('dfc_lancamentos', 'DELETE', null, `?id=eq.${r.id}`);
+        if (!ok) { erros.push(r.titulo); continue; }
+        db.dfc_lans = db.dfc_lans.filter(x => x.id !== r.id);
+      }
+    } catch (e) { console.error(e); erros.push(r.titulo); }
+  }
+  if (mexeuAjuste) await salvarFpAjustes();
+  bumpDbVer();
+  if (btn) { btn.textContent = '🗑 Remover selecionados'; }
+  try { renderFluxoProjetado(); renderApagar(); renderLancamentos(); renderCustosFixos(); } catch (e) {}
+  fpLocalizar();
+  alert(erros.length ? `⚠️ Algumas origens não puderam ser removidas: ${erros.map(e => e.replace(/<[^>]+>/g, '')).join(', ')}` + sbErroMsg() : '✅ Removido. O Fluxo Projetado já foi atualizado.');
+}
+// Remove uma parcela de um lançamento parcelado sem perguntar (usa a rotina existente sem o confirm).
+async function _fplExcluirParcelaSilenciosa(origem, lancId, parcIdx) {
+  const c = window.confirm; window.confirm = () => true;
+  try { await excluirParcela(origem, lancId, parcIdx); } finally { window.confirm = c; }
+}
+
 // Exporta a tabela atual para Excel (CSV com ponto e vírgula)
 function fpExportar() {
   const tabela = document.querySelector('#fp-tabela-wrap table');
@@ -16038,7 +16486,8 @@ async function excluirDoDetalheDre(tipo, id) {
   const quem = tipo === 'receber' ? getClienteNome(reg.cliente) : getFornNome(reg.forn);
   const nParc = reg.parcelas || 1;
   const aviso = nParc > 1 ? `\n\nEste lançamento tem ${nParc} parcelas. Todas serão excluídas.` : '';
-  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(reg.valor)}?${aviso}`)) return;
+  const avisoCf = (tipo !== 'receber' && typeof cfAvisoGerados === 'function') ? cfAvisoGerados(id) : '';
+  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(reg.valor)}?${aviso}${avisoCf}`)) return;
 
   const ok = await sbFetch(tipo === 'receber' ? 'lancreceber' : 'lancamentos', 'DELETE', null, `?id=eq.${id}`);
   if (!ok) { alert('❌ Não foi possível excluir no banco de dados.' + sbErroMsg()); return; }
@@ -16816,7 +17265,7 @@ async function bxExcluir(origem, id, parcIdx) {
     refrescar(); return;
   }
   const quem = pagar ? getFornNome(l.forn) : getClienteNome(l.cliente);
-  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(l.valor)}?\n\nEle sairá das contas ${pagar ? 'pagas' : 'recebidas'} e o saldo do banco será recalculado.`)) return;
+  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(l.valor)}?\n\nEle sairá das contas ${pagar ? 'pagas' : 'recebidas'} e o saldo do banco será recalculado.` + (pagar && typeof cfAvisoGerados === 'function' ? cfAvisoGerados(l.id) : ''))) return;
   const ok = await sbFetch(pagar ? 'lancamentos' : 'lancreceber', 'DELETE', null, `?id=eq.${l.id}`);
   if (!ok) { alert('❌ Não foi possível excluir no banco de dados.' + sbErroMsg()); return; }
   if (pagar) {
@@ -19445,10 +19894,55 @@ function vigTextoPeriodo(v) {
 }
 
 // ── Gravação (tabela `config`) ─────────────────────────────────────────
+// Lançamentos mensais gerados por um custo fixo (sem o próprio lançamento base).
+function cfGeradosDoLanc(lancId) {
+  const d = cfDadosDoLanc(lancId);
+  if (!d) return [];
+  const ids = new Set(Object.values(d.gerados || {}).filter(g => g && g !== lancId));
+  return db.lancamentos.filter(l => ids.has(l.id));
+}
+function _cfLancEstaPago(l) {
+  const n = l.parcelas || 1;
+  if (n <= 1) return l.pago === 'sim';
+  const { pagos } = _parseParcelas(l.parcela_datas);
+  return pagos.slice(0, n).some(Boolean);   // qualquer parcela paga já mexeu no saldo
+}
+// Texto para os avisos de confirmação: o que mais será apagado junto.
+function cfAvisoGerados(lancId, semVig) {
+  if (!cfEhCustoFixo(lancId)) return '';
+  const g = cfGeradosDoLanc(lancId);
+  if (!g.length) return semVig ? '' : '\n\nÉ um custo fixo: as vigências também serão apagadas.';
+  const ab = g.filter(l => !_cfLancEstaPago(l)), pg = g.length - ab.length;
+  return `\n\nCusto fixo: também serão excluídos os ${ab.length} lançamento(s) mensal(is) EM ABERTO gerados por ele (${fmtBRL(ab.reduce((t,l)=>t+(l.valor||0),0))}).` +
+         (pg ? `\nExistem ${pg} já pago(s) — você poderá escolher se exclui também.` : '');
+}
+// Exclui os lançamentos gerados por um custo fixo. Os em aberto saem sempre;
+// os já pagos só se o usuário confirmar (alteram o saldo dos bancos).
+async function cfExcluirGerados(lancId) {
+  const g = cfGeradosDoLanc(lancId);
+  if (!g.length) return { excluidos: 0 };
+  const ab = g.filter(l => !_cfLancEstaPago(l));
+  const pg = g.filter(l => _cfLancEstaPago(l));
+  let alvo = ab.slice();
+  if (pg.length && confirm(
+      `Este custo fixo tem ${pg.length} lançamento(s) mensal(is) JÁ PAGO(S), total ${fmtBRL(pg.reduce((t,l)=>t+(l.valor||0),0))}.\n\n` +
+      `OK = excluir também os pagos (o saldo dos bancos será recalculado)\nCancelar = manter os pagos no histórico`)) alvo = alvo.concat(pg);
+  if (!alvo.length) return { excluidos: 0 };
+  const { sucesso, falha } = await sbDeleteMany('lancamentos', alvo.map(l => l.id));
+  const ok = new Set(sucesso);
+  db.lancamentos = db.lancamentos.filter(l => !ok.has(l.id));
+  bumpDbVer();
+  if (falha.length) alert(`⚠️ ${falha.length} lançamento(s) mensal(is) do custo fixo não puderam ser excluídos. Eles aparecem como "Órfão" na tela Custos Fixos.` + sbErroMsg());
+  return { excluidos: sucesso.length };
+}
+
 async function cfSalvarNoBanco(lancId, ativo, vigencias) {
   const key = CF_CONFIG_PREFIX + lancId;
   const filtro = `?key=eq.${encodeURIComponent(key)}`;
   if (!ativo) {
+    // Ao deixar de ser custo fixo (remover/excluir), apaga junto os lançamentos
+    // mensais que ele gerou — senão ficam "órfãos" no Contas a Pagar e no Fluxo.
+    if (cfDadosDoLanc(lancId)) await cfExcluirGerados(lancId);
     const del = await sbFetch('config', 'DELETE', null, filtro);
     if (del === null) return false;
     delete db.custosfixos[lancId]; bumpDbVer(); return true;
@@ -20303,12 +20797,13 @@ async function seedSevegnani() {
 async function removerCustoFixo(lancId) {
   const l = db.lancamentos.find(x => x.id === lancId);
   if (!l) return;
-  if (!confirm('Tirar a marcação de Custo Fixo de "' + getFornNome(l.forn) + '"?\n\nAs vigências cadastradas serão apagadas. O lançamento em si NÃO será excluído.')) return;
+  if (!confirm('Remover o Custo Fixo de "' + getFornNome(l.forn) + '"?\n\nAs vigências cadastradas serão apagadas. O lançamento original (base) NÃO será excluído.' + cfAvisoGerados(lancId, true))) return;
   const ok = await cfSalvarNoBanco(lancId, false, []);
   if (!ok) { alert('❌ Não foi possível remover o custo fixo.' + sbErroMsg()); return; }
   const card = document.getElementById('cf-detalhe-card');
   if (card) card.style.display = 'none';
   renderCustosFixos();
+  try { renderLancamentos(); renderApagar(); renderPagas(); } catch (e) {}
 }
 
 // Filtros de mês/ano começam sempre no mês e ano atuais.
@@ -20474,7 +20969,7 @@ async function cfExcluirLancsSelecionados() {
   const nBase = alvos.filter(i => i.origem === 'base').length;
   const nPagos = alvos.filter(i => i.pago).length;
   let msg = `Excluir ${alvos.length} lançamento(s), totalizando ${fmtBRL(tot)}?`;
-  if (nBase) msg += `\n\n• ${nBase} é(são) lançamento(s) BASE de custo fixo: a marcação de custo fixo e as vigências também serão apagadas (deixa de projetar no Fluxo de Caixa).`;
+  if (nBase) msg += `\n\n• ${nBase} é(são) lançamento(s) BASE de custo fixo: a marcação de custo fixo, as vigências e os lançamentos mensais em aberto gerados por ele também serão apagados.`;
   if (nPagos) msg += `\n• ${nPagos} já está(ão) PAGO(S) — a exclusão altera o saldo das contas.`;
   msg += '\n\nEsta ação não pode ser desfeita.';
   if (!confirm(msg)) return;
@@ -20484,10 +20979,10 @@ async function cfExcluirLancsSelecionados() {
   if (btn) { btn.disabled = true; btn.textContent = 'Excluindo...'; }
   const { sucesso, falha } = await sbDeleteMany('lancamentos', ids);
   const ok = new Set(sucesso);
+  db.lancamentos = db.lancamentos.filter(x => !ok.has(x.id));
   for (const i of alvos) {
     if (ok.has(i.l.id) && cfDadosDoLanc(i.l.id)) await cfSalvarNoBanco(i.l.id, false, []);
   }
-  db.lancamentos = db.lancamentos.filter(x => !ok.has(x.id));
   _cflSel = new Set();
   bumpDbVer();
   renderCustosFixos();
@@ -23551,13 +24046,18 @@ async function excluirDoDetalhe(tabela, id) {
   const aviso = nParc > 1
     ? `\n\nATENÇÃO: este lançamento tem ${nParc} parcelas. Todas serão excluídas.`
     : '';
-  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(reg.valor)}?${aviso}`)) return;
+  const avisoCf = (tabela !== 'receber' && typeof cfAvisoGerados === 'function') ? cfAvisoGerados(id) : '';
+  if (!confirm(`Excluir o lançamento de ${quem}, no valor de ${fmtBRL(reg.valor)}?${aviso}${avisoCf}`)) return;
 
   const ok = await sbFetch(tabela === 'receber' ? 'lancreceber' : 'lancamentos', 'DELETE', null, `?id=eq.${id}`);
   if (!ok) { alert('❌ Não foi possível excluir no banco de dados.' + sbErroMsg()); return; }
 
   if (tabela === 'receber') db.lancreceber = db.lancreceber.filter(x => x.id !== id);
-  else                      db.lancamentos = db.lancamentos.filter(x => x.id !== id);
+  else {
+    if (typeof cfEhCustoFixo === 'function' && cfEhCustoFixo(id)) await cfSalvarNoBanco(id, false, []);
+    db.lancamentos = db.lancamentos.filter(x => x.id !== id);
+    if (typeof renderCustosFixos === 'function') renderCustosFixos();
+  }
   bumpDbVer();
   _atualizarTelasAposExcluir(tabela);
   renderListaLancamentos();
