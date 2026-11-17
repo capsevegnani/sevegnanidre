@@ -21449,7 +21449,7 @@ function ccRenderDetalhe() {
       <div class="ccx-panel">
         <div class="ccx-panel-h"><h4>Resumo por grupo e categoria</h4></div>
         <div id="cc-det-resumo"></div>
-        <div class="ccx-note">As despesas do cartão entram no <b>DRE</b> e na <b>Análise por Categoria</b> pela data da compra, e no <b>Fluxo de Caixa</b> quando a fatura é paga — cada uma na sua categoria.</div>
+        <div class="ccx-note">As despesas do cartão entram no <b>DRE</b> e na <b>Análise por Categoria</b> pela data da compra (1ª parcela) e as demais parcelas pelo vencimento de cada fatura, e no <b>Fluxo de Caixa</b> quando a fatura é paga — cada uma na sua categoria.</div>
       </div>
     </div>`;
   ccRenderDetalheLista();
@@ -22082,9 +22082,8 @@ function ccExpandirFaturas(lista) {
   return out;
 }
 // Compras feitas direto no cartão, para relatórios por competência.
-// Uma linha por compra (soma das parcelas). Parcela avulsa importada da
-// fatura (ex.: 4/10 sozinha) entra no mês de fechamento da fatura em que
-// ela caiu — senão cada fatura importada alteraria meses passados.
+// Uma linha por parcela: a 1ª parcela entra pela data da compra e as
+// demais pela data de vencimento da fatura em que caem (mês a mês no DRE).
 // porVencimento = true: uma linha por parcela, pela data de vencimento da fatura.
 function ccItensDespesas(porVencimento) {
   const diretas = (db.cartao_despesas || []).filter(d => !d.origem_lanc);
@@ -22099,21 +22098,20 @@ function ccItensDespesas(porVencimento) {
       };
     });
   }
-  const m = new Map();
-  diretas.forEach(d => {
-    let o = m.get(d.grupo);
-    if (!o) { o = { d, valor: 0, n: 0, pagas: 0 }; m.set(d.grupo, o); }
-    o.valor += Number(d.valor) || 0; o.n++;
-    if (ccFaturaPaga(d.cartao_id, d.fatura)) o.pagas++;
-  });
-  return [...m.values()].map(o => {
-    const d = o.d, c = ccCartao(d.cartao_id);
-    const tp = d.total_parcelas || 1;
-    const avulsa = o.n === 1 && tp > 1 && (d.parcela || 1) > 1;
-    const data = avulsa && c ? ccDataFechamento(c, d.fatura) : d.data;
-    const desc = (d.descricao || '') + (tp > 1 ? (o.n > 1 ? ` (${o.n}x)` : ` (parc. ${d.parcela}/${tp})`) : '');
-    return { grupo: d.grupo, cartaoId: d.cartao_id, cat: d.cat_dre || '', valor: Math.round(o.valor * 100) / 100,
-             data, desc, nomeCartao: c ? c.nome : 'Cartão', quitado: o.pagas === o.n };
+  // Competência com parcelas distribuídas mês a mês:
+  // • 1ª parcela (ou compra à vista) → data da compra (competência);
+  // • parcelas 2, 3, 4... → data de vencimento da fatura em que cada uma cai.
+  return diretas.map(d => {
+    const c = ccCartao(d.cartao_id);
+    const tp = d.total_parcelas || 1, np = d.parcela || 1;
+    const primeira = tp <= 1 || np <= 1;
+    const data = primeira ? (d.data || (c ? ccDataVencimento(c, d.fatura) : d.fatura + '-01'))
+                          : (c ? ccDataVencimento(c, d.fatura) : (d.fatura + '-01'));
+    return {
+      grupo: d.grupo, cartaoId: d.cartao_id, cat: d.cat_dre || '', valor: Number(d.valor) || 0,
+      data, desc: (d.descricao || '') + (tp > 1 ? ` (parc. ${np}/${tp})` : ''),
+      nomeCartao: c ? c.nome : 'Cartão', quitado: ccFaturaPaga(d.cartao_id, d.fatura)
+    };
   });
 }
 
