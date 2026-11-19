@@ -22055,8 +22055,10 @@ function ccExpandirFaturas(lista) {
   const porFatura = {};
   (db.cartao_despesas || []).forEach(d => { const k = ccChave(d.cartao_id, d.fatura); (porFatura[k] = porFatura[k] || []).push(d); });
   const out = [];
+  const comLanc = new Set();
   lista.forEach(p => {
     if (!p.cartaoFatura) { out.push(p); return; }
+    comLanc.add(p.cartaoFatura);
     const [cid, mes] = String(p.cartaoFatura).split('|');
     const c = ccCartao(cid);
     const nomeC = c ? c.nome : 'Cartão';
@@ -22078,6 +22080,42 @@ function ccExpandirFaturas(lista) {
     });
     const resto = Math.round(((p.valParc || 0) - soma) * 100) / 100;
     if (Math.abs(resto) >= 0.01) out.push(Object.assign({}, p, { catId: '', valParc: resto, ccParte: true, prod: `💳 ${nomeC} · Fatura ${ccMesCurto(mes)} · ajuste` }));
+  });
+  // Faturas com despesas mas sem o lançamento em Contas a Pagar (ex.: a
+  // sincronização falhou ao salvar a despesa). Sem isso o valor sumia do
+  // DFC/Fluxo Projetado/Análise em aberto. Entram como fatura em aberto,
+  // pelo vencimento, abertas por categoria. Sem id: não dá para pagar/editar
+  // pela janela de lançamentos — a fatura é tratada na tela do cartão.
+  Object.keys(porFatura).forEach(chave => {
+    if (comLanc.has(chave)) return;
+    const [cid, mes] = chave.split('|');
+    const c = ccCartao(cid);
+    if (!c || !mes) return;
+    const l = ccLancFatura(cid, mes);
+    if (l) return;                                   // existe, mas filtrado (ex.: origem)
+    const total = ccTotalFatura(cid, mes);
+    if (total <= 0) return;
+    const venc = ccDataVencimento(c, mes);
+    const base = {
+      lancId: '', forn: `Cartão de Crédito – ${c.nome}`, prod: '', valParc: total,
+      venc, dtcompra: ccDataFechamento(c, mes), dtpago: '', nf: '', financeiro: 'nao',
+      banco: '', tipoPag: CC_FORMA_PAG, juros: null, catId: '', parcIdx: 1, totalParc: 1,
+      isPago: false, cartaoFatura: chave, ccSemLanc: true
+    };
+    const porCat = new Map();
+    porFatura[chave].forEach(d => {
+      const k = d.cat_dre || '';
+      const o = porCat.get(k) || { v: 0, n: 0 };
+      o.v += Number(d.valor) || 0; o.n++; porCat.set(k, o);
+    });
+    porCat.forEach((o, k) => {
+      const v = Math.round(o.v * 100) / 100;
+      if (Math.abs(v) < 0.005) return;
+      out.push(Object.assign({}, base, {
+        catId: k, valParc: v, ccParte: true,
+        prod: `💳 ${c.nome} · Fatura ${ccMesCurto(mes)} · ${k ? getDreCatNome(k) : 'Sem categoria'} (${o.n} desp.) · fatura não gerada em Contas a Pagar`
+      }));
+    });
   });
   return out;
 }
