@@ -1246,6 +1246,47 @@ tr.cob-dia-vazio > td {
 .cc-pagar-cartao { width:100%; margin-bottom:18px; background:#1f2937; color:#fff; border:none; border-radius:10px; padding:11px; font-weight:700; font-size:13px; cursor:pointer; }
 .cc-pagar-cartao:hover { background:#111827; }
 .badge-cc { background:#fff1e6; color:#c2410c; border:1px solid #fed7aa; }
+/* Cartões: detalhe com gráficos ao lado */
+.cc-wrap.cc-wrap.ccg-wrap-det { max-width:none !important; }
+.ccg-layout { display:grid; grid-template-columns:minmax(0,1280px) minmax(400px,1fr); gap:20px; align-items:start; }
+.ccg-col { display:flex; flex-direction:column; gap:16px; position:sticky; top:16px; min-width:0; }
+.ccg-an { background:#fff; border:1px solid var(--border); border-radius:16px; box-shadow:0 1px 3px rgba(26,62,122,.05); overflow:hidden; }
+.ccg-an-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:16px 20px 14px; border-bottom:1px solid #f0eeec; }
+.ccg-an-tit { font-size:11.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#78716c; }
+.ccg-an-sub { font-size:12.5px; color:#a8a29e; margin-top:3px; }
+.ccg-an-tag { font-size:11.5px; font-weight:600; color:#57534e; background:#f5f5f4; border:1px solid #e7e5e4; border-radius:20px; padding:3px 10px; white-space:nowrap; }
+.ccg-an-body { padding:18px 20px 20px; }
+.ccg-an-vazio { padding:36px 10px; text-align:center; color:#a8a29e; font-size:13px; }
+/* composição */
+.ccg-comp { display:flex; flex-wrap:wrap; gap:22px; align-items:center; }
+.ccg-donut { position:relative; width:190px; height:190px; flex:0 0 190px; margin:0 auto; }
+.ccg-donut-c { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; text-align:center; }
+.ccg-donut-c .l { font-size:10.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#a8a29e; }
+.ccg-donut-c .v { font-family:'DM Mono',monospace; font-size:17px; font-weight:700; color:#1f2937; margin-top:3px; }
+.ccg-donut-c .s { font-size:11.5px; color:#78716c; margin-top:2px; }
+.ccg-cat-lista { flex:1 1 230px; min-width:0; display:flex; flex-direction:column; gap:10px; }
+.ccg-cat { display:grid; grid-template-columns:10px minmax(0,1fr) auto 48px; gap:4px 10px; align-items:center; padding:3px 6px; margin:0 -6px; border-radius:8px; cursor:default; transition:background .12s; }
+.ccg-cat.hl { background:#faf9f7; }
+.ccg-cat .dot { width:10px; height:10px; border-radius:3px; }
+.ccg-cat .nm { font-size:13px; color:#1f2937; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ccg-cat .vl { font-family:'DM Mono',monospace; font-size:12.5px; color:#1f2937; font-weight:600; text-align:right; }
+.ccg-cat .pc { font-size:12px; color:#78716c; text-align:right; font-variant-numeric:tabular-nums; }
+.ccg-cat .br { grid-column:2 / 5; height:4px; background:#f5f4f2; border-radius:4px; overflow:hidden; }
+.ccg-cat .br i { display:block; height:100%; border-radius:4px; }
+/* evolução */
+.ccg-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:#f0eeec; border-bottom:1px solid #f0eeec; }
+.ccg-kpis > div { background:#fff; padding:12px 14px; min-width:0; }
+.ccg-kpis .l { font-size:10.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:#a8a29e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ccg-kpis .v { font-family:'DM Mono',monospace; font-size:15px; font-weight:700; color:#1f2937; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ccg-kpis .s { font-size:11.5px; color:#78716c; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ccg-kpis .up { color:#b91c1c; } .ccg-kpis .down { color:#15803d; }
+.ccg-evo-box { position:relative; height:260px; }
+.ccg-evo-leg { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:11.5px; color:#78716c; margin-top:12px; }
+.ccg-evo-leg span { display:inline-flex; align-items:center; gap:6px; }
+.ccg-evo-leg i { display:inline-block; width:10px; height:10px; border-radius:3px; }
+.ccg-evo-leg i.linha { width:16px; height:0; border-top:2px dashed #78716c; border-radius:0; }
+@media (max-width:1600px) { .ccg-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:1340px) { .ccg-layout { grid-template-columns:minmax(0,1fr); } .ccg-col { position:static; } }
 @media (max-width:640px) { .cc-det-info { grid-template-columns:1fr; } }
 
 /* ══ CARTÕES DE CRÉDITO — layout profissional ══ */
@@ -21250,10 +21291,12 @@ function ccRender() {
   if (!lw || !dw) return;
   if (ccSel.cartao && ccCartao(ccSel.cartao)) {
     lw.style.display = 'none'; dw.style.display = '';
+    dw.parentElement.classList.add('ccg-wrap-det');
     ccRenderDetalhe();
   } else {
     ccSel.cartao = null;
     dw.style.display = 'none'; lw.style.display = '';
+    dw.parentElement.classList.remove('ccg-wrap-det');
     ccRenderLista();
   }
 }
@@ -21403,6 +21446,7 @@ function ccRenderDetalhe() {
   }).join('');
   const lim = c.limite ? Math.max(0, c.limite - ccLimiteUsado(c.id)) : null;
   dw.innerHTML = `
+    <div class="ccg-layout"><div class="ccg-main">
     <div class="ccx-top">
       <button class="ccx-btn" onclick="ccVoltarLista()">← Todos os cartões</button>
       <span class="sp"></span>
@@ -21451,9 +21495,188 @@ function ccRenderDetalhe() {
         <div id="cc-det-resumo"></div>
         <div class="ccx-note">As despesas do cartão entram no <b>DRE</b> e na <b>Análise por Categoria</b> pela data da compra (1ª parcela) e as demais parcelas pelo vencimento de cada fatura, e no <b>Fluxo de Caixa</b> quando a fatura é paga — cada uma na sua categoria.</div>
       </div>
+    </div>
+    </div>
+    <div class="ccg-col">
+      <div class="ccg-an">
+        <div class="ccg-an-head"><div><div class="ccg-an-tit">Composição da fatura</div><div class="ccg-an-sub">Gastos por categoria · ${ccMesLabel(mes)}</div></div><span class="ccg-an-tag">${c.nome}</span></div>
+        <div class="ccg-an-body" id="ccg-comp-body"></div>
+      </div>
+      <div class="ccg-an">
+        <div class="ccg-an-head"><div><div class="ccg-an-tit">Evolução mensal</div><div class="ccg-an-sub">Total por fatura · jan a dez de ${mes.slice(0, 4)}</div></div><span class="ccg-an-tag">${c.nome}</span></div>
+        <div class="ccg-kpis" id="ccg-evo-kpis"></div>
+        <div class="ccg-an-body">
+          <div class="ccg-evo-box"><canvas id="ccg-graf-barras"></canvas></div>
+          <div class="ccg-evo-leg"><span><i style="background:#ea580c"></i>Fatura selecionada</span><span><i style="background:#cbd5e1"></i>Demais meses</span><span id="ccg-evo-leg-fut" style="display:none"><i style="background:#e2e8f0;outline:1px dashed #94a3b8;outline-offset:-1px"></i>Faturas futuras (parcelas)</span><span><i class="linha"></i>Média mensal</span></div>
+        </div>
+      </div>
+    </div>
     </div>`;
   ccRenderDetalheLista();
+  ccRenderGraficos();
 }
+
+// ── Painel analítico do detalhe do cartão (composição por categoria + evolução jan–dez) ──
+const CC_GRAF_CORES = ['#ea580c','#2a78d6','#1baf7a','#eda100','#e87ba4','#6250d6','#008300'];
+const CC_GRAF_OUTRAS = '#a8a29e';
+let _ccGrafPizza = null, _ccGrafBarras = null;
+function ccFmtCompacto(v) {
+  const a = Math.abs(v);
+  if (a >= 1e6) return 'R$ ' + (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mi';
+  if (a >= 1e3) return 'R$ ' + (v / 1e3).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mil';
+  return 'R$ ' + v.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+}
+function ccPct(v, t) { return t > 0 ? (v / t * 100).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%' : '—'; }
+function ccCatHl(i) {
+  document.querySelectorAll('#ccg-comp-body .ccg-cat').forEach((el, k) => el.classList.toggle('hl', k === i));
+  if (!_ccGrafPizza) return;
+  _ccGrafPizza.setActiveElements(i == null ? [] : [{ datasetIndex: 0, index: i }]);
+  _ccGrafPizza.update('none');
+}
+function ccRenderGraficos() {
+  if (_ccGrafPizza) { _ccGrafPizza.destroy(); _ccGrafPizza = null; }
+  if (_ccGrafBarras) { _ccGrafBarras.destroy(); _ccGrafBarras = null; }
+  const c = ccCartao(ccSel.cartao);
+  if (!c) return;
+  const mes = ccSel.mes;
+  const temChart = typeof Chart !== 'undefined';
+  const fonte = (getComputedStyle(document.body).fontFamily) || 'sans-serif';
+  const tooltipBase = { backgroundColor: '#1f2937', titleColor: '#fff', bodyColor: '#e7e5e4', padding: 10, cornerRadius: 8, displayColors: false,
+    titleFont: { family: fonte, size: 12, weight: '700' }, bodyFont: { family: fonte, size: 12 } };
+
+  // ── Composição por categoria ──
+  const desp = ccDespesasFatura(c.id, mes);
+  const porCat = {};
+  desp.forEach(d => {
+    const nome = d.cat_dre ? getDreCatNome(d.cat_dre) : 'Sem categoria';
+    porCat[nome] = (porCat[nome] || 0) + (Number(d.valor) || 0);
+  });
+  let itens = Object.entries(porCat).map(([n, v]) => ({ n, v: Math.round(v * 100) / 100 })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+  if (itens.length > CC_GRAF_CORES.length) {
+    const resto = itens.slice(CC_GRAF_CORES.length - 1);
+    itens = itens.slice(0, CC_GRAF_CORES.length - 1).concat([{ n: `Outras (${resto.length})`, v: Math.round(resto.reduce((s, x) => s + x.v, 0) * 100) / 100, outras: true }]);
+  }
+  itens.forEach((x, i) => { x.cor = x.outras ? CC_GRAF_OUTRAS : CC_GRAF_CORES[i]; });
+  const totP = itens.reduce((s, x) => s + x.v, 0);
+  const comp = document.getElementById('ccg-comp-body');
+  if (comp) {
+    if (!itens.length) {
+      comp.innerHTML = '<div class="ccg-an-vazio">Nenhuma despesa nesta fatura.</div>';
+    } else {
+      comp.innerHTML = `<div class="ccg-comp">
+        <div class="ccg-donut"><canvas id="ccg-graf-pizza"></canvas>
+          <div class="ccg-donut-c"><div class="l">Total</div><div class="v">${fmtBRL(totP)}</div><div class="s">${itens.length} ${itens.length === 1 ? 'categoria' : 'categorias'}</div></div></div>
+        <div class="ccg-cat-lista" onmouseleave="ccCatHl(null)">${itens.map((x, i) => `
+          <div class="ccg-cat" onmouseenter="ccCatHl(${i})" title="${x.n}: ${fmtBRL(x.v)}">
+            <span class="dot" style="background:${x.cor}"></span><span class="nm">${x.n}</span>
+            <span class="vl">${fmtBRL(x.v)}</span><span class="pc">${ccPct(x.v, totP)}</span>
+            <span class="br"><i style="width:${(x.v / itens[0].v * 100).toFixed(1)}%;background:${x.cor}"></i></span>
+          </div>`).join('')}</div></div>`;
+      const cvP = document.getElementById('ccg-graf-pizza');
+      if (cvP && temChart) {
+        _ccGrafPizza = new Chart(cvP.getContext('2d'), {
+          type: 'doughnut',
+          data: { labels: itens.map(x => x.n), datasets: [{ data: itens.map(x => x.v), backgroundColor: itens.map(x => x.cor), borderColor: '#fff', borderWidth: 2, hoverOffset: 6, borderRadius: 3 }] },
+          options: {
+            responsive: true, maintainAspectRatio: false, cutout: '72%', layout: { padding: 6 },
+            onHover: (e, els) => document.querySelectorAll('#ccg-comp-body .ccg-cat').forEach((el, k) => el.classList.toggle('hl', !!els.length && els[0].index === k)),
+            plugins: { legend: { display: false }, datalabels: { display: false },
+              tooltip: Object.assign({}, tooltipBase, { callbacks: { title: t => t[0].label, label: t => `${fmtBRL(t.raw)} · ${ccPct(t.raw, totP)} da fatura` } }) }
+          }
+        });
+      }
+    }
+  }
+
+  // ── Evolução mensal ──
+  const ano = mes.slice(0, 4);
+  const mesesAno = Array.from({ length: 12 }, (_, i) => `${ano}-${String(i + 1).padStart(2, '0')}`);
+  const valores = mesesAno.map(m => ccTotalFatura(c.id, m));
+  const mesHoje = ccMesAtualCartao(c);
+  const futuro = mesesAno.map(m => m > mesHoje);
+  const comGasto = valores.filter(v => v > 0);
+  const totAno = valores.reduce((s, v) => s + v, 0);
+  const media = comGasto.length ? totAno / comGasto.length : 0;
+  let iMax = -1; valores.forEach((v, i) => { if (v > 0 && (iMax < 0 || v > valores[iMax])) iMax = i; });
+  const vSel = ccTotalFatura(c.id, mes), vAnt = ccTotalFatura(c.id, ccAddMes(mes, -1));
+  let varHtml = '<div class="v">—</div><div class="s">sem fatura anterior</div>';
+  if (vAnt > 0) {
+    const pv = (vSel - vAnt) / vAnt * 100;
+    const cls = pv > 0.05 ? 'up' : pv < -0.05 ? 'down' : '';
+    varHtml = `<div class="v ${cls}">${pv > 0 ? '▲ ' : pv < 0 ? '▼ ' : ''}${Math.abs(pv).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%</div><div class="s">vs ${ccMesCurto(ccAddMes(mes, -1))} (${ccFmtCompacto(vAnt)})</div>`;
+  }
+  const kp = document.getElementById('ccg-evo-kpis');
+  if (kp) kp.innerHTML = `
+    <div><div class="l">Total no ano</div><div class="v">${fmtBRL(totAno)}</div><div class="s">${comGasto.length} ${comGasto.length === 1 ? 'fatura' : 'faturas'} com gasto</div></div>
+    <div><div class="l">Média mensal</div><div class="v">${fmtBRL(media)}</div><div class="s">meses com gasto</div></div>
+    <div><div class="l">Maior fatura</div><div class="v">${iMax >= 0 ? fmtBRL(valores[iMax]) : '—'}</div><div class="s">${iMax >= 0 ? meses[iMax + 1] : 'sem gastos no ano'}</div></div>
+    <div><div class="l">Variação ${ccMesCurto(mes)}</div>${varHtml}</div>`;
+  const legFut = document.getElementById('ccg-evo-leg-fut');
+  if (legFut) legFut.style.display = futuro.some((f, i) => f && mesesAno[i] !== mes) ? '' : 'none';
+  const cvB = document.getElementById('ccg-graf-barras');
+  if (cvB && temChart) {
+    const cores = mesesAno.map((m, i) => m === mes ? '#ea580c' : futuro[i] ? '#e2e8f0' : '#cbd5e1');
+    const coresHover = mesesAno.map((m, i) => m === mes ? '#c2410c' : futuro[i] ? '#cbd5e1' : '#94a3b8');
+    const linhaMedia = {
+      id: 'ccLinhaMedia',
+      afterDatasetsDraw(ch) {
+        if (!(media > 0)) return;
+        const { ctx, chartArea: a, scales: { y } } = ch;
+        const py = y.getPixelForValue(media);
+        ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = '#78716c'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(a.left, py); ctx.lineTo(a.right, py); ctx.stroke(); ctx.setLineDash([]);
+        const txt = 'Média ' + ccFmtCompacto(media);
+        ctx.font = `600 11px ${fonte}`; const w = ctx.measureText(txt).width + 10;
+        ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fillRect(a.left + 2, py - 17, w, 15);
+        ctx.fillStyle = '#57534e'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'; ctx.fillText(txt, a.left + 7, py - 3);
+        ctx.restore();
+      }
+    };
+    const rotuloSel = {
+      id: 'ccRotuloSel',
+      afterDatasetsDraw(ch) {
+        const i = mesesAno.indexOf(mes); const v = valores[i];
+        if (i < 0 || !(v > 0)) return;
+        const bar = ch.getDatasetMeta(0).data[i]; if (!bar) return;
+        const { ctx, chartArea: a } = ch; ctx.save();
+        ctx.font = `700 11.5px 'DM Mono', monospace`; ctx.fillStyle = '#c2410c'; ctx.textBaseline = 'bottom';
+        const txt = ccFmtCompacto(v), w = ctx.measureText(txt).width;
+        const x = Math.min(Math.max(bar.x, a.left + w / 2), ch.width - w / 2 - 2);
+        ctx.textAlign = 'center'; ctx.fillText(txt, x, bar.y - 5); ctx.restore();
+      }
+    };
+    _ccGrafBarras = new Chart(cvB.getContext('2d'), {
+      type: 'bar',
+      plugins: [linhaMedia, rotuloSel],
+      data: { labels: mesesAbr.slice(1), datasets: [{ data: valores, backgroundColor: cores, hoverBackgroundColor: coresHover,
+        borderColor: mesesAno.map((m, i) => futuro[i] && m !== mes ? '#94a3b8' : 'transparent'), borderWidth: mesesAno.map((m, i) => futuro[i] && m !== mes ? { top: 1, left: 1, right: 1, bottom: 0 } : 0),
+        borderDash: [3, 3], borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: 'bottom', categoryPercentage: 0.72, barPercentage: 0.9, maxBarThickness: 46 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 22 } },
+        onClick: (e, els) => { if (els.length) { ccIrMes(mesesAno[els[0].index]); } },
+        onHover: (e, els) => { e.native && (e.native.target.style.cursor = els.length ? 'pointer' : 'default'); },
+        plugins: {
+          legend: { display: false }, datalabels: { display: false },
+          tooltip: Object.assign({}, tooltipBase, { callbacks: {
+            title: t => `Fatura ${meses[t[0].dataIndex + 1]} ${ano}${futuro[t[0].dataIndex] ? ' · futura' : ''}`,
+            label: t => {
+              const v = t.raw; const linhas = [fmtBRL(v)];
+              if (media > 0 && v > 0) { const d = (v - media) / media * 100; linhas.push(`${d >= 0 ? '+' : '−'}${Math.abs(d).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}% vs média`); }
+              if (mesesAno[t.dataIndex] !== mes) linhas.push('Clique para abrir esta fatura');
+              return linhas;
+            } } })
+        },
+        scales: {
+          x: { ticks: { color: '#78716c', font: { size: 11, family: fonte }, autoSkip: false, maxRotation: 0 }, grid: { display: false }, border: { color: '#e7e5e4' } },
+          y: { beginAtZero: true, grace: '8%', ticks: { color: '#a8a29e', font: { size: 11, family: fonte }, maxTicksLimit: 5, callback: v => ccFmtCompacto(v) }, grid: { color: '#f5f4f2' }, border: { display: false } }
+        }
+      }
+    });
+  }
+}
+
+
 
 // Grupo do DRE de uma despesa (vem da categoria)
 function ccGrupoDesp(d) { return d.cat_dre ? (getDreCatGrupo(d.cat_dre) || '') : ''; }
