@@ -22131,11 +22131,16 @@ async function ccExcluirDespesa(grupo) {
 
 // ── Pagamento da fatura (único caminho para pagar) ──
 let _ccPagando = null;
-function ccAbrirPagamento(cid, mes) {
+async function ccAbrirPagamento(cid, mes) {
   const c = ccCartao(cid);
-  const l = ccLancFatura(cid, mes);
   const total = ccTotalFatura(cid, mes);
-  if (!c || !l || total <= 0) { alert('Não há valor a pagar nesta fatura.'); return; }
+  if (!c || total <= 0) { alert('Não há valor a pagar nesta fatura.'); return; }
+  // Se a fatura tem despesas mas o lançamento em Contas a Pagar não existe
+  // (não foi gerado ou foi removido), gera agora antes de abrir o pagamento.
+  if (!ccLancFatura(cid, mes)) {
+    if (!(await ccSincronizarFatura(cid, mes))) { alert('❌ Erro ao gerar a fatura em Contas a Pagar.' + sbErroDetalhe()); return; }
+    if (!ccLancFatura(cid, mes)) { alert('❌ Não foi possível localizar o lançamento desta fatura em Contas a Pagar.'); return; }
+  }
   _ccPagando = { cid, mes };
   document.getElementById('cc-pg-info').innerHTML =
     `<b>${c.nome}</b> — fatura de ${ccMesLabel(mes)}<br>Vencimento: ${fmtDate(ccDataVencimento(c, mes))}<br>` +
