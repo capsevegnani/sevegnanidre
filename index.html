@@ -740,6 +740,67 @@ td.fp-zero::before { content:'⦸ '; font-size:9px; text-decoration:none; displa
 .kpi-card-val { font-size:21px; font-weight:800; font-family:'DM Mono',monospace; color:#1f2937; line-height:1.15; white-space:nowrap; }
 .kpi-card-lbl { font-size:11px; color:#57534e; margin-top:5px; font-weight:600; }
 .kpi-card-period { font-size:10px; color:#d6d3d1; margin-top:1px; }
+/* ══ Medidores de Metas (v2) ══ */
+.mg-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; padding:2px 2px 6px; }
+@media (max-width: 1100px) { .mg-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 600px) { .mg-grid { grid-template-columns:1fr; } }
+.mg-card { background:#fff; border:1px solid #ece9e5; border-radius:14px; padding:12px 12px 10px; display:flex; flex-direction:column; gap:6px; position:relative; transition:box-shadow .15s, transform .15s; }
+.mg-card:hover { box-shadow:0 6px 20px rgba(28,25,23,.07); transform:translateY(-1px); }
+.mg-card::after { content:''; position:absolute; left:12px; right:12px; top:0; height:3px; border-radius:0 0 3px 3px; background:var(--mg-cor,#e7e5e4); }
+.mg-head { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; min-height:30px; }
+.mg-titulo { font-size:12.5px; font-weight:700; color:#44403c; line-height:1.25; letter-spacing:.1px; }
+.mg-tipo { flex-shrink:0; font-size:8.5px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:#78716c; background:#f5f5f4; border-radius:5px; padding:2px 5px; cursor:help; }
+.mg-svg { width:100%; max-width:210px; margin:0 auto; display:block; overflow:visible; }
+.mg-svg .mg-prog { animation:mgProg .9s cubic-bezier(.22,1,.36,1) both; }
+.mg-svg .mg-needle { animation:mgNeedle .9s cubic-bezier(.22,1,.36,1) both; }
+@keyframes mgProg { from { stroke-dashoffset:100; } }
+@keyframes mgNeedle { from { transform:rotate(-90deg); } }
+.mg-valor { text-align:center; font-family:'Sora',sans-serif; font-size:21px; font-weight:800; color:#1c1917; letter-spacing:-.4px; line-height:1.1; margin-top:-4px; white-space:nowrap; }
+.mg-rodape { display:flex; flex-direction:column; gap:3px; border-top:1px dashed #ece9e5; padding-top:7px; }
+.mg-linha { display:flex; align-items:baseline; justify-content:space-between; gap:6px; min-width:0; }
+.mg-rot { font-size:9.5px; font-weight:700; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; flex-shrink:0; }
+.mg-num { font-family:'DM Mono',monospace; font-size:12px; font-weight:700; color:#44403c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mg-status { align-self:center; display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; }
+.mg-status.ok   { color:#15803d; background:#dcfce7; }
+.mg-status.warn { color:#b45309; background:#fef3c7; }
+.mg-status.bad  { color:#b91c1c; background:#fee2e2; }
+.mg-status.vazio { color:#78716c; background:#f5f5f4; cursor:pointer; border:1px dashed #d6d3d1; }
+.mg-status.vazio:hover { color:var(--accent); border-color:var(--accent); background:#fff7ed; }
+
+/* ══ Contas a Pagar / Receber (v2) ══ */
+.cpr-wrap { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width: 1100px) { .cpr-wrap { grid-template-columns:1fr; } }
+.cpr-panel { background:#fff; border:1px solid #ece9e5; border-radius:16px; padding:18px 18px 16px; display:flex; flex-direction:column; gap:14px; min-width:0; }
+.cpr-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.cpr-head-l { display:flex; align-items:center; gap:10px; }
+.cpr-ico { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cpr-ico svg { width:18px; height:18px; }
+.cpr-panel.pagar   .cpr-ico { background:#fef2f2; color:#dc2626; }
+.cpr-panel.receber .cpr-ico { background:#f0fdf4; color:#16a34a; }
+.cpr-titulo { font-size:14px; font-weight:800; color:#1c1917; letter-spacing:-.1px; }
+.cpr-sub { font-size:11px; color:#a8a29e; margin-top:1px; }
+.cpr-per { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#78716c; background:#f5f5f4; padding:4px 9px; border-radius:20px; white-space:nowrap; }
+.cpr-hero { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding:2px 2px 0; border-radius:10px; cursor:pointer; }
+.cpr-hero:hover .cpr-hero-val { color:var(--accent); }
+.cpr-hero-rot { font-size:10.5px; font-weight:700; color:#78716c; text-transform:uppercase; letter-spacing:.5px; }
+.cpr-hero-val { font-family:'Sora',sans-serif; font-size:26px; font-weight:800; color:#1c1917; letter-spacing:-.6px; line-height:1.15; white-space:nowrap; transition:color .15s; }
+.cpr-qtd { text-align:right; cursor:pointer; padding:6px 10px; border-radius:10px; background:#faf9f7; border:1px solid #f0eeeb; transition:.15s; }
+.cpr-qtd:hover { border-color:var(--accent); }
+.cpr-qtd b { display:block; font-family:'Sora',sans-serif; font-size:17px; font-weight:800; color:#1c1917; line-height:1.1; }
+.cpr-qtd span { font-size:10px; color:#78716c; font-weight:600; }
+.cpr-bar-top { display:flex; justify-content:space-between; font-size:11px; color:#57534e; font-weight:600; margin-bottom:6px; }
+.cpr-bar-top b { font-family:'DM Mono',monospace; }
+.cpr-bar { height:10px; border-radius:6px; background:#f5f5f4; overflow:hidden; display:flex; }
+.cpr-bar i { display:block; height:100%; transition:width .8s cubic-bezier(.22,1,.36,1); }
+.cpr-tiles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+@media (max-width: 560px) { .cpr-tiles { grid-template-columns:1fr; } }
+.cpr-tile { border:1px solid #f0eeeb; background:#fcfbfa; border-radius:12px; padding:11px 12px; cursor:pointer; transition:.15s; min-width:0; position:relative; }
+.cpr-tile:hover { background:#fff; border-color:#d6d3d1; box-shadow:0 4px 14px rgba(28,25,23,.06); }
+.cpr-tile-rot { display:flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; color:#57534e; }
+.cpr-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.cpr-tile-val { font-family:'DM Mono',monospace; font-size:16px; font-weight:800; color:#1c1917; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cpr-tile-nota { font-size:10px; color:#a8a29e; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cpr-tile-nota.alerta { color:#dc2626; font-weight:700; }
 
 
 
@@ -1867,6 +1928,144 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
 .bx-sep-txt em { margin-top:0; }
 .bx-sep-line { border-top:none; }
 .bx-sep-saldo { background:#fff; border:1px solid #dbeafe; }
+
+/* ══════════ BANCOS / CAIXAS — layout profissional (bk-*) ══════════ */
+#page-bancos .bk-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+#page-bancos .bk-head .page-title { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; letter-spacing:-.4px; color:#1c1917; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.bk-pill { display:inline-flex; align-items:center; gap:6px; padding:3px 11px; border-radius:20px; font-size:11.5px; font-weight:700; background:#f5f5f4; color:#57534e; border:1px solid #e7e5e4; font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:0; }
+.bk-pill i { width:7px; height:7px; border-radius:50%; background:#16a34a; box-shadow:0 0 0 3px rgba(22,163,74,.15); }
+.bk-head-acts { display:flex; gap:8px; flex-wrap:wrap; }
+.bk-btn-sec { display:inline-flex; align-items:center; gap:7px; height:40px; padding:0 16px; border-radius:10px; border:1px solid #e7e5e4; background:#fff; color:#1c1917; font-weight:700; font-size:13px; cursor:pointer; font-family:inherit; transition:.15s; }
+.bk-btn-sec:hover { border-color:#ea580c; color:#ea580c; box-shadow:0 4px 14px rgba(234,88,12,.10); }
+.bk-btn-sec svg { width:16px; height:16px; }
+
+/* Hero */
+.bk-hero { position:relative; overflow:hidden; border-radius:18px; padding:24px 26px 20px; margin-bottom:18px; color:#fff;
+  background:radial-gradient(900px 260px at 100% 0%, rgba(234,88,12,.35), transparent 60%), linear-gradient(125deg,#1c1917 0%,#292524 55%,#3b2418 100%);
+  box-shadow:0 10px 30px rgba(28,25,23,.18); }
+.bk-hero-grid { display:grid; grid-template-columns:minmax(240px,1.1fr) minmax(260px,1.6fr) minmax(220px,1fr); gap:26px; align-items:stretch; }
+.bk-hero-lbl { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a8a29e; }
+.bk-hero-val { font-family:'Sora',sans-serif; font-size:34px; font-weight:800; letter-spacing:-1px; line-height:1.1; margin-top:6px; white-space:nowrap; }
+.bk-hero-val.neg { color:#fca5a5; }
+.bk-hero-var { display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; background:rgba(255,255,255,.08); }
+.bk-hero-var.up { color:#86efac; } .bk-hero-var.down { color:#fca5a5; }
+.bk-hero-var span { color:#a8a29e; font-weight:600; }
+.bk-hero-meta { font-size:11.5px; color:#a8a29e; margin-top:12px; }
+.bk-hero-chart { display:flex; flex-direction:column; min-width:0; }
+.bk-hero-chart .bk-hero-lbl { display:flex; justify-content:space-between; }
+.bk-hero-chart .bk-hero-lbl b { color:#fff; font-weight:700; letter-spacing:0; text-transform:none; font-size:11.5px; font-family:'DM Mono',monospace; }
+.bk-hero-chart svg { width:100%; height:96px; margin-top:8px; overflow:visible; }
+.bk-hero-axis { display:flex; justify-content:space-between; font-size:10px; color:#78716c; margin-top:4px; }
+.bk-hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.bk-hs { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:10px 12px; cursor:default; }
+.bk-hs.click { cursor:pointer; transition:.15s; } .bk-hs.click:hover { background:rgba(255,255,255,.12); }
+.bk-hs span { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:#a8a29e; }
+.bk-hs b { display:block; font-family:'DM Mono',monospace; font-size:15px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-hs b.pos { color:#86efac; } .bk-hs b.neg { color:#fca5a5; }
+.bk-comp { margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,.08); }
+.bk-comp-bar { display:flex; height:10px; border-radius:6px; overflow:hidden; background:rgba(255,255,255,.08); gap:2px; }
+.bk-comp-bar i { display:block; height:100%; min-width:3px; transition:opacity .15s; }
+.bk-comp-leg { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:10px; font-size:11.5px; color:#d6d3d1; }
+.bk-comp-leg span { display:inline-flex; align-items:center; gap:7px; white-space:nowrap; }
+.bk-comp-leg em { width:9px; height:9px; border-radius:3px; display:inline-block; }
+.bk-comp-leg b { font-family:'DM Mono',monospace; color:#fff; font-weight:500; }
+@media (max-width:1100px) { .bk-hero-grid { grid-template-columns:1fr 1fr; } .bk-hero-chart { grid-column:1 / -1; order:3; } }
+@media (max-width:640px) { .bk-hero-grid { grid-template-columns:1fr; } .bk-hero-val { font-size:28px; } .bk-hero { padding:18px; } }
+
+/* Seção */
+.bk-sec-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:6px 2px 12px; flex-wrap:wrap; }
+.bk-sec-tit { font-family:'Sora',sans-serif; font-size:15px; font-weight:800; color:#1c1917; display:flex; align-items:center; gap:8px; }
+.bk-sec-tit small { font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:600; color:#a8a29e; }
+.bk-sec-sub { font-size:12px; color:#a8a29e; }
+
+/* Cards de conta */
+#bancos-list.bk-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-bottom:22px; }
+.bk-card { position:relative; background:#fff; border:1px solid #ece9e5; border-radius:16px; padding:18px 18px 14px; display:flex; flex-direction:column; gap:12px; transition:box-shadow .18s, transform .18s, border-color .18s; overflow:hidden; }
+.bk-card::before { content:''; position:absolute; left:0; right:0; top:0; height:3px; background:var(--bk,#ea580c); }
+.bk-card:hover { box-shadow:0 12px 28px rgba(28,25,23,.08); transform:translateY(-2px); border-color:#e7e5e4; }
+.bk-card.neg { background:linear-gradient(180deg,#fff 0%,#fff 70%,#fef2f2 100%); }
+.bk-top { display:flex; align-items:center; gap:12px; min-width:0; }
+.bk-logo { width:46px; height:46px; border-radius:13px; background:#f5f4f2; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.04); }
+.bk-id { min-width:0; flex:1; cursor:pointer; }
+.bk-nome { font-size:14.5px; font-weight:800; color:#1c1917; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-sub { font-size:11.5px; color:#a8a29e; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'DM Mono',monospace; }
+.bk-tipo { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; padding:4px 9px; border-radius:20px; background:#f5f5f4; color:#57534e; white-space:nowrap; flex-shrink:0; }
+.bk-saldo-box { display:flex; align-items:flex-end; justify-content:space-between; gap:10px; cursor:pointer; }
+.bk-saldo-lbl { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:#a8a29e; }
+.bk-saldo { font-family:'Sora',sans-serif; font-size:24px; font-weight:800; letter-spacing:-.6px; color:#1c1917; line-height:1.15; margin-top:3px; white-space:nowrap; }
+.bk-saldo.neg { color:#dc2626; }
+.bk-spark { width:110px; height:40px; flex-shrink:0; overflow:visible; }
+.bk-share { display:flex; align-items:center; gap:10px; font-size:11px; color:#78716c; }
+.bk-share-bar { flex:1; height:6px; background:#f5f5f4; border-radius:4px; overflow:hidden; }
+.bk-share-bar i { display:block; height:100%; background:var(--bk,#ea580c); border-radius:4px; }
+.bk-share b { font-family:'DM Mono',monospace; color:#44403c; font-weight:500; }
+.bk-mes { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.bk-mes div { background:#faf9f7; border-radius:10px; padding:8px 10px; cursor:pointer; transition:.12s; border:1px solid transparent; }
+.bk-mes div:hover { border-color:#fed7aa; background:#fff7ed; }
+.bk-mes span { display:block; font-size:10px; font-weight:700; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; }
+.bk-mes b { display:block; font-family:'DM Mono',monospace; font-size:13px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-mes .e b { color:#16a34a; } .bk-mes .s b { color:#dc2626; }
+.bk-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:10px; border-top:1px dashed #ece9e5; }
+.bk-ult { font-size:11px; color:#a8a29e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-ult b { color:#57534e; font-weight:600; }
+.bk-acts { display:flex; gap:4px; flex-shrink:0; }
+.bk-ic { width:32px; height:32px; border-radius:9px; border:1px solid #ece9e5; background:#fff; color:#78716c; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:.12s; padding:0; }
+.bk-ic svg { width:15px; height:15px; }
+.bk-ic:hover { background:#1c1917; border-color:#1c1917; color:#fff; }
+.bk-ic.del:hover { background:#dc2626; border-color:#dc2626; }
+.bk-add { border:1.5px dashed #d6d3d1; border-radius:16px; background:transparent; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:#a8a29e; font-weight:700; font-size:13px; cursor:pointer; font-family:inherit; transition:.15s; }
+.bk-add:hover { border-color:#ea580c; color:#ea580c; background:#fff7ed; }
+.bk-add span { width:44px; height:44px; border-radius:50%; background:#f5f5f4; display:flex; align-items:center; justify-content:center; font-size:22px; transition:.15s; }
+.bk-add:hover span { background:#ea580c; color:#fff; }
+.bk-vazio { grid-column:1 / -1; text-align:center; padding:46px 20px; background:#fff; border:1.5px dashed #d6d3d1; border-radius:16px; color:#78716c; }
+.bk-vazio div { font-size:34px; margin-bottom:6px; }
+
+/* Fluxo diário */
+.bk-fluxo { padding:22px 24px; }
+.bk-fluxo-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+.bk-filtros { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.bk-sel { display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #e7e5e4; border-radius:10px; padding:0 4px 0 12px; height:38px; }
+.bk-sel label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#a8a29e; margin:0; white-space:nowrap; }
+.bk-sel select { border:none !important; background:transparent !important; box-shadow:none !important; height:36px; padding:0 6px !important; font-size:13px; font-weight:600; color:#1c1917; outline:none; min-width:0; width:auto; }
+.bk-seg { display:inline-flex; background:#f5f5f4; border-radius:10px; padding:3px; gap:2px; }
+.bk-seg button { border:none; background:none; height:32px; padding:0 12px; border-radius:8px; font-size:12px; font-weight:700; color:#78716c; cursor:pointer; font-family:inherit; white-space:nowrap; }
+.bk-seg button.on { background:#fff; color:#1c1917; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+.bk-seg button:hover:not(.on) { color:#1c1917; }
+#page-bancos .fb-logo-destaque { padding:8px 16px 8px 8px; box-shadow:none; }
+#page-bancos .fb-logo-img { width:48px; height:48px; border-radius:12px; }
+#page-bancos .fb-logo-nome { font-size:15px; }
+.bk-kpis { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-bottom:16px; }
+.bk-kpi { background:#fff; border:1px solid #ece9e5; border-radius:12px; padding:12px 14px; position:relative; overflow:hidden; cursor:pointer; transition:.15s; }
+.bk-kpi:hover { border-color:#fdba74; box-shadow:0 6px 16px rgba(234,88,12,.08); }
+.bk-kpi::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--c,#a8a29e); }
+.bk-kpi span { display:block; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#a8a29e; }
+.bk-kpi b { display:block; font-family:'DM Mono',monospace; font-size:17px; margin-top:4px; color:var(--c,#1c1917); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-kpi small { display:block; font-size:10.5px; color:#a8a29e; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bk-kpi.dest { background:linear-gradient(135deg,#fff 0%,#fff7ed 100%); border-color:#fed7aa; }
+@media (max-width:1000px) { .bk-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.bk-chart-box { position:relative; height:240px; margin-bottom:16px; background:#fff; border:1px solid #ece9e5; border-radius:12px; padding:12px 12px 6px; }
+.bk-tab-wrap { max-height:520px; overflow-y:auto; border:1px solid #ece9e5; border-radius:12px; }
+.bk-tab { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
+.bk-tab thead th { position:sticky; top:0; z-index:1; background:#faf9f7; text-align:right; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#78716c; padding:10px 14px; border-bottom:1px solid #ece9e5; }
+.bk-tab thead th:first-child { text-align:left; }
+.bk-tab td { padding:7px 14px; text-align:right; border-bottom:1px solid #f5f5f4; font-family:'DM Mono',monospace; font-size:12.5px; white-space:nowrap; color:#1c1917; }
+.bk-tab td:first-child { text-align:left; font-family:'Plus Jakarta Sans',sans-serif; }
+.bk-tab tbody tr:hover td { background:#fffaf5; }
+.bk-dia { display:inline-flex; align-items:center; gap:10px; }
+.bk-dia-n { width:28px; height:26px; border-radius:9px; background:#f5f5f4; display:inline-flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:700; font-size:12.5px; color:#1c1917; }
+.bk-dia-w { font-size:11.5px; color:#a8a29e; font-weight:600; width:28px; }
+.bk-tab tr.fds .bk-dia-n { background:#fafaf9; color:#a8a29e; }
+.bk-tab tr.fut td { color:#d6d3d1; }
+.bk-tab tr.fut .bk-dia-n { background:#fafaf9; color:#d6d3d1; }
+.bk-tab tr.hoje td { background:#fff7ed !important; }
+.bk-tab tr.hoje .bk-dia-n { background:#ea580c; color:#fff; }
+.bk-hoje-tag { font-size:9px; font-weight:800; letter-spacing:.5px; background:#ea580c; color:#fff; padding:2px 7px; border-radius:20px; }
+.bk-tab .z { color:#e7e5e4; }
+.bk-tab .pos { color:#16a34a; } .bk-tab .neg { color:#dc2626; }
+.bk-tab td.saldo { font-weight:700; }
+.bk-tab tfoot td { position:sticky; bottom:0; background:#1c1917; color:#fff; font-weight:700; border:none; padding:11px 14px; }
+.bk-tab tfoot td:first-child { font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:.6px; }
+.bk-tab tfoot .pos { color:#86efac; } .bk-tab tfoot .neg { color:#fca5a5; }
 </style>
 </head>
 <body>
@@ -3399,7 +3598,7 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
     <!-- ══ DFC DEMONSTRATIVO ══ -->
     <div class="page" id="page-dfc-demonstrativo">
       <div class="page-title">Demonstrativo de Fluxo de Caixa <span class="empresa-tag"></span></div>
-      <div class="page-sub">Visão mensal com acumulado do ano — apenas o dinheiro que efetivamente entrou ou saiu da conta (pela data do pagamento/recebimento)</div>
+      <div class="page-sub">Visão mensal com acumulado do ano — apenas o que já foi <b>pago</b> ou <b>recebido</b> (pela data do pagamento/recebimento, até hoje). Valores em aberto não entram. O acumulado parte do saldo dos bancos e fecha com ele.</div>
 
       <!-- Filtro Ano -->
       <div class="card" style="padding:14px 20px;margin-bottom:16px;">
@@ -3624,11 +3823,18 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
 
     <!-- ══ BANCOS / CAIXAS ══ -->
     <div class="page" id="page-bancos">
-      <div class="page-header">
-        <div><div class="page-title">Bancos / Caixas <span style="display:inline-block;margin-left:10px;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;vertical-align:middle;background:#f5f5f4;color:#57534e;border:1px solid #e7e5e4;" title="Saldos e extratos das contas sempre somam todas as empresas">📊 Consolidado</span></div><div class="page-sub" style="margin-bottom:0">Cadastro de contas bancárias e caixas — saldos e extratos sempre consolidados (todas as empresas)</div></div>
-        <button class="btn-novo" id="btn-novo-bnk" onclick="toggleFormPanel('form-bnk',this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
-        </button>
+      <div class="bk-head">
+        <div>
+          <div class="page-title">Bancos / Caixas <span class="bk-pill" title="Saldos e extratos das contas sempre somam todas as empresas"><i></i>Consolidado · todas as empresas</span></div>
+          <div class="page-sub" style="margin-bottom:0">Posição de caixa, contas bancárias e movimentação diária</div>
+        </div>
+        <div class="bk-head-acts">
+          <button class="bk-btn-sec" onclick="showPage('analise-bancos')" title="Abrir a Análise Bancária"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg> Análise</button>
+          <button class="bk-btn-sec" onclick="abrirNovaTransferencia()" title="Transferir entre contas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h13l-4-4"/><path d="M17 17H4l4 4"/></svg> Transferir</button>
+          <button class="btn-novo" id="btn-novo-bnk" onclick="toggleFormPanel('form-bnk',this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova conta
+          </button>
+        </div>
       </div>
       <div class="form-panel" id="form-bnk" style="margin-bottom:0">
       <div class="card">
@@ -3657,21 +3863,33 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
         </div>
       </div>
       </div><!-- /form-panel bnk -->
-      <div class="card" style="margin-top:16px">
-        <div class="card-title">Contas Cadastradas</div>
-        <div id="bancos-list">
-          <div class="empty-state" style="padding:24px">Nenhuma conta cadastrada.</div>
-        </div>
+
+      <!-- Resumo consolidado -->
+      <div class="bk-hero" id="bk-hero"></div>
+
+      <!-- Contas -->
+      <div class="bk-sec-head">
+        <div class="bk-sec-tit">Contas <small id="bk-qtd"></small></div>
+        <div class="bk-sec-sub">Clique na conta para ver os lançamentos</div>
+      </div>
+      <div id="bancos-list" class="bk-grid">
+        <div class="bk-vazio"><div>🏦</div>Nenhuma conta cadastrada.</div>
       </div>
 
-      <div class="card" style="margin-top:16px">
-        <div class="card-title">Fluxo de Caixa Diário</div>
-        <div class="page-sub" style="margin-bottom:14px">Entradas e saídas efetivamente pagas/recebidas, dia a dia (01 a 31)</div>
-        <div class="filter-row" style="margin-bottom:16px">
-          <div class="form-group" style="min-width:240px"><label>Conta</label>
+      <!-- Fluxo de caixa diário -->
+      <div class="card bk-fluxo" id="bk-fluxo-card">
+        <div class="bk-fluxo-head">
+          <div>
+            <div class="bk-sec-tit" style="margin-bottom:2px">Fluxo de caixa diário</div>
+            <div class="bk-sec-sub">Entradas e saídas efetivamente pagas/recebidas, dia a dia</div>
+          </div>
+          <div id="fb-logo-destaque" class="fb-logo-destaque" style="display:none"></div>
+        </div>
+        <div class="bk-filtros" style="margin-bottom:16px">
+          <div class="bk-sel"><label for="fb-banco">Conta</label>
             <select id="fb-banco" onchange="renderFluxoBancoDiario()"><option value="">Todas as Contas</option></select>
           </div>
-          <div class="form-group"><label>Mês</label>
+          <div class="bk-sel"><label for="fb-mes">Mês</label>
             <select id="fb-mes" onchange="renderFluxoBancoDiario()">
               <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
               <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
@@ -3679,16 +3897,17 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
               <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
             </select>
           </div>
-          <div class="form-group"><label>Ano</label>
+          <div class="bk-sel"><label for="fb-ano">Ano</label>
             <select id="fb-ano" onchange="renderFluxoBancoDiario()"></select>
           </div>
-          <div class="form-group"><label>Imprimir / PDF</label>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-secondary btn-sm" style="padding:10px 12px" onclick="imprimirExtratoBanco('retrato')" title="Extrato em folha A4 retrato">🖨 Retrato</button>
-              <button class="btn btn-secondary btn-sm" style="padding:10px 12px" onclick="imprimirExtratoBanco('paisagem')" title="Extrato em folha A4 paisagem">🖨 Paisagem</button>
-            </div>
+          <div class="bk-seg" id="fb-modo" title="Quais dias mostrar na tabela">
+            <button type="button" data-m="todos" class="on" onclick="bkFluxoModo('todos')">Todos os dias</button>
+            <button type="button" data-m="mov" onclick="bkFluxoModo('mov')">Com movimento</button>
           </div>
-          <div id="fb-logo-destaque" class="fb-logo-destaque" style="display:none"></div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="bk-btn-sec" style="height:38px" onclick="imprimirExtratoBanco('retrato')" title="Extrato em folha A4 retrato">🖨 Retrato</button>
+            <button class="bk-btn-sec" style="height:38px" onclick="imprimirExtratoBanco('paisagem')" title="Extrato em folha A4 paisagem">🖨 Paisagem</button>
+          </div>
         </div>
         <div id="fluxo-banco-wrap"></div>
       </div>
@@ -3922,6 +4141,19 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
         </div>
       </div>
 
+      <!-- ══ TOPO: Metas do mês (velocímetros) + Contas a Pagar / Receber ══ -->
+      <!-- Medidores de Metas do DRE (Venda, CPV, Margem, Lucro) -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+          <div class="card-title" style="margin:0;">🎯 Metas do Mês <span id="metas-gauge-periodo" style="font-weight:400;color:#a8a29e;font-size:12px;"></span></div>
+          <button class="btn btn-secondary" style="padding:6px 14px;font-size:12px;" onclick="abrirModalMetasDre()">⚙️ Definir Metas</button>
+        </div>
+        <div id="dash-metas-gauges" class="mg-grid"></div>
+      </div>
+
+      <!-- KPIs r&#225;pidos (Contas a Pagar / Contas a Receber) -->
+      <div class="grid4" id="dash-kpis-top" style="margin-bottom:20px;"></div>
+
       <!-- ═══ PAINEL EXECUTIVO ═══ -->
       <div id="exec-panel">
         <div class="ex-head">
@@ -3968,18 +4200,6 @@ tr.lanc-dia-row.hoje td { background:#ffedd5 !important; border-top-color:#ea580
         </div>
         <div class="ex-sec">Detalhes operacionais</div>
       </div>
-
-      <!-- Medidores de Metas do DRE (Venda, CPV, Margem, Lucro) -->
-      <div class="card" style="margin-bottom:16px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
-          <div class="card-title" style="margin:0;">🎯 Metas do Mês <span id="metas-gauge-periodo" style="font-weight:400;color:#a8a29e;font-size:12px;"></span></div>
-          <button class="btn btn-secondary" style="padding:6px 14px;font-size:12px;" onclick="abrirModalMetasDre()">⚙️ Definir Metas</button>
-        </div>
-        <div id="dash-metas-gauges" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;"></div>
-      </div>
-
-      <!-- KPIs r&#225;pidos (Contas a Pagar / Contas a Receber) -->
-      <div class="grid4" id="dash-kpis-top" style="margin-bottom:20px;"></div>
 
       <!-- Filtro de ano/mês dos gráficos -->
       <div class="card" style="padding:16px 24px;">
@@ -7135,7 +7355,28 @@ function diffDias(d1, d2) {
   const a = new Date(d1), b = new Date(d2);
   return Math.round((b - a) / 86400000);
 }
-function today() { return new Date().toISOString().slice(0,10); }
+function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+// Pagamento/recebimento só pode ter data até HOJE (nunca futura).
+function dataPagRecFutura(d) { return !!d && String(d).slice(0,10) > today(); }
+function bloquearDataFutura(d, rotulo, campoId) {
+  if (!dataPagRecFutura(d)) return true;
+  alert(`A data do ${rotulo || 'pagamento/recebimento'} (${fmtDate(d)}) não pode ser depois de hoje (${fmtDate(today())}).\n\nSó registre como pago/recebido o que já saiu ou entrou na conta. O que ainda vai acontecer deve continuar em aberto.`);
+  const el = campoId ? document.getElementById(campoId) : null;
+  if (el) { try { el.value = ''; el.focus(); } catch(e) {} }
+  return false;
+}
+// Calendários de data de pagamento/recebimento: bloqueia dias futuros (max = hoje)
+const _SEL_DATA_PAGREC = '#l-dtpago,#edit-dtpago,#lr-dtrecebido,#elr-dtrecebido,#modal-pago-data,#modal-recebido-data,#cc-pg-data,#cob-bx-data,#mp-data-de,#mp-data-ate,#mr-data-de,#mr-data-ate,input[type="date"][id$="-dp1"],input[type="date"][id*="-dp"]';
+function aplicarMaxHojeDatas(root) {
+  try { (root || document).querySelectorAll(_SEL_DATA_PAGREC).forEach(el => { if (/-dp\d+$/.test(el.id) || !/-dp/.test(el.id)) el.max = today(); }); } catch(e) {}
+}
+document.addEventListener('focusin', ev => { const el = ev.target; if (el && el.matches && el.type === 'date' && el.matches(_SEL_DATA_PAGREC)) aplicarMaxHojeDatas(el.parentNode || document); }, true);
+document.addEventListener('change', ev => {
+  const el = ev.target;
+  if (!el || el.type !== 'date' || !el.matches || !el.matches(_SEL_DATA_PAGREC)) return;
+  if (/-dp/.test(el.id) && !/-dp\d+$/.test(el.id)) return;
+  if (dataPagRecFutura(el.value)) bloquearDataFutura(el.value, /receb|lr-|elr-|mr-|cob-/.test(el.id) ? 'recebimento' : 'pagamento', el.id);
+}, true);
 
 function parcelaVencimento(dtprev, parcela, totalParcelas) {
   if(!dtprev) return null;
@@ -9405,6 +9646,7 @@ async function confirmarPago() {
   const parcIdx = parseInt(document.getElementById('modal-pago-parc').value) || 1;
   const dtpago = document.getElementById('modal-pago-data').value;
   if(!dtpago) { alert('Informe a data do pagamento.'); return; }
+  if (!bloquearDataFutura(dtpago, 'pagamento', 'modal-pago-data')) return;
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return;
   const valorPago = _mpLerValor();
@@ -9744,6 +9986,7 @@ async function confirmarMarcarPagoMassa() {
   const banco = document.getElementById('mp-banco').value;
   if (!dataDe || !dataAte) { alert('Informe o período de vencimento (de/até).'); return; }
   if (dataDe > dataAte) { alert('A data "De" não pode ser depois da data "Até".'); return; }
+  if (dataAte > today()) { alert(`A data "Até" não pode ser depois de hoje (${fmtDate(today())}).\n\nCada parcela é baixada com a data do seu vencimento, e não é permitido registrar pagamento/recebimento com data futura.`); return; }
   if (!banco) { alert('Selecione o banco/conta.'); return; }
 
   const alvo = getParcelas(false).filter(p => !p.cartaoFatura && p.venc && p.venc >= dataDe && p.venc <= dataAte);
@@ -9841,6 +10084,7 @@ async function confirmarMarcarRecebidoMassa() {
   const banco = document.getElementById('mr-banco').value;
   if (!dataDe || !dataAte) { alert('Informe o período de vencimento (de/até).'); return; }
   if (dataDe > dataAte) { alert('A data "De" não pode ser depois da data "Até".'); return; }
+  if (dataAte > today()) { alert(`A data "Até" não pode ser depois de hoje (${fmtDate(today())}).\n\nCada parcela é baixada com a data do seu vencimento, e não é permitido registrar pagamento/recebimento com data futura.`); return; }
   if (!banco) { alert('Selecione o banco/conta.'); return; }
 
   const alvo = getParcelasReceber(false).filter(p => p.venc && p.venc >= dataDe && p.venc <= dataAte);
@@ -10985,28 +11229,81 @@ function renderDashboard() {
     'faltareceber': { titulo:'📌 Falta a Receber/Recebido', sub:relPeriodo, modo:'receber', tipo:'parc', itens:parcelasRecFiltradas },
   };
 
+  // ── Painéis Contas a Pagar / Contas a Receber (v2) ──
+  const _hojeISO = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })();
+  const _vencidoPag = _pfPag.filter(p => !p.isPago && p.venc && p.venc < _hojeISO);
+  const _vencidoRec = parcelasRecFiltradas.filter(p => !p.isRecebido && p.venc && p.venc < _hojeISO);
+  const totVencPag = _vencidoPag.reduce((s,p)=>s+p.valParc,0);
+  const totVencRec = _vencidoRec.reduce((s,p)=>s+p.valParc,0);
+  const periodoChip = (kpiAno || kpiMes) ? (kpiMes ? meses[parseInt(kpiMes)] + ' ' + (kpiAno||'') : kpiAno) : 'Todo período';
+  const _icoPagar   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>';
+  const _icoReceber = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>';
+  const painelCPR = (o) => {
+    const base = o.aberto + o.quitado;
+    const pq = base > 0 ? (o.quitado / base) * 100 : 0;
+    const pa = base > 0 ? 100 - pq : 0;
+    return `
+    <div class="cpr-panel ${o.tipo}">
+      <div class="cpr-head">
+        <div class="cpr-head-l">
+          <div class="cpr-ico">${o.icone}</div>
+          <div><div class="cpr-titulo">${o.titulo}</div><div class="cpr-sub">${o.sub}</div></div>
+        </div>
+        <span class="cpr-per">${periodoChip}</span>
+      </div>
+      <div class="cpr-hero">
+        <div onclick="abrirRelatorioKPI('${o.relTotal}')" title="Clique para ver os lançamentos" style="min-width:0">
+          <div class="cpr-hero-rot">${o.rotTotal}</div>
+          <div class="cpr-hero-val">${fmtBRL(o.total)}</div>
+        </div>
+        <div class="cpr-qtd" onclick="abrirRelatorioKPI('${o.relQtd}')" title="Clique para ver os lançamentos">
+          <b>${o.qtd}</b><span>${o.rotQtd}</span>
+        </div>
+      </div>
+      <div>
+        <div class="cpr-bar-top">
+          <span>${o.rotQuitado}: <b style="color:${o.corQuitado}">${base>0?Math.round(pq):0}%</b></span>
+          <span>${o.rotAberto}: <b style="color:${o.corAberto}">${base>0?Math.round(pa):0}%</b></span>
+        </div>
+        <div class="cpr-bar" title="${o.rotQuitado} ${fmtBRL(o.quitado)} · ${o.rotAberto} ${fmtBRL(o.aberto)}">
+          <i style="width:${pq.toFixed(2)}%;background:${o.corQuitado}"></i>
+          <i style="width:${pa.toFixed(2)}%;background:${o.corAberto};opacity:.85"></i>
+        </div>
+      </div>
+      <div class="cpr-tiles">
+        <div class="cpr-tile" onclick="abrirRelatorioKPI('${o.relAberto}')" title="Clique para ver os lançamentos">
+          <div class="cpr-tile-rot"><span class="cpr-dot" style="background:${o.corAberto}"></span>${o.rotAberto}</div>
+          <div class="cpr-tile-val" style="color:${o.corAberto}">${fmtBRL(o.aberto)}</div>
+          <div class="cpr-tile-nota${o.vencido>0?' alerta':''}">${o.vencido>0 ? '⚠ '+fmtBRL(o.vencido)+' vencido' : 'Nada vencido'}</div>
+        </div>
+        <div class="cpr-tile" onclick="abrirRelatorioKPI('${o.relQuitado}')" title="Clique para ver os lançamentos">
+          <div class="cpr-tile-rot"><span class="cpr-dot" style="background:${o.corQuitado}"></span>${o.rotQuitado}</div>
+          <div class="cpr-tile-val" style="color:${o.corQuitado}">${fmtBRL(o.quitado)}</div>
+          <div class="cpr-tile-nota">Por vencimento</div>
+        </div>
+        <div class="cpr-tile" onclick="abrirRelatorioKPI('${o.relSoma}')" title="Clique para ver os lançamentos">
+          <div class="cpr-tile-rot"><span class="cpr-dot" style="background:#7e22ce"></span>${o.rotSoma}</div>
+          <div class="cpr-tile-val" style="color:#7e22ce">${fmtBRL(base)}</div>
+          <div class="cpr-tile-nota">${o.rotAberto} + ${o.rotQuitado}</div>
+        </div>
+      </div>
+    </div>`;
+  };
+
   document.getElementById('dash-kpis-top').innerHTML = `
-    <div class="card" style="grid-column:1/-1;padding:14px 16px;">
-      <div class="kpi-section-title pagar">📦 Contas a Pagar</div>
-      <div class="kpi-cards-grid">
-        ${kpiCard({ cor:'azul', icone:'🧾', valor:lancFiltrados.length, label:'Total de Compras', rel:'compras' })}
-        ${kpiCard({ cor:'azul', icone:'💵', valor:fmtBRL(totalComprado), valCor:'#ea580c', label:'Total Comprado', rel:'comprado' })}
-        ${kpiCard({ cor:'vermelho', icone:'⏳', valor:fmtBRL(totalAPagar), valCor:'#dc2626', label:'A Pagar', rel:'apagar' })}
-        ${kpiCard({ cor:'verde', icone:'✅', valor:fmtBRL(totalPago), valCor:'#16a34a', label:'Pago', rel:'pago' })}
-        ${kpiCard({ cor:'roxo', icone:'📌', valor:fmtBRL(totalAPagar + totalPago), valCor:'#7e22ce', label:'Falta a Pagar/Pago', rel:'faltapagar' })}
-      </div>
-      ${legendaFaltaPagar}
-    </div>
-    <div class="card" style="grid-column:1/-1;padding:14px 16px;">
-      <div class="kpi-section-title receber">💰 Contas a Receber</div>
-      <div class="kpi-cards-grid">
-        ${kpiCard({ cor:'azul', icone:'🧾', valor:lancRecFiltrados.length, label:'Total de Vendas', rel:'vendas' })}
-        ${kpiCard({ cor:'azul', icone:'💵', valor:fmtBRL(totalVendido), valCor:'#ea580c', label:'Total Vendido', rel:'vendido' })}
-        ${kpiCard({ cor:'laranja', icone:'⏳', valor:fmtBRL(totalAReceber), valCor:'#d97706', label:'A Receber', rel:'areceber' })}
-        ${kpiCard({ cor:'verde', icone:'✅', valor:fmtBRL(totalRecebido), valCor:'#16a34a', label:'Recebido', rel:'recebido' })}
-        ${kpiCard({ cor:'roxo', icone:'📌', valor:fmtBRL(totalAReceber + totalRecebido), valCor:'#7e22ce', label:'Falta a Receber/Recebido', rel:'faltareceber' })}
-      </div>
-      ${legendaFaltaReceber}
+    <div class="cpr-wrap">
+      ${painelCPR({ tipo:'pagar', icone:_icoPagar, titulo:'Contas a Pagar', sub:'Compras e despesas do período',
+        rotTotal:'Total Comprado', total:totalComprado, relTotal:'comprado',
+        qtd:lancFiltrados.length, rotQtd: lancFiltrados.length===1?'compra':'compras', relQtd:'compras',
+        rotAberto:'A Pagar', aberto:totalAPagar, relAberto:'apagar', corAberto:'#dc2626', vencido:totVencPag,
+        rotQuitado:'Pago', quitado:totalPago, relQuitado:'pago', corQuitado:'#16a34a',
+        rotSoma:'Falta a Pagar/Pago', relSoma:'faltapagar' })}
+      ${painelCPR({ tipo:'receber', icone:_icoReceber, titulo:'Contas a Receber', sub:'Vendas e recebimentos do período',
+        rotTotal:'Total Vendido', total:totalVendido, relTotal:'vendido',
+        qtd:lancRecFiltrados.length, rotQtd: lancRecFiltrados.length===1?'venda':'vendas', relQtd:'vendas',
+        rotAberto:'A Receber', aberto:totalAReceber, relAberto:'areceber', corAberto:'#d97706', vencido:totVencRec,
+        rotQuitado:'Recebido', quitado:totalRecebido, relQuitado:'recebido', corQuitado:'#16a34a',
+        rotSoma:'Falta a Receber/Recebido', relSoma:'faltareceber' })}
     </div>`;
   document.getElementById('dash-kpis-bottom').innerHTML = `
     <div class="card" style="grid-column:1/-1;padding:14px 16px;">
@@ -11157,29 +11454,46 @@ function renderPainelExecutivo() {
   const st = (n) => n === 2 ? '<span class="ex-gauge-st ex-st-ok">Saudável</span>' : n === 1 ? '<span class="ex-gauge-st ex-st-at">Atenção</span>' : '<span class="ex-gauge-st ex-st-cr">Crítico</span>';
   const corSt = (n) => n === 2 ? '#16a34a' : n === 1 ? '#d97706' : '#dc2626';
   const g = [];
-  const gauge = (titulo, val, max, meta, txt, metaTxt, dica, nivel) =>
-    g.push(cardGauge(titulo, val == null ? '<div style="width:100%;max-width:210px;height:118px;display:flex;align-items:center;justify-content:center;color:#d6d3d1;font-size:12px;">sem dados no período</div>' : speedometerSVG(val/max, meta/max, corSt(nivel), txt),
-      val == null ? '' : st(nivel), metaTxt, dica));
+  // [CORRECAO] cardGauge não existia no arquivo (ReferenceError) — isso
+  // abortava renderPainelExecutivo() e deixava medidores, alertas e os 4
+  // gráficos em branco. Além disso o 4º parâmetro de speedometerSVG agora é o
+  // modo ('piso' = maior melhor, 'teto' = menor melhor), e não o texto.
+  const cardGauge = (titulo, svg, status, txt, metaTxt, dica, cor) =>
+    `<div class="mg-card" style="--mg-cor:${cor}">
+      <div class="mg-head"><div class="mg-titulo">${titulo}</div></div>
+      ${svg}
+      <div class="mg-valor">${txt}</div>
+      <div style="text-align:center">${status}</div>
+      <div class="mg-rodape">
+        <div class="mg-linha"><span class="mg-rot">${metaTxt}</span></div>
+        <div class="mg-linha"><span class="mg-rot" style="font-size:10px">${dica}</span></div>
+      </div>
+    </div>`;
+  const gauge = (titulo, val, max, meta, txt, metaTxt, dica, nivel, modo) =>
+    g.push(cardGauge(titulo,
+      val == null ? '<div style="width:100%;max-width:210px;height:118px;margin:0 auto;display:flex;align-items:center;justify-content:center;color:#d6d3d1;font-size:12px;">sem dados no período</div>'
+                  : speedometerSVG(val/max, meta/max, corSt(nivel), modo),
+      val == null ? '' : st(nivel), txt, metaTxt, dica, val == null ? '#e7e5e4' : corSt(nivel)));
   // 1. Liquidez 30 dias (maior melhor; ideal >= 1,2)
   { const n = liquidez == null ? 2 : liquidez >= 1.2 ? 2 : liquidez >= 1 ? 1 : 0;
     gauge('Liquidez 30 dias', liquidez == null ? null : Math.min(liquidez, 3), 3, 1.2,
       liquidez == null ? '—' : liquidez.toFixed(2) + 'x', 'ideal: ≥ 1,20x',
-      '(caixa + receber 30d) ÷ pagar 30d', n); }
+      '(caixa + receber 30d) ÷ pagar 30d', n, 'piso'); }
   // 2. Inadimplência (menor melhor; ideal <= 5%)
   { const n = inadimpl <= 5 ? 2 : inadimpl <= 15 ? 1 : 0;
-    gauge('Inadimplência', inadimpl, 40, 5, inadimpl.toFixed(1) + '%', 'limite: ≤ 5%', 'vencido ÷ total a receber', n); }
+    gauge('Inadimplência', Math.min(inadimpl, 40), 40, 5, inadimpl.toFixed(1) + '%', 'limite: ≤ 5%', 'vencido ÷ total a receber', n, 'teto'); }
   // 3. Margem do período (maior melhor; ideal >= 15%)
   { const n = margem == null ? 1 : margem >= 15 ? 2 : margem >= 5 ? 1 : 0;
     gauge('Margem do período', margem == null ? null : Math.max(0, margem), 50, 15,
-      margem == null ? '—' : margem.toFixed(1) + '%', 'ideal: ≥ 15%', 'resultado ÷ faturamento', n); }
+      margem == null ? '—' : margem.toFixed(1) + '%', 'ideal: ≥ 15%', 'resultado ÷ faturamento', n, 'piso'); }
   // 4. Cobertura de caixa em dias (maior melhor; ideal >= 30)
   { const n = cobertura == null ? 1 : cobertura >= 30 ? 2 : cobertura >= 15 ? 1 : 0;
     gauge('Cobertura de caixa', cobertura == null ? null : Math.max(0, Math.min(cobertura, 90)), 90, 30,
-      cobertura == null ? '—' : Math.round(cobertura) + ' dias', 'ideal: ≥ 30 dias', 'saldo ÷ gasto médio diário (90d)', n); }
+      cobertura == null ? '—' : Math.round(cobertura) + ' dias', 'ideal: ≥ 30 dias', 'saldo ÷ gasto médio diário (90d)', n, 'piso'); }
   // 5. Peso dos custos fixos (menor melhor; ideal <= 35%)
   { const n = pesoFixo == null ? 1 : pesoFixo <= 35 ? 2 : pesoFixo <= 50 ? 1 : 0;
     gauge('Peso dos custos fixos', pesoFixo == null ? null : Math.min(pesoFixo, 100), 100, 35,
-      pesoFixo == null ? '—' : pesoFixo.toFixed(1) + '%', 'ideal: ≤ 35%', 'custo fixo ÷ faturamento', n); }
+      pesoFixo == null ? '—' : pesoFixo.toFixed(1) + '%', 'ideal: ≤ 35%', 'custo fixo ÷ faturamento', n, 'teto'); }
   document.getElementById('ex-gauges').innerHTML = g.join('');
 
   // ── Projeção de caixa (13 semanas) ──
@@ -11460,34 +11774,115 @@ function calcularDreParaMetas(ano) {
   return out;
 }
 
-// ── Velocímetro (SVG, semicírculo com ponteiro) ──
-// valFrac e metaFrac em 0..1 (posição na escala). cor = cor do arco de progresso.
-function speedometerSVG(valFrac, metaFrac, cor, centerText) {
-  const R = 80, cx = 100, cy = 100;
+// ── Velocímetro (SVG v2: arco com faixas de desempenho, marcador de meta e ponteiro animado) ──
+// valFrac e metaFrac em 0..1 (posição na escala). cor = cor do status.
+// modo: 'piso' (quanto maior, melhor) ou 'teto' (quanto menor, melhor) — define as faixas coloridas.
+function speedometerSVG(valFrac, metaFrac, cor, modo) {
+  const R = 74, cx = 100, cy = 98;
   const cl = x => Math.max(0, Math.min(1, x));
-  const ang = f => Math.PI * (1 - cl(f)); // 0 => 180° (esq), 1 => 0° (dir)
+  const ang = f => Math.PI * (1 - cl(f));
   const pt = (f, rr) => [cx + rr * Math.cos(ang(f)), cy - rr * Math.sin(ang(f))];
-  const bg = `M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`;
-  const [ex, ey] = pt(valFrac, R);
-  const prog = `M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`;
-  const [nx, ny] = pt(valFrac, R - 12);
-  const [mx1, my1] = pt(metaFrac, R + 3);
-  const [mx2, my2] = pt(metaFrac, R - 20);
-  const metaTick = (metaFrac >= 0 && metaFrac <= 1)
-    ? `<line x1="${mx1.toFixed(1)}" y1="${my1.toFixed(1)}" x2="${mx2.toFixed(1)}" y2="${my2.toFixed(1)}" stroke="#1f2937" stroke-width="2.5" stroke-dasharray="2 2"/>`
-    : '';
-  return `<svg viewBox="0 0 200 118" style="width:100%;max-width:210px;">
-    <path d="${bg}" fill="none" stroke="#f5f4f2" stroke-width="14" stroke-linecap="round"/>
-    <path d="${prog}" fill="none" stroke="${cor}" stroke-width="14" stroke-linecap="round"/>
-    ${metaTick}
-    <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="#1f2937" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="${cx}" cy="${cy}" r="6" fill="#1f2937"/>
-    <text x="${cx}" y="86" text-anchor="middle" font-size="24" font-weight="800" fill="#1f2937" font-family="Sora,sans-serif">${centerText}</text>
+  const arc = (f0, f1, rr) => {
+    const [x0,y0] = pt(f0, rr), [x1,y1] = pt(f1, rr);
+    return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${rr} ${rr} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  };
+  const m = cl(metaFrac);
+  // Faixas de desempenho (anel externo fino)
+  const zonas = modo === 'teto'
+    ? [[0, m, '#86efac'], [m, Math.min(1, m*1.1), '#fcd34d'], [Math.min(1, m*1.1), 1, '#fca5a5']]
+    : [[0, m*0.8, '#fca5a5'], [m*0.8, m, '#fcd34d'], [m, 1, '#86efac']];
+  const zonasSvg = zonas.filter(z => z[1] - z[0] > 0.001)
+    .map(z => `<path d="${arc(z[0], z[1], R + 11)}" fill="none" stroke="${z[2]}" stroke-width="3.5"/>`).join('');
+  // Marcas da escala
+  let ticks = '';
+  for (let k = 0; k <= 20; k++) {
+    const f = k / 20, maior = k % 5 === 0;
+    const [a1,b1] = pt(f, R - 11), [a2,b2] = pt(f, R - (maior ? 18 : 14));
+    ticks += `<line x1="${a1.toFixed(1)}" y1="${b1.toFixed(1)}" x2="${a2.toFixed(1)}" y2="${b2.toFixed(1)}" stroke="${maior?'#a8a29e':'#d6d3d1'}" stroke-width="${maior?1.4:1}"/>`;
+  }
+  // Marcador da meta (triângulo por fora do arco + traço)
+  const [t1x,t1y] = pt(m, R + 16), aM = ang(m);
+  const px = Math.cos(aM + Math.PI/2) * 4.5, py = -Math.sin(aM + Math.PI/2) * 4.5;
+  const [t2x,t2y] = pt(m, R + 23);
+  const [l1x,l1y] = pt(m, R + 7), [l2x,l2y] = pt(m, R - 7);
+  const metaMk = `<line x1="${l1x.toFixed(1)}" y1="${l1y.toFixed(1)}" x2="${l2x.toFixed(1)}" y2="${l2y.toFixed(1)}" stroke="#1c1917" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M ${t1x.toFixed(1)} ${t1y.toFixed(1)} L ${(t2x+px).toFixed(1)} ${(t2y+py).toFixed(1)} L ${(t2x-px).toFixed(1)} ${(t2y-py).toFixed(1)} Z" fill="#1c1917"/>`;
+  const progPct = cl(valFrac) * 100;
+  const rot = (cl(valFrac) * 180 - 90).toFixed(1);
+  return `<svg class="mg-svg" viewBox="0 -2 200 108" role="img">
+    ${zonasSvg}
+    <path d="${arc(0,1,R)}" fill="none" stroke="#f1efec" stroke-width="12" stroke-linecap="round"/>
+    ${progPct > 0.3 ? `<path class="mg-prog" d="${arc(0,1,R)}" pathLength="100" fill="none" stroke="${cor}" stroke-width="12" stroke-linecap="round"
+      stroke-dasharray="100 100" style="stroke-dashoffset:${(100 - progPct).toFixed(2)}"/>` : ''}
+    ${ticks}
+    ${metaMk}
+    <g transform="translate(${cx},${cy})">
+      <g class="mg-needle" style="transform:rotate(${rot}deg)">
+        <path d="M -3.2 0 L 0 -${R - 8} L 3.2 0 Z" fill="#1c1917"/>
+      </g>
+      <circle r="7" fill="#1c1917"/><circle r="2.6" fill="#fff"/>
+    </g>
   </svg>`;
 }
 
-// Renderiza os 4 velocímetros conforme o filtro (kpi-ano / kpi-mes) do dashboard.
-// Venda = valor em R$. CPV, Margem e Lucro = percentual do DRE (sobre a Receita).
+// Medidor "apagado" para quando não há meta cadastrada
+function gaugeVazioSVG() {
+  const R = 74, cx = 100, cy = 98;
+  return `<svg class="mg-svg" viewBox="0 -2 200 108" role="img">
+    <path d="M ${cx-R} ${cy} A ${R} ${R} 0 0 1 ${cx+R} ${cy}" fill="none" stroke="#f1efec" stroke-width="12" stroke-linecap="round"/>
+    <path d="M ${cx-R-11} ${cy} A ${R+11} ${R+11} 0 0 1 ${cx+R+11} ${cy}" fill="none" stroke="#e7e5e4" stroke-width="2" stroke-dasharray="3 4"/>
+    <circle cx="${cx}" cy="${cy}" r="7" fill="#d6d3d1"/><circle cx="${cx}" cy="${cy}" r="2.6" fill="#fff"/>
+  </svg>`;
+}
+
+function fmtBRLCompacto(v) {
+  return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',notation:'compact',maximumFractionDigits:1}).format(v||0);
+}
+const fmtPctBR = v => (isFinite(v) ? v : 0).toFixed(1).replace('.', ',') + '%';
+
+// Monta um card de medidor completo.
+// o = { titulo, modo:'piso'|'teto', real, meta, max, fmtCentro, fmtNum }
+function montarCardMeta(o) {
+  const temMeta = o.meta > 0;
+  let cor = '#e7e5e4', status = '';
+  if (temMeta) {
+    if (o.modo === 'piso') {
+      const p = o.meta ? (o.real / o.meta) * 100 : 0;
+      const cls = p >= 100 ? 'ok' : (p >= 80 ? 'warn' : 'bad');
+      cor = cls === 'ok' ? '#16a34a' : (cls === 'warn' ? '#d97706' : '#dc2626');
+      status = cls === 'ok'
+        ? `<span class="mg-status ok">✓ Meta atingida · ${Math.round(p)}%</span>`
+        : `<span class="mg-status ${cls}">${Math.round(p)}% da meta</span>`;
+    } else {
+      const exc = o.meta ? ((o.real - o.meta) / o.meta) * 100 : 0;
+      const cls = o.real <= o.meta ? 'ok' : (exc <= 10 ? 'warn' : 'bad');
+      cor = cls === 'ok' ? '#16a34a' : (cls === 'warn' ? '#d97706' : '#dc2626');
+      status = cls === 'ok'
+        ? `<span class="mg-status ok">✓ Dentro do teto</span>`
+        : `<span class="mg-status ${cls}">▲ ${Math.round(exc)}% acima do teto</span>`;
+    }
+  } else {
+    status = `<span class="mg-status vazio" onclick="abrirModalMetasDre()" title="Cadastrar meta">+ Definir meta</span>`;
+  }
+  const dica = o.modo === 'piso' ? 'Meta é piso: quanto maior, melhor' : 'Meta é teto: quanto menor, melhor';
+  const svg = temMeta ? speedometerSVG(o.real / o.max, o.meta / o.max, cor, o.modo) : gaugeVazioSVG();
+  return `<div class="mg-card" style="--mg-cor:${temMeta ? cor : '#e7e5e4'}">
+    <div class="mg-head">
+      <div class="mg-titulo">${o.titulo}</div>
+      <span class="mg-tipo" title="${dica}">${o.modo === 'piso' ? '↑ Piso' : '↓ Teto'}</span>
+    </div>
+    ${svg}
+    <div class="mg-valor" style="${temMeta ? '' : 'color:#a8a29e'}">${o.fmtCentro(o.real)}</div>
+    ${status}
+    <div class="mg-rodape">
+      <div class="mg-linha"><span class="mg-rot">Realizado</span><span class="mg-num" title="${o.fmtNum(o.real)}">${o.fmtNum(o.real)}</span></div>
+      <div class="mg-linha"><span class="mg-rot">Meta</span><span class="mg-num">${temMeta ? o.fmtNum(o.meta) : '—'}</span></div>
+    </div>
+  </div>`;
+}
+
+// Renderiza os 4 velocímetros (Venda, CPV, Margem, Lucro). Venda = valor em R$.
+// CPV, Margem e Lucro = percentual do DRE (sobre a Receita).
 function renderMetasGauges() {
   const wrap = document.getElementById('dash-metas-gauges');
   if (!wrap) return;
@@ -11500,6 +11895,7 @@ function renderMetasGauges() {
 
   const real = calcularDreParaMetas(ano);
   const metasAno = dreMetas[ano] || {};
+  // metaDe: valor-alvo em R$ — no modo "ano acumulado" SOMA as metas mensais.
   const metaDe = (metric) => {
     if (mes) { const mm = metasAno[mes]; return mm ? (parseFloat(mm[metric]) || 0) : 0; }
     let s = 0; for (let m=1;m<=12;m++){ const mm = metasAno[m]; if (mm) s += parseFloat(mm[metric])||0; } return s;
@@ -11512,8 +11908,7 @@ function renderMetasGauges() {
   const lucroReal = realDe(real.lucro);
   const pctDe = (v) => vendaReal ? (v / vendaReal) * 100 : 0; // % sobre a receita
 
-  // metaMedia = para o modo "ano acumulado", metaDe soma; para % isso não faz
-  // sentido, então nesse caso usamos a média das metas mensais preenchidas.
+  // metaPctMedia: valor-alvo em % — no modo "ano acumulado" usa a média das metas mensais preenchidas.
   const metaPctMedia = (metric) => {
     if (mes) { const mm = metasAno[mes]; return mm ? (parseFloat(mm[metric])||0) : 0; }
     let s=0, n=0; for (let m=1;m<=12;m++){ const mm=metasAno[m]; if (mm && mm[metric]!=null && mm[metric]!=='') { s+=parseFloat(mm[metric])||0; n++; } }
@@ -11521,71 +11916,27 @@ function renderMetasGauges() {
   };
 
   const cards = [];
+  const emR$  = { fmtCentro: v => fmtBRLCompacto(v), fmtNum: v => fmtBRL(v) };
+  const emPct = { fmtCentro: fmtPctBR, fmtNum: fmtPctBR };
 
-  // 1) VENDA — R$
-  {
-    const meta = metaDe('venda');
-    const cor = meta>0 ? (vendaReal>=meta ? '#16a34a' : '#d97706') : '#d6d3d1';
-    const max = Math.max(meta*1.25, vendaReal*1.1, 1);
-    const pctMeta = meta>0 ? (vendaReal/meta*100) : 0;
-    const centro = meta>0 ? `${Math.round(pctMeta)}%` : '—';
-    cards.push(cardGauge('Venda',
-      meta>0 ? speedometerSVG(vendaReal/max, meta/max, cor, centro) : gaugeVazio(),
-      fmtBRL(vendaReal), meta>0?('meta: '+fmtBRL(meta)):'meta: <span style="color:#d6d3d1">sem meta</span>',
-      'meta é piso (quanto maior, melhor)'));
-  }
-  // 2) CPV — % (menor é melhor; meta é teto)
-  {
-    const rpct = pctDe(cpvReal);
-    const meta = metaPctMedia('cpv');
-    const cor = meta>0 ? (rpct<=meta ? '#16a34a' : '#dc2626') : '#d6d3d1';
-    const max = Math.max(meta*1.6, rpct*1.15, 100);
-    cards.push(cardGauge('CPV (%)',
-      meta>0 ? speedometerSVG(rpct/max, meta/max, cor, rpct.toFixed(1)+'%') : gaugeVazioPct(rpct),
-      rpct.toFixed(1)+'%', meta>0?('meta: '+meta.toFixed(1)+'%'):'meta: <span style="color:#d6d3d1">sem meta</span>',
-      'meta é teto (quanto menor, melhor)'));
-  }
-  // 3) MARGEM DE CONTRIBUIÇÃO — %
-  {
-    const rpct = pctDe(mcReal);
-    const meta = metaPctMedia('mc');
-    const cor = meta>0 ? (rpct>=meta ? '#16a34a' : '#d97706') : '#d6d3d1';
-    const max = Math.max(meta*1.5, rpct*1.15, 100);
-    cards.push(cardGauge('Margem de Contribuição (%)',
-      meta>0 ? speedometerSVG(rpct/max, meta/max, cor, rpct.toFixed(1)+'%') : gaugeVazioPct(rpct),
-      rpct.toFixed(1)+'%', meta>0?('meta: '+meta.toFixed(1)+'%'):'meta: <span style="color:#d6d3d1">sem meta</span>',
-      'meta é piso (quanto maior, melhor)'));
-  }
-  // 4) LUCRO LÍQUIDO — %
-  {
-    const rpct = pctDe(lucroReal);
-    const meta = metaPctMedia('lucro');
-    const cor = meta>0 ? (rpct>=meta ? '#16a34a' : '#d97706') : '#d6d3d1';
-    const max = Math.max(meta*1.8, Math.abs(rpct)*1.2, 50);
-    cards.push(cardGauge('Lucro Líquido (%)',
-      meta>0 ? speedometerSVG(rpct/max, meta/max, cor, rpct.toFixed(1)+'%') : gaugeVazioPct(rpct),
-      rpct.toFixed(1)+'%', meta>0?('meta: '+meta.toFixed(1)+'%'):'meta: <span style="color:#d6d3d1">sem meta</span>',
-      'meta é piso (quanto maior, melhor)'));
-  }
+  // 1) VENDA — R$ (piso)
+  { const meta = metaDe('venda');
+    cards.push(montarCardMeta({ titulo:'Venda', modo:'piso', real:vendaReal, meta,
+      max:Math.max(meta*1.25, vendaReal*1.1, 1), ...emR$ })); }
+  // 2) CPV — % (teto)
+  { const r = pctDe(cpvReal), meta = metaPctMedia('cpv');
+    cards.push(montarCardMeta({ titulo:'CPV', modo:'teto', real:r, meta,
+      max:Math.max(meta*1.6, r*1.15, 1), ...emPct })); }
+  // 3) MARGEM DE CONTRIBUIÇÃO — % (piso)
+  { const r = pctDe(mcReal), meta = metaPctMedia('mc');
+    cards.push(montarCardMeta({ titulo:'Margem de Contribuição', modo:'piso', real:r, meta,
+      max:Math.max(meta*1.5, r*1.15, 1), ...emPct })); }
+  // 4) LUCRO LÍQUIDO — % (piso)
+  { const r = pctDe(lucroReal), meta = metaPctMedia('lucro');
+    cards.push(montarCardMeta({ titulo:'Lucro Líquido', modo:'piso', real:r, meta,
+      max:Math.max(meta*1.8, Math.abs(r)*1.2, 1), ...emPct })); }
 
   wrap.innerHTML = cards.join('');
-}
-function cardGauge(titulo, svg, valorTxt, metaTxt, dica) {
-  return `<div style="background:#fff;border:1px solid #f5f4f2;border-radius:14px;padding:14px 12px;text-align:center;">
-    <div style="font-size:12px;font-weight:700;color:#57534e;margin-bottom:4px;min-height:30px;display:flex;align-items:center;justify-content:center;">${titulo}</div>
-    <div style="display:flex;justify-content:center;">${svg}</div>
-    <div style="margin-top:4px;font-family:'DM Mono',monospace;font-size:14px;font-weight:800;color:#1f2937;">${valorTxt}</div>
-    <div style="font-size:11px;color:#a8a29e;margin-top:2px;">${metaTxt}</div>
-    <div style="font-size:10px;color:#a8a29e;margin-top:3px;">${dica}</div>
-  </div>`;
-}
-function gaugeVazio() {
-  return `<div style="width:100%;max-width:210px;height:118px;display:flex;align-items:center;justify-content:center;color:#d6d3d1;font-size:12px;">Sem meta definida</div>`;
-}
-function gaugeVazioPct(rpct) {
-  return `<div style="width:100%;max-width:210px;height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#a8a29e;">
-    <div style="font-size:24px;font-weight:800;color:#1f2937;font-family:Sora,sans-serif;">${rpct.toFixed(1)}%</div>
-    <div style="font-size:11px;color:#d6d3d1;">sem meta definida</div></div>`;
 }
 
 // ── Modal de cadastro de metas ──
@@ -12388,6 +12739,8 @@ function validarParcelasPagasForm(containerid, n, banco) {
   const st = _statusParcelasForm(containerid, n);
   const rot = _ehParcelaReceber(containerid) ? 'recebimento' : 'pagamento';
   if (st.faltaData) { alert(`Informe a data do ${rot} de cada parcela marcada.`); return false; }
+  const iFut = st.dtpagos.findIndex(d => dataPagRecFutura(d));
+  if (iFut >= 0 && !bloquearDataFutura(st.dtpagos[iFut], `${rot} da parcela ${iFut + 1}`, `${containerid}-dp${iFut + 1}`)) return false;
   if (st.qtd > 0 && !banco) { alert('Selecione o banco/conta antes de salvar: parcelas marcadas como pagas/recebidas precisam ter um banco vinculado.'); return false; }
   return true;
 }
@@ -13364,6 +13717,7 @@ async function confirmarRecebido() {
   const banco=document.getElementById('modal-recebido-banco').value;
   const tipoPag=document.getElementById('modal-recebido-tipo-pag').value;
   if(!dtrecebido){ alert('Informe a data do recebimento.'); return; }
+  if (!bloquearDataFutura(dtrecebido, 'recebimento', 'modal-recebido-data')) return;
   if(!banco){ alert('Selecione o banco/conta em que o valor foi recebido.'); return; }
   const l=db.lancreceber.find(x=>x.id===id); if(!l) return;
   const n = l.parcelas || 1;
@@ -13902,7 +14256,8 @@ function renderDfc() {
   // 1. Recebimentos realizados → Categoria do lançamento, senão do produto de venda, senão Receitas
   if (inclReceber) {
     getParcelasReceber(true).forEach(p => {
-      const dt = p.dtrecebido || p.venc;
+      if (!p.isRecebido || !p.dtrecebido || dataPagRecFutura(p.dtrecebido)) return; // aberto não entra
+      const dt = p.dtrecebido;
       const m = _mesCaixa(dt);
       if (!m) return;
       const catObj  = p.catId ? db.dfc_cats.find(x => x.id === p.catId) : null;
@@ -13922,7 +14277,8 @@ function renderDfc() {
     // Fatura de cartão paga = saída de caixa aberta pelas categorias das despesas;
     // contas pagas "via cartão" saem do caixa só quando a fatura é paga.
     getParcelasGerenciais(true).forEach(p => {
-      const dt = p.dtpago || p.venc;
+      if (!p.isPago || !p.dtpago || dataPagRecFutura(p.dtpago)) return; // aberto não entra
+      const dt = p.dtpago;
       const m = _mesCaixa(dt);
       if (!m) return;
       const catObj  = p.catId ? db.dfc_cats.find(x => x.id === p.catId) : null;
@@ -13937,8 +14293,10 @@ function renderDfc() {
     });
   }
 
-  // 3. Lançamentos extras DFC
-  db.dfc_lans.forEach(l => {
+  // 3. Lançamentos extras DFC: NÃO entram. Não são pagamentos/recebimentos
+  // reais (não passam por conta bancária) e quebrariam a conciliação com o
+  // saldo dos bancos. Mantido desativado para referência.
+  [].forEach(l => {
     if (!l.data) return;
     const parts = l.data.split('-');
     if (parseInt(parts[0]) !== ano) return;
@@ -14003,6 +14361,82 @@ function renderDfc() {
   const entradaGrupos = grupos.filter(g => g.tipo === 'entrada');
   const saidaGrupos   = grupos.filter(g => g.tipo !== 'entrada');
 
+  // ── Fluxo de Caixa Acumulado conciliado com o saldo dos bancos ──
+  // Parte do saldo das contas em 01/01 do ano e soma o que efetivamente
+  // passou pelos bancos em cada mês (mesmo critério de getBancoSaldo).
+  // Movimentos que não aparecem nas categorias (sem conta, sem grupo,
+  // de outra empresa na mesma conta...) entram numa linha de ajuste, para
+  // que a última linha seja SEMPRE igual ao saldo dos bancos.
+  const conciliar = inclPagar && inclReceber && (db.bancos || []).length > 0;
+  let linhasAcumulado = '', notaConc = '';
+  const _cel = (v, extra) => `<td${extra ? ' ' + extra : ''}>${fmtDfcResult(v)}</td>`;
+  if (conciliar) {
+    const ids = new Set(db.bancos.map(b => b.id));
+    const iniAno = `${ano}-01-01`;
+    let abertura = db.bancos.reduce((t, b) => t + (b.saldo_inicial || 0), 0);
+    const movBanco = {}; for (let m = 1; m <= 12; m++) movBanco[m] = 0;
+    let futQtd = 0, futVal = 0;
+    const _mov = (dt, v) => {
+      if (!dt) return;
+      if (dataPagRecFutura(dt)) { futQtd++; futVal += v; return; }
+      if (dt < iniAno) { abertura += v; return; }
+      const m = _mesCaixa(dt);
+      if (m) movBanco[m] += v;
+    };
+    getParcelasReceberBanco(true).forEach(p => { if (ids.has(p.banco) && p.dtrecebido) _mov(p.dtrecebido, (p.valParc || 0)); });
+    getParcelasBanco(true).forEach(p => { if (ids.has(p.banco) && p.dtpago) _mov(p.dtpago, -(p.valParc || 0)); });
+    (db.transferencias || []).forEach(t => {
+      const v = (ids.has(t.destino) ? (t.valor || 0) : 0) - (ids.has(t.origem) ? (t.valor || 0) : 0);
+      if (!v) return;
+      if (!t.data) { abertura += v; return; }
+      _mov(String(t.data).slice(0, 10), v);
+    });
+    const ajuste = {}; let temAjuste = false, totAjuste = 0;
+    for (let m = 1; m <= 12; m++) {
+      ajuste[m] = Math.round((movBanco[m] - liquido[m]) * 100) / 100;
+      if (Math.abs(ajuste[m]) >= 0.01) temAjuste = true; else ajuste[m] = 0;
+      totAjuste += ajuste[m];
+    }
+    const acum = {}; let ac = abertura;
+    for (let m = 1; m <= 12; m++) { ac += liquido[m] + ajuste[m]; acum[m] = Math.round(ac * 100) / 100; }
+    const saldoBancos = db.bancos.reduce((t, b) => t + getBancoSaldo(b), 0);
+    const anoAtual = parseInt(today().slice(0, 4));
+    const mesAtual = parseInt(today().slice(5, 7));
+    const ultimoMes = ano === anoAtual ? mesAtual : 12;
+
+    const cellsAb = Array.from({length:12}, (_, i) => {
+      const v = i === 0 ? abertura : acum[i];
+      return `<td style="color:#57534e">${fmtDfcResult(v)}</td>`;
+    }).join('');
+    linhasAcumulado += `<tr class="dfc-row-sub"><td>🏦 Saldo inicial dos bancos (início do mês)</td>${cellsAb}<td class="dfc-col-total">${fmtDfcResult(abertura)}</td></tr>`;
+    if (temAjuste) {
+      const cellsAj = Array.from({length:12}, (_, i) => ajuste[i+1]
+        ? `<td style="color:#b45309">${fmtDfcResult(ajuste[i+1])}</td>` : '<td><span class="dfc-val-zero">—</span></td>').join('');
+      linhasAcumulado += `<tr class="dfc-row-sub"><td title="Pagamentos/recebimentos que passaram pelos bancos mas não estão nas categorias acima (ou o contrário): sem conta bancária, sem grupo de DFC, de outra empresa na mesma conta, transferências para contas excluídas.">⚖️ Ajuste de conciliação bancária</td>${cellsAj}<td class="dfc-col-total" style="color:#b45309">${fmtDfcResult(totAjuste)}</td></tr>`;
+    }
+    const cellsAc = Array.from({length:12}, (_, i) => {
+      const futuro = (ano > anoAtual) || (ano === anoAtual && i + 1 > mesAtual);
+      return futuro ? '<td><span class="dfc-val-zero">—</span></td>' : `<td>${fmtDfcResult(acum[i+1])}</td>`;
+    }).join('');
+    const finalAc = ano > anoAtual ? abertura : acum[ultimoMes];
+    const rlCls = 'dfc-row-total-rl' + (finalAc < 0 ? ' negativo' : '');
+    linhasAcumulado += `<tr class="${rlCls}"><td>📈 Fluxo de Caixa Acumulado (= saldo dos bancos)</td>${cellsAc}<td class="dfc-col-total">${fmtDfcResult(finalAc)}</td></tr>`;
+
+    const partes = [];
+    if (ano === anoAtual) {
+      const dif = Math.round((saldoBancos - finalAc) * 100) / 100;
+      partes.push(`Saldo atual dos bancos: <b>${fmtBRL(saldoBancos)}</b>` + (Math.abs(dif) < 0.01 ? ' ✅ confere com o acumulado.' : ` — diferença de <b>${fmtBRL(dif)}</b>.`));
+    }
+    if (futQtd) partes.push(`⚠️ ${futQtd} pagamento(s)/recebimento(s) com data futura (${fmtBRL(futVal)}) estão no saldo do banco mas não no DFC. Corrija a data (máximo: hoje) ou volte para "em aberto".`);
+    if (temAjuste) partes.push('A linha <b>Ajuste de conciliação bancária</b> mostra o que passou pelos bancos e não está nas categorias acima (ex.: lançamento sem conta bancária ou sem grupo de DFC).');
+    if (partes.length) notaConc = `<div style="padding:10px 14px;font-size:12px;color:#57534e;border-top:1px solid #f5f4f2">${partes.join('<br>')}</div>`;
+  } else {
+    let ac = 0; const acum = {};
+    for (let m = 1; m <= 12; m++) { ac += liquido[m]; acum[m] = ac; }
+    linhasAcumulado = linhaResult('📈 Fluxo de Caixa Acumulado', acum, ac);
+    notaConc = `<div style="padding:10px 14px;font-size:12px;color:#57534e;border-top:1px solid #f5f4f2">Marque <b>Contas a Pagar</b> e <b>Contas a Receber</b> para o acumulado partir do saldo dos bancos e fechar com ele.</div>`;
+  }
+
   const html = `<table class="dfc-table">
     <thead><tr><th>Categoria</th>${mesesHeader}</tr></thead>
     <tbody>
@@ -14010,13 +14444,9 @@ function renderDfc() {
       ${saidaGrupos.length ? `<tr class="dfc-row-group"><td colspan="14">📤 SAÍDAS</td></tr>` + saidaGrupos.map(linha).join('') : ''}
       <tr><td colspan="14" style="padding:4px"></td></tr>
       ${linhaResult('🟢 Resultado Líquido (Entradas − Saídas)', liquido, totalLiquido)}
-      ${(() => { // Fluxo de caixa acumulado (após pagamentos e recebimentos)
-        let ac = 0; const acum = {};
-        for (let m = 1; m <= 12; m++) { ac += liquido[m]; acum[m] = ac; }
-        return linhaResult('📈 Fluxo de Caixa Acumulado', acum, ac);
-      })()}
+      ${linhasAcumulado}
     </tbody>
-  </table>`;
+  </table>${notaConc}`;
 
   wrap.innerHTML = html;
 
@@ -16838,6 +17268,12 @@ function debugBancoSaldo(nomeBanco) {
 // ══════════════════════════════════════════════════════════
 // FLUXO DE CAIXA DIÁRIO DOS BANCOS (dia 01 a 31, estático)
 // ══════════════════════════════════════════════════════════
+var _fbModo = 'todos';
+function bkFluxoModo(m) {
+  _fbModo = m;
+  document.querySelectorAll('#fb-modo button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  renderFluxoBancoDiario();
+}
 function renderFluxoBancoDiario() {
   const wrap = document.getElementById('fluxo-banco-wrap');
   if (!wrap) return;
@@ -16850,26 +17286,24 @@ function renderFluxoBancoDiario() {
   const ano = parseInt(anoEl.value) || new Date().getFullYear();
   const bancoSel = bancoEl ? bancoEl.value : '';
 
-  // Logo grande da conta selecionada, ao lado dos filtros
+  // Logo da conta selecionada, no cabeçalho do card
   const logoBox = document.getElementById('fb-logo-destaque');
   if (logoBox) {
     const bSel = bancoSel ? db.bancos.find(x => x.id === bancoSel) : null;
     if (bSel) {
-      const ic = bancoIconeHtml(bSel, 72);
-      logoBox.innerHTML = `<div class="fb-logo-img">${ic.startsWith('<img') ? ic : `<span style="font-size:44px;line-height:1">${ic}</span>`}</div>
-        <div><div class="fb-logo-nome">${bSel.nome}</div><div class="fb-logo-sub">${[bSel.tipo, bSel.banco, bSel.agencia ? 'Ag: ' + bSel.agencia : '', bSel.conta ? 'CC: ' + bSel.conta : ''].filter(Boolean).join(' · ')}</div></div>`;
+      const ic = bancoIconeHtml(bSel, 48);
+      logoBox.innerHTML = `<div class="fb-logo-img">${ic.startsWith('<img') ? ic : `<span style="font-size:28px;line-height:1">${ic}</span>`}</div>
+        <div><div class="fb-logo-nome">${esc(bSel.nome)}</div><div class="fb-logo-sub">${[bSel.tipo, bSel.banco, bSel.agencia ? 'Ag: ' + bSel.agencia : '', bSel.conta ? 'CC: ' + bSel.conta : ''].filter(Boolean).map(esc).join(' · ')}</div></div>`;
       logoBox.style.display = 'flex';
     } else { logoBox.style.display = 'none'; logoBox.innerHTML = ''; }
   }
 
   if (!db.bancos.length) {
-    wrap.innerHTML = '<div class="empty-state" style="padding:24px">Cadastre uma conta bancária para visualizar o fluxo de caixa.</div>';
+    wrap.innerHTML = '<div class="bk-vazio"><div>📊</div>Cadastre uma conta bancária para visualizar o fluxo de caixa.</div>';
     return;
   }
 
-  // Conjunto de contas consideradas: a selecionada, ou todas as cadastradas
   const bancoIds = bancoSel ? [bancoSel] : db.bancos.map(b => b.id);
-
   const diasNoMes = new Date(ano, mes, 0).getDate();
   const mesStr = String(mes).padStart(2, '0');
   const primeiroDiaMes = `${ano}-${mesStr}-01`;
@@ -16889,24 +17323,24 @@ function renderFluxoBancoDiario() {
     if (bancoIds.includes(t.origem)) saldoAcum -= (t.valor || 0);
     if (bancoIds.includes(t.destino)) saldoAcum += (t.valor || 0);
   });
+  const saldoInicialMes = saldoAcum;
 
   // Movimentação real (paga/recebida) de cada dia do mês selecionado
   const porDia = {};
-  for (let d = 1; d <= 31; d++) porDia[d] = { entrada: 0, saida: 0 };
-
+  for (let d = 1; d <= 31; d++) porDia[d] = { entrada: 0, saida: 0, n: 0 };
   getParcelasBanco(true).forEach(p => {
     if (!bancoIds.includes(p.banco) || !p.dtpago) return;
     const parts = p.dtpago.split('-');
     if (parseInt(parts[0]) !== ano || parseInt(parts[1]) !== mes) return;
     const d = parseInt(parts[2]);
-    if (porDia[d]) porDia[d].saida += (p.valParc || 0);
+    if (porDia[d]) { porDia[d].saida += (p.valParc || 0); porDia[d].n++; }
   });
   getParcelasReceberBanco(true).forEach(p => {
     if (!bancoIds.includes(p.banco) || !p.dtrecebido) return;
     const parts = p.dtrecebido.split('-');
     if (parseInt(parts[0]) !== ano || parseInt(parts[1]) !== mes) return;
     const d = parseInt(parts[2]);
-    if (porDia[d]) porDia[d].entrada += (p.valParc || 0);
+    if (porDia[d]) { porDia[d].entrada += (p.valParc || 0); porDia[d].n++; }
   });
   (db.transferencias || []).forEach(t => {
     if (!t.data) return;
@@ -16914,50 +17348,63 @@ function renderFluxoBancoDiario() {
     if (parseInt(parts[0]) !== ano || parseInt(parts[1]) !== mes) return;
     const d = parseInt(parts[2]);
     if (!porDia[d]) return;
-    if (bancoIds.includes(t.origem)) porDia[d].saida += (t.valor || 0);
-    if (bancoIds.includes(t.destino)) porDia[d].entrada += (t.valor || 0);
+    if (bancoIds.includes(t.origem)) { porDia[d].saida += (t.valor || 0); porDia[d].n++; }
+    if (bancoIds.includes(t.destino)) { porDia[d].entrada += (t.valor || 0); porDia[d].n++; }
   });
 
   const todayStr = today();
-  let totalEntradas = 0, totalSaidas = 0;
+  const semana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let totalEntradas = 0, totalSaidas = 0, diasMov = 0;
+  let maiorE = { v: 0, d: null }, maiorS = { v: 0, d: null }, menorSaldo = { v: Infinity, d: null };
   const linhas = [];
-  for (let d = 1; d <= 31; d++) {
-    if (d > diasNoMes) {
-      linhas.push(`<tr class="fb-dia-inexistente"><td>${d}</td><td colspan="4" style="text-align:center">—</td></tr>`);
-      continue;
-    }
-    const { entrada, saida } = porDia[d];
+  for (let d = 1; d <= diasNoMes; d++) {
+    const { entrada, saida, n } = porDia[d];
     saldoAcum += (entrada - saida);
     totalEntradas += entrada; totalSaidas += saida;
+    const temMov = entrada > 0.005 || saida > 0.005;
+    if (temMov) diasMov++;
+    if (entrada > maiorE.v) maiorE = { v: entrada, d };
+    if (saida > maiorS.v) maiorS = { v: saida, d };
     const dateStr = `${ano}-${mesStr}-${String(d).padStart(2, '0')}`;
+    const futuro = dateStr > todayStr;
+    if (!futuro && saldoAcum < menorSaldo.v) menorSaldo = { v: saldoAcum, d };
+    if (_fbModo === 'mov' && !temMov) continue;
+    const dow = new Date(ano, mes - 1, d).getDay();
     const isToday = dateStr === todayStr;
-    const saldoCls = saldoAcum >= 0 ? 'dfc-val-pos' : 'dfc-val-neg';
-    linhas.push(`<tr class="${isToday ? 'fb-dia-hoje' : ''}">
-      <td style="font-weight:700">${(entrada > 0.005 || saida > 0.005) ? `<span class="bx-cell" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${String(d).padStart(2, '0')}</span>` : String(d).padStart(2, '0')}${isToday ? ' <span style="font-size:9px;color:#ea580c">HOJE</span>' : ''}</td>
-      <td>${entrada > 0.005 ? `<span class="dfc-val-pos bx-cell" onclick="bxFluxoDia('${dateStr}','ET')" title="Ver entradas do dia">+ ${fmtBRL(entrada)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
-      <td>${saida > 0.005 ? `<span class="dfc-val-neg bx-cell" onclick="bxFluxoDia('${dateStr}','ST')" title="Ver saídas do dia">− ${fmtBRL(saida)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
-      <td>${Math.abs(entrada - saida) > 0.005 ? `<span class="bx-cell" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${fmtDreVal(entrada - saida)}</span>` : '<span class="dfc-val-zero">—</span>'}</td>
-      <td class="${saldoCls}" style="font-weight:700">${fmtBRL(saldoAcum)}</td>
+    const cls = [isToday ? 'hoje' : '', futuro ? 'fut' : '', (dow === 0 || dow === 6) ? 'fds' : ''].filter(Boolean).join(' ');
+    const diaHtml = `<span class="bk-dia"><span class="bk-dia-n">${String(d).padStart(2, '0')}</span><span class="bk-dia-w">${semana[dow]}</span>${isToday ? '<span class="bk-hoje-tag">HOJE</span>' : ''}${n ? `<span style="font-size:11px;color:#a8a29e">${n} lanç.</span>` : ''}</span>`;
+    linhas.push(`<tr class="${cls}">
+      <td>${temMov ? `<span class="bx-cell" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${diaHtml}</span>` : diaHtml}</td>
+      <td>${entrada > 0.005 ? `<span class="pos bx-cell" onclick="bxFluxoDia('${dateStr}','ET')" title="Ver entradas do dia">+ ${fmtBRL(entrada)}</span>` : '<span class="z">—</span>'}</td>
+      <td>${saida > 0.005 ? `<span class="neg bx-cell" onclick="bxFluxoDia('${dateStr}','ST')" title="Ver saídas do dia">− ${fmtBRL(saida)}</span>` : '<span class="z">—</span>'}</td>
+      <td>${Math.abs(entrada - saida) > 0.005 ? `<span class="bx-cell ${entrada - saida >= 0 ? 'pos' : 'neg'}" onclick="bxFluxoDia('${dateStr}')" title="Ver lançamentos do dia">${bkSinal(entrada - saida)}</span>` : '<span class="z">—</span>'}</td>
+      <td class="saldo ${futuro ? '' : (saldoAcum >= 0 ? '' : 'neg')}">${fmtBRL(saldoAcum)}</td>
     </tr>`);
   }
+  if (!linhas.length) linhas.push(`<tr><td colspan="5" style="text-align:center;padding:30px;color:#a8a29e;font-family:inherit">Nenhuma movimentação neste mês.</td></tr>`);
 
-  const nomeBanco = bancoSel ? getBancoNome(bancoSel) : 'Todas as Contas';
-  const saldoMesCor = (totalEntradas - totalSaidas) >= 0 ? '#166534' : '#dc2626';
-  const saldoFinalCor = saldoAcum >= 0 ? '#166534' : '#dc2626';
+  const nomeBanco = bancoSel ? getBancoNome(bancoSel) : 'Todas as contas';
+  const res = totalEntradas - totalSaidas;
+  const kpi = (lbl, val, sub, cor, onclick, dest) =>
+    `<div class="bk-kpi ${dest ? 'dest' : ''}" style="--c:${cor}" onclick="${onclick}" title="Ver lançamentos"><span>${lbl}</span><b>${val}</b><small>${sub}</small></div>`;
 
   wrap.innerHTML = `
-    <div class="grid4" style="margin-bottom:16px;">
-      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes('ET')" title="Ver entradas do mês"><div class="kpi-val" style="color:#166534">+ ${fmtBRL(totalEntradas)}</div><div class="kpi-lbl">Entradas no mês</div></div>
-      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes('ST')" title="Ver saídas do mês"><div class="kpi-val" style="color:#dc2626">− ${fmtBRL(totalSaidas)}</div><div class="kpi-lbl">Saídas no mês</div></div>
-      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes()" title="Ver todos os lançamentos do mês"><div class="kpi-val" style="color:${saldoMesCor}">${fmtDreVal(totalEntradas - totalSaidas)}</div><div class="kpi-lbl">Saldo do mês</div></div>
-      <div class="card kpi bx-kpi-click" onclick="bxFluxoMes()" title="Ver todos os lançamentos do mês"><div class="kpi-val" style="color:${saldoFinalCor}">${fmtBRL(saldoAcum)}</div><div class="kpi-lbl">Saldo final — ${nomeBanco}</div></div>
+    <div class="bk-kpis">
+      ${kpi('Saldo inicial', fmtBRL(saldoInicialMes), `em 01/${mesStr}/${ano}`, '#57534e', 'bxFluxoMes()')}
+      ${kpi('Entradas', '+ ' + fmtBRL(totalEntradas), maiorE.d ? `maior: dia ${String(maiorE.d).padStart(2, '0')} · ${fmtBRL(maiorE.v)}` : 'sem entradas', '#16a34a', "bxFluxoMes('ET')")}
+      ${kpi('Saídas', '− ' + fmtBRL(totalSaidas), maiorS.d ? `maior: dia ${String(maiorS.d).padStart(2, '0')} · ${fmtBRL(maiorS.v)}` : 'sem saídas', '#dc2626', "bxFluxoMes('ST')")}
+      ${kpi('Resultado do mês', bkSinal(res), `${diasMov} dia${diasMov === 1 ? '' : 's'} com movimento`, res >= 0 ? '#16a34a' : '#dc2626', 'bxFluxoMes()')}
+      ${kpi('Saldo final', fmtBRL(saldoAcum), menorSaldo.d ? `mínimo: ${fmtBRL(menorSaldo.v)} (dia ${String(menorSaldo.d).padStart(2, '0')})` : esc(nomeBanco), saldoAcum >= 0 ? '#ea580c' : '#dc2626', 'bxFluxoMes()', true)}
     </div>
-    <div style="max-height:520px;overflow-y:auto">
-      <table class="dfc-table" style="width:100%">
-        <thead><tr><th style="text-align:left">Dia</th><th>Entradas</th><th>Saídas</th><th>Saldo do Dia</th><th>Saldo Acumulado</th></tr></thead>
+    <div class="bk-tab-wrap">
+      <table class="bk-tab">
+        <thead><tr><th>Dia</th><th>Entradas</th><th>Saídas</th><th>Saldo do dia</th><th>Saldo acumulado</th></tr></thead>
         <tbody>${linhas.join('')}</tbody>
+        <tfoot><tr><td>Total do mês · ${esc(nomeBanco)}</td><td class="pos">+ ${fmtBRL(totalEntradas)}</td><td class="neg">− ${fmtBRL(totalSaidas)}</td><td class="${res >= 0 ? 'pos' : 'neg'}">${bkSinal(res)}</td><td>${fmtBRL(saldoAcum)}</td></tr></tfoot>
       </table>
     </div>`;
+
+  if (charts['fb-chart']) { try { charts['fb-chart'].destroy(); } catch (e) {} delete charts['fb-chart']; }
 }
 
 // ── Extrato da conta para impressão / PDF (retrato ou paisagem) ──────────
@@ -17658,36 +18105,188 @@ function clearBanco() {
   document.getElementById('bnk-tipo').value='';
   document.getElementById('bnk-saldo').value='';
 }
+const bkSinal = v => (v >= 0 ? '+ ' : '− ') + fmtBRL(Math.abs(v));
+// ── Bancos / Caixas — helpers do layout novo ─────────────────────────────
+const BK_CORES = ['#ea580c','#2563eb','#16a34a','#9333ea','#0d9488','#d97706','#db2777','#0891b2','#65a30d','#57534e'];
+function bkCorConta(id) {
+  const i = db.bancos.findIndex(b => b.id === id);
+  return BK_CORES[(i < 0 ? 0 : i) % BK_CORES.length];
+}
+// Todos os movimentos efetivados por conta: { banco, data, valor(+/-) }
+// (mesmos critérios de getBancoSaldo e do Fluxo de Caixa Diário)
+function bkMovimentos() {
+  const m = [];
+  getParcelasReceberBanco(true).forEach(p => { if (p.banco && p.dtrecebido) m.push({ banco: p.banco, data: p.dtrecebido, valor: (p.valParc || 0) }); });
+  getParcelasBanco(true).forEach(p => { if (p.banco && p.dtpago) m.push({ banco: p.banco, data: p.dtpago, valor: -(p.valParc || 0) }); });
+  (db.transferencias || []).forEach(t => {
+    if (!t.data) return;
+    if (t.origem) m.push({ banco: t.origem, data: t.data, valor: -(t.valor || 0), transf: true });
+    if (t.destino) m.push({ banco: t.destino, data: t.data, valor: (t.valor || 0), transf: true });
+  });
+  return m;
+}
+const bkAddDias = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`; };
+// Série de saldo diário (fim do dia) de um conjunto de contas, de 'ini' a 'fim'
+function bkSerieSaldo(movs, bancoIds, ini, fim) {
+  const set = new Set(bancoIds);
+  let s = db.bancos.filter(b => set.has(b.id)).reduce((t, b) => t + (b.saldo_inicial || 0), 0);
+  const porDia = {};
+  movs.forEach(mv => {
+    if (!set.has(mv.banco)) return;
+    if (mv.data < ini) s += mv.valor;
+    else if (mv.data <= fim) porDia[mv.data] = (porDia[mv.data] || 0) + mv.valor;
+  });
+  const out = [];
+  for (let d = ini; d <= fim; d = bkAddDias(d, 1)) { s += (porDia[d] || 0); out.push(Math.round(s * 100) / 100); }
+  return out;
+}
+let _bkSparkN = 0;
+function bkSparkSVG(vals, cor, w, h, cls) {
+  if (!vals.length) return '';
+  const min = Math.min(...vals), max = Math.max(...vals), rg = (max - min) || 1;
+  const pad = 3, step = vals.length > 1 ? (w / (vals.length - 1)) : w;
+  const pts = vals.map((v, i) => [i * step, pad + (h - pad * 2) * (1 - (v - min) / rg)]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const area = line + ` L ${w} ${h} L 0 ${h} Z`;
+  const id = 'bkg' + (++_bkSparkN);
+  const last = pts[pts.length - 1];
+  const zeroY = (min < 0 && max > 0) ? (pad + (h - pad * 2) * (1 - (0 - min) / rg)).toFixed(1) : null;
+  return `<svg class="${cls || 'bk-spark'}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${cor}" stop-opacity=".28"/><stop offset="1" stop-color="${cor}" stop-opacity="0"/></linearGradient></defs>
+    ${zeroY ? `<line x1="0" x2="${w}" y1="${zeroY}" y2="${zeroY}" stroke="#a8a29e" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke" opacity=".6"/>` : ''}
+    <path d="${area}" fill="url(#${id})"/>
+    <path d="${line}" fill="none" stroke="${cor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.8" fill="${cor}"/>
+  </svg>`;
+}
+const BK_IC = {
+  ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+  flx: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></svg>',
+  edt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>'
+};
+// Abre o fluxo diário já filtrado na conta e rola até ele
+function bkVerFluxo(id) {
+  const sel = document.getElementById('fb-banco');
+  if (sel) sel.value = id || '';
+  renderFluxoBancoDiario();
+  const c = document.getElementById('bk-fluxo-card');
+  if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function renderBancos() {
   const el = document.getElementById('bancos-list');
+  if (!el) return;
+  el.classList.add('bk-grid');
+  const hero = document.getElementById('bk-hero');
+  const qtd = document.getElementById('bk-qtd');
+  const btnAdd = `<button type="button" class="bk-add" onclick="toggleFormPanel('form-bnk',document.getElementById('btn-novo-bnk'))"><span>+</span>Adicionar conta</button>`;
   if (!db.bancos.length) {
-    el.innerHTML='<div class="empty-state" style="padding:24px">Nenhuma conta cadastrada.</div>'; return;
+    el.innerHTML = `<div class="bk-vazio"><div>🏦</div><b>Nenhuma conta cadastrada.</b><br><span style="font-size:12px;color:#a8a29e">Cadastre seus bancos e caixas para acompanhar saldos e fluxo.</span></div>`;
+    if (hero) hero.style.display = 'none';
+    if (qtd) qtd.textContent = '';
+    return;
   }
-  el.innerHTML = db.bancos.map(b => {
+  _bkSparkN = 0;
+  const hoje = today();
+  const iniMes = hoje.slice(0, 8) + '01';
+  const ini30 = bkAddDias(hoje, -29), ini90 = bkAddDias(hoje, -89);
+  const movs = bkMovimentos();
+
+  // Dados por conta
+  const contas = db.bancos.map(b => {
     const saldo = getBancoSaldo(b);
-    const saldoCls = saldo >= 0 ? 'saldo-positivo' : 'saldo-negativo';
-    const icon = bancoIconeHtml(b, 42);
-    return `<div class="banco-card">
-      <div class="banco-icon">${icon}</div>
-      <div class="banco-info bx-click" onclick="abrirLancamentosBanco('${b.id}')" title="Ver lançamentos desta conta">
-        <div class="banco-nome">${b.nome}</div>
-        <div class="banco-tipo">
-          <span class="badge-tipo-banco">${b.tipo}</span>
-          ${b.banco ? ' · '+b.banco : ''}
-          ${b.agencia ? ' · Ag: '+b.agencia : ''}
-          ${b.conta ? ' · CC: '+b.conta : ''}
+    const meus = movs.filter(m => m.banco === b.id);
+    let ent = 0, sai = 0, ult = '';
+    meus.forEach(m => {
+      if (m.data > ult) ult = m.data;
+      if (m.data >= iniMes && m.data <= hoje) { if (m.valor >= 0) ent += m.valor; else sai -= m.valor; }
+    });
+    return { b, saldo, ent, sai, ult, cor: bkCorConta(b.id), serie: bkSerieSaldo(meus, [b.id], ini30, hoje) };
+  });
+  const total = contas.reduce((s, c) => s + c.saldo, 0);
+  const somaPos = contas.reduce((s, c) => s + Math.max(0, c.saldo), 0);
+
+  // Consolidado (transferências entre contas próprias não contam como entrada/saída)
+  let entMes = 0, saiMes = 0;
+  movs.forEach(m => { if (m.transf || m.data < iniMes || m.data > hoje) return; if (m.valor >= 0) entMes += m.valor; else saiMes -= m.valor; });
+  const serie90 = bkSerieSaldo(movs, db.bancos.map(b => b.id), ini90, hoje);
+  const saldo30 = serie90[serie90.length - 31] != null ? serie90[serie90.length - 31] : serie90[0];
+  const var30 = total - saldo30;
+  const minS = Math.min(...serie90), maxS = Math.max(...serie90);
+  const negs = contas.filter(c => c.saldo < -0.005);
+  const mesNome = `${mesesAbr[parseInt(hoje.slice(5, 7))]}/${hoje.slice(2, 4)}`;
+
+  if (hero) {
+    hero.style.display = '';
+    const comp = contas.filter(c => c.saldo > 0.005).sort((a, b) => b.saldo - a.saldo);
+    hero.innerHTML = `
+      <div class="bk-hero-grid">
+        <div>
+          <div class="bk-hero-lbl">Saldo consolidado</div>
+          <div class="bk-hero-val ${total < 0 ? 'neg' : ''}">${fmtBRL(total)}</div>
+          <div class="bk-hero-var ${var30 >= 0 ? 'up' : 'down'}">${var30 >= 0 ? '▲' : '▼'} ${fmtBRL(Math.abs(var30))} <span>em 30 dias</span></div>
+          <div class="bk-hero-meta">Posição em ${fmtDate(hoje)} · ${db.bancos.length} conta${db.bancos.length === 1 ? '' : 's'}</div>
+        </div>
+        <div class="bk-hero-chart">
+          <div class="bk-hero-lbl"><span>Evolução do saldo · 90 dias</span><b>${fmtBRL(minS)} – ${fmtBRL(maxS)}</b></div>
+          ${bkSparkSVG(serie90, '#fb923c', 400, 96, 'bk-hero-spark')}
+          <div class="bk-hero-axis"><span>${fmtDate(ini90).slice(0, 5)}</span><span>${fmtDate(bkAddDias(hoje, -45)).slice(0, 5)}</span><span>Hoje</span></div>
+        </div>
+        <div class="bk-hero-stats">
+          <div class="bk-hs click" onclick="bkVerFluxo('')" title="Ver fluxo do mês"><span>Entradas ${mesNome}</span><b class="pos">+ ${fmtBRL(entMes)}</b></div>
+          <div class="bk-hs click" onclick="bkVerFluxo('')" title="Ver fluxo do mês"><span>Saídas ${mesNome}</span><b class="neg">− ${fmtBRL(saiMes)}</b></div>
+          <div class="bk-hs"><span>Resultado ${mesNome}</span><b class="${entMes - saiMes >= 0 ? 'pos' : 'neg'}">${bkSinal(entMes - saiMes)}</b></div>
+          <div class="bk-hs" title="${negs.map(c => esc(c.b.nome)).join(', ')}"><span>Contas no negativo</span><b class="${negs.length ? 'neg' : 'pos'}">${negs.length ? negs.length + ' · ' + fmtBRL(negs.reduce((s, c) => s + c.saldo, 0)) : 'Nenhuma ✓'}</b></div>
         </div>
       </div>
-      <div class="banco-saldo bx-click" onclick="abrirLancamentosBanco('${b.id}')" title="Ver lançamentos desta conta">
-        <div class="banco-saldo-val ${saldoCls}">${fmtBRL(saldo)}</div>
-        <div class="banco-saldo-lbl">Saldo estimado<span class="bx-ver">· ver lançamentos ›</span></div>
+      ${comp.length ? `<div class="bk-comp">
+        <div class="bk-hero-lbl" style="margin-bottom:8px">Onde está o dinheiro</div>
+        <div class="bk-comp-bar">${comp.map(c => `<i style="width:${(c.saldo / somaPos * 100).toFixed(2)}%;background:${c.cor}" title="${esc(c.b.nome)}: ${fmtBRL(c.saldo)}"></i>`).join('')}</div>
+        <div class="bk-comp-leg">${comp.map(c => `<span><em style="background:${c.cor}"></em>${esc(c.b.nome)} <b>${(c.saldo / somaPos * 100).toFixed(1)}%</b></span>`).join('')}</div>
+      </div>` : ''}`;
+  }
+  if (qtd) qtd.textContent = `· ${db.bancos.length} cadastrada${db.bancos.length === 1 ? '' : 's'}`;
+
+  el.innerHTML = contas.map(c => {
+    const b = c.b, id = esc(b.id);
+    const ic = bancoIconeHtml(b, 46);
+    const sub = [b.banco, b.agencia ? 'Ag ' + b.agencia : '', b.conta ? 'CC ' + b.conta : ''].filter(Boolean).map(esc).join(' · ') || (esc(b.obs) || '—');
+    const pct = somaPos > 0 && c.saldo > 0 ? c.saldo / somaPos * 100 : 0;
+    const dias = c.ult ? diffDias(c.ult, hoje) : null;
+    const ultTxt = c.ult ? `<b>${fmtDate(c.ult)}</b> · ${dias === 0 ? 'hoje' : dias === 1 ? 'ontem' : 'há ' + dias + ' dias'}` : 'sem movimentação';
+    return `<div class="bk-card ${c.saldo < -0.005 ? 'neg' : ''}" style="--bk:${c.cor}">
+      <div class="bk-top">
+        <div class="bk-logo">${ic}</div>
+        <div class="bk-id" onclick="abrirLancamentosBanco('${id}')" title="Ver lançamentos desta conta">
+          <div class="bk-nome">${esc(b.nome)}</div>
+          <div class="bk-sub">${sub}</div>
+        </div>
+        <span class="bk-tipo">${esc(b.tipo || 'Conta')}</span>
       </div>
-      <div class="actions" style="margin-left:8px">
-        <button class="btn btn-secondary btn-sm" onclick="editBanco('${b.id}')">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteBanco('${b.id}')">Excluir</button>
+      <div class="bk-saldo-box" onclick="abrirLancamentosBanco('${id}')" title="Ver lançamentos desta conta">
+        <div style="min-width:0">
+          <div class="bk-saldo-lbl">Saldo atual</div>
+          <div class="bk-saldo ${c.saldo < -0.005 ? 'neg' : ''}">${fmtBRL(c.saldo)}</div>
+        </div>
+        ${bkSparkSVG(c.serie, c.saldo < -0.005 ? '#dc2626' : c.cor, 110, 40)}
+      </div>
+      <div class="bk-share"><div class="bk-share-bar"><i style="width:${pct.toFixed(1)}%"></i></div><b>${pct.toFixed(1)}%</b> do total</div>
+      <div class="bk-mes">
+        <div class="e" onclick="abrirLancamentosBanco('${id}','${iniMes}','${hoje}','ET')" title="Ver entradas do mês"><span>Entradas ${mesNome}</span><b>+ ${fmtBRL(c.ent)}</b></div>
+        <div class="s" onclick="abrirLancamentosBanco('${id}','${iniMes}','${hoje}','ST')" title="Ver saídas do mês"><span>Saídas ${mesNome}</span><b>− ${fmtBRL(c.sai)}</b></div>
+      </div>
+      <div class="bk-foot">
+        <div class="bk-ult">Último mov.: ${ultTxt}</div>
+        <div class="bk-acts">
+          <button class="bk-ic" onclick="abrirLancamentosBanco('${id}')" title="Lançamentos">${BK_IC.ext}</button>
+          <button class="bk-ic" onclick="bkVerFluxo('${id}')" title="Fluxo diário desta conta">${BK_IC.flx}</button>
+          <button class="bk-ic" onclick="editBanco('${id}')" title="Editar">${BK_IC.edt}</button>
+          <button class="bk-ic del" onclick="deleteBanco('${id}')" title="Excluir">${BK_IC.del}</button>
+        </div>
       </div>
     </div>`;
-  }).join('');
+  }).join('') + btnAdd;
 }
 function editBanco(id) {
   const b = db.bancos.find(x=>x.id===id); if(!b) return;
@@ -20294,6 +20893,7 @@ function validarDataRecebimentoObrigatoria(recebido, dt, campoId) {
     if (el) el.focus();
     return false;
   }
+  if (recebido === 'sim' && !bloquearDataFutura(dt, 'recebimento', campoId)) return false;
   return true;
 }
 
@@ -20304,6 +20904,7 @@ function validarDataPagamentoObrigatoria(pago, dtpago, campoId) {
     if (el) { el.focus(); }
     return false;
   }
+  if (pago === 'sim' && !bloquearDataFutura(dtpago, 'pagamento', campoId)) return false;
   return true;
 }
 
@@ -22029,6 +22630,8 @@ async function ccSalvarDespesa() {
   if (!ps[0].fatura) { alert('Selecione a fatura.'); return; }
   const pagas = ps.filter(p => ccFaturaPaga(cid, p.fatura));
   if (pagas.length) { alert(`A fatura de ${ccMesLabel(pagas[0].fatura)} já foi paga. Escolha outra fatura ou desfaça o pagamento dela.`); return; }
+  // Conta de Contas a Pagar quitada via cartão = pagamento: data não pode ser futura
+  if (document.getElementById('cc-d-orig-lanc').value && !bloquearDataFutura(document.getElementById('cc-d-data').value, 'pagamento (compra no cartão)', 'cc-d-data')) return;
 
   const antigas = grupoAnt ? db.cartao_despesas.filter(d => d.grupo === grupoAnt) : [];
   const afetadas = new Set(antigas.map(d => `${d.cartao_id}|${d.fatura}`));
@@ -22157,6 +22760,7 @@ async function ccConfirmarPagamento() {
   const dtpago = document.getElementById('cc-pg-data').value;
   const banco = document.getElementById('cc-pg-banco').value;
   if (!dtpago) { alert('Informe a data do pagamento.'); return; }
+  if (!bloquearDataFutura(dtpago, 'pagamento da fatura', 'cc-pg-data')) return;
   if (!banco) { alert('Selecione a conta (banco) de onde saiu o pagamento.'); return; }
   // garante que o valor do lançamento está igual ao total da fatura
   if (!(await ccSincronizarFatura(cid, mes))) { alert('❌ Erro ao atualizar a fatura.' + sbErroDetalhe()); return; }
@@ -23341,6 +23945,7 @@ async function addBaixaCobranca() {
   const obs   = document.getElementById('cob-bx-obs').value.trim();
 
   if (!data)  { alert('Informe a data do recebimento.'); return; }
+  if (!bloquearDataFutura(data, 'recebimento', 'cob-bx-data')) return;
   if (isNaN(valor) || valor <= 0) { alert('Informe um valor maior que zero.'); return; }
   if (!forma) { alert('Selecione a forma de recebimento (PIX, dinheiro, cheque...).'); return; }
   if (!banco) { alert('Selecione o banco/conta em que o valor entrou.'); return; }
@@ -23430,7 +24035,7 @@ async function _quitarParcelaCobranca(lancId, parcIdx, silencioso) {
   const reg = cobGet(lancId, parcIdx);
   const baixas = (reg.baixas || []).slice().sort((a,b) => (a.data||'').localeCompare(b.data||''));
   const ultima = baixas[baixas.length - 1] || {};
-  const dtrecebido = ultima.data || today();
+  const dtrecebido = (ultima.data && !dataPagRecFutura(ultima.data)) ? ultima.data : today();
   const banco = ultima.banco || l.banco || '';
   const formas = [...new Set(baixas.map(b => b.forma).filter(Boolean))];
   const tipoPag = formas.length > 1 ? 'Misto' : (formas[0] || l.tipo_pag || '');
