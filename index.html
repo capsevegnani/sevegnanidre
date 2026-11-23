@@ -21251,7 +21251,7 @@ async function ccSincronizarFatura(cid, mes) {
       id: uid(), empresa_id: c.empresa_id || empresaAtual() || ((typeof empresaPadrao === 'function' && empresaPadrao()) ? empresaPadrao().id : null), ...dados,
       nf: '', prod: '', parcelas: 1, financeiro: 'nao',
       pago: 'nao', dtpago: '', tipo_pag: CC_FORMA_PAG, banco: '',
-      cat_dre: '', subcat: '', cartao_fatura: ccChave(cid, mes)
+      cat_dre: '', cartao_fatura: ccChave(cid, mes)
     };
     const ok = await sbFetch('lancamentos', 'POST', rec);
     if (!ok) return false;
